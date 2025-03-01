@@ -3,14 +3,13 @@ import { Suspense } from 'react'
 import { type Locale } from '@/i18n'
 import {
   HeroSection,
-  SubheroSection,
   MyExpertise,
-  OurServices,
   CaseStudies,
   WhyUs,
   Philosophy,
   Faq,
   TestimonialsSection,
+  YoutubeSection,
 } from '@/helpers/componentsLoad'
 import { companyConfig } from '@/config/company'
 import { siteUrl } from '@/config/constants';
@@ -90,6 +89,11 @@ export default async function HomePage({ params }: HomePageProps) {
             </div>
           </Suspense>
 
+          <Suspense fallback={<div className="min-h-[400px]">Loading video...</div>}>
+            <div>
+              <YoutubeSection />
+            </div>
+          </Suspense>
 
           {/* <Suspense fallback={<div className="min-h-[300px]" />}>
             <CaseStudies locale={locale} />

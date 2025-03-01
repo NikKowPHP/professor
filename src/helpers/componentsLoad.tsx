@@ -28,10 +28,10 @@ export const MyExpertise = dynamic(
   }
 )
 
-export const OurServices = dynamic(
+export const YoutubeSection = dynamic(
   () =>
-    import('@/components/sections/our-services/our-services').then(
-      (mod) => mod.OurServices
+    import('@/components/sections/youtube-section/youtube-section').then(
+      (mod) => mod.YoutubeSection
     ),
   {
     ssr: true,
