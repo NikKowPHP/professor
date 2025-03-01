@@ -100,9 +100,9 @@ export default async function HomePage({ params }: HomePageProps) {
             <QuoteSection />
           </Suspense>
 
-          {/* <Suspense fallback={<div className="min-h-[300px]" />}>
+          <Suspense fallback={<div className="min-h-[300px]" />}>
             <CaseStudies locale={locale} />
-          </Suspense> */}
+          </Suspense>
 
           {/* Defer less critical sections */}
           {/* <Suspense fallback={<div className="min-h-[300px]" />}>
