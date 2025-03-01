@@ -1,45 +1,49 @@
 export const navigationConfig = {
   mainNav: [
     {
-      title: 'process',
-      href: 'our-process',
+      title: 'bookCall',
+      href: 'book-call',
       isRoute: false,
     },
     {
-      title: 'services',
-      href: 'our-services',
+      title: 'myInvestments',
+      href: 'my-investments',
       isRoute: false,
     },
     {
-      title: 'whyZiro',
-      href: 'why-ziro',
+      title: 'myStory',
+      href: 'my-story',
       isRoute: false,
     },
     {
-      title: 'philosophy',
-      href: 'philosophy',
+      title: 'newsInsights',
+      href: 'news-insights',
       isRoute: false,
-    },
-    {
-      title: 'FAQs',
-      href: 'faqs',
-      isRoute: false,
-    },
-    {
-      title: 'blog',
-      href: '/blog',
-      isRoute: true,
     }
   ],
-  languages: [
+  mainNavLinks: [
     {
-      title: 'English',
-      locale: 'en',
+      title: 'email',
+      href: 'email',
+      isRoute: false,
     },
     {
-      title: 'Polish',
-      locale: 'pl',
+      title: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/proffessor-website/',
+      isRoute: false,
+    },
+    {
+      title: 'researchgate',
+      href: 'https://www.researchgate.net/profile/Proffessor-Website',
+      isRoute: false,
+    },
+    {
+      title: 'patents',
+      href: 'https://patents.google.com/patent/US11964322B2/en',
+      isRoute: false,
     },
 
+
   ],
+
 } as const 

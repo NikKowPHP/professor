@@ -10,10 +10,7 @@ import {
   WhyUs,
   Philosophy,
   Faq,
-  // StayInformed,
-  FloatVideo,
   TestimonialsSection,
-  BannerModalWrapper
 } from '@/helpers/componentsLoad'
 import { companyConfig } from '@/config/company'
 import { siteUrl } from '@/config/constants';
@@ -114,13 +111,13 @@ export default async function HomePage({ params }: HomePageProps) {
           </Suspense>
 
           {/* Load floating video last */}
-          <Suspense fallback={null}>
+          {/* <Suspense fallback={null}>
             <FloatVideo />
           </Suspense>
 
           <Suspense fallback={null}>
             <BannerModalWrapper  />
-          </Suspense>
+          </Suspense> */}
         </div>
 
         {/* Metadata */}

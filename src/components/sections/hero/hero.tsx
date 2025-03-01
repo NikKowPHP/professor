@@ -1,61 +1,57 @@
-import { HeroButtons } from './hero-buttons'
-import { getTranslations } from 'next-intl/server'
-import { headers } from 'next/headers'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export const HeroSection = async () => {
-  // Obtain the current request headers.
-  const headersList = headers()
-  // Retrieve the 'accept-language' header; fallback to 'en-US' if not present.
-  const acceptLanguage = headersList.get('accept-language') ?? 'en-US'
-  // Extract the primary language from the header (e.g., "en-US" from "en-US,en;q=0.9,...")
-  const primaryLanguage = acceptLanguage.split(',')[0]
-  console.log('Primary Language:', primaryLanguage)
-
-  // Fetch translations for the hero namespace.
-  const [t] = await Promise.all([
-    getTranslations('hero')
-  ])
-
   return (
     <section
-      className="flex flex-col justify-center items-center pt-[180px] sm:pt-[175px] sm:pb-[100px] space-y-6 sm:space-y-8"
+      className="flex flex-col sm:flex-row justify-between  pt-[180px]  border border-red-500"
       itemScope
       itemType="https://schema.org/WebPageElement"
     >
-      {/* Optimize heading for LCP */}
-      <h1
-        className="font-normal text-[64px] sm:text-[72px] lg:text-[64px] leading-[1.1] font-medium tracking-[-0.02em] mb-2 text-center max-w-[1200px] mx-auto"
-        itemProp="headline"
-        style={{
-          contentVisibility: 'auto',
-          containIntrinsicSize: '64px',
-        }}
-      >
-        <span className="inline-block">
-          {t('title1')}
-        </span>
-        <br className="hidden sm:block" aria-hidden="true" />
-        <span className="sm:hidden"> </span>
-        <span className="inline-block">
-          {t('title2')}
-        </span>
-      </h1>
-
-      {/* Optimize subtitle */}
-      <p 
-        className="text-[18px] sm:text-[20px] lg:text-[24px] text-gray-600 leading-relaxed px-4 sm:px-0 max-w-[800px] mx-auto text-center"
-        style={{
-          contentVisibility: 'auto',
-          containIntrinsicSize: '24px',
-        }}
-      >
-        {t('subtitle')}
-      </p>
-
-      {/* Defer buttons rendering */}
-      <div className="opacity-0 animate-fadeIn">
-        <HeroButtons />
+      <div className="w-full">
+        <Image
+          src="/images/mf.webp"
+          alt="Michael Friebe"
+          width={150}
+          height={51}
+          className="h-[36px] w-[95px]"
+          priority
+        />
       </div>
+
+      {/* Optimize heading for LCP */}
+      <div className="flex flex-col items-center">
+        <div>
+          <h1
+            className="font-normal text-[64px] sm:text-[72px] lg:text-[64px] leading-[1.1] font-medium tracking-[-0.02em] mb-2 text-center max-w-[1200px] mx-auto"
+            itemProp="headline"
+          >
+            Prof. Michael Friebe, PhD
+          </h1>
+          <h2
+            className="font-normal text-[64px] sm:text-[72px] lg:text-[64px] leading-[1.1] font-medium tracking-[-0.02em] mb-2 text-center max-w-[1200px] mx-auto"
+            itemProp="headline"
+          >
+            HealthTEC: Creating Innovations for Enterprises and New Ventures +
+          </h2>
+          <h3>
+            <span>Massive Transformative Purpose: </span>
+            <span>Health Democratise Enabler</span>
+          </h3>
+          <p>
+            Prof. Michael Friebe has extensive experience in medical technology,
+            with a focus on innovation, entrepreneurship, and image-guided
+            therapies. He has a strong background as a founder, innovator, CEO,
+            and investor in various MedTech ventures.
+          </p>
+        </div>
+        {/* cta */}
+        <div>
+          <Link href="/about">My Investments</Link>
+        </div>
+      </div>
+
+      <div className="opacity-0 animate-fadeIn"></div>
     </section>
   )
 }
