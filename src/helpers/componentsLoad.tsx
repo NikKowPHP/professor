@@ -18,10 +18,10 @@ export const SubheroSection = dynamic(
     ssr: true,
   }
 )
-export const OurProcess = dynamic(
+export const MyExpertise = dynamic(
   () =>
-    import('@/components/sections/our-process/our-process').then(
-      (mod) => mod.OurProcess
+    import('@/components/sections/my-expertise/my-expertise').then(
+      (mod) => mod.MyExpertise
     ),
   {
     ssr: true,

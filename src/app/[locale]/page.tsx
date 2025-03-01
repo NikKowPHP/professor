@@ -4,7 +4,7 @@ import { type Locale } from '@/i18n'
 import {
   HeroSection,
   SubheroSection,
-  OurProcess,
+  MyExpertise,
   OurServices,
   CaseStudies,
   WhyUs,
@@ -79,36 +79,35 @@ export default async function HomePage({ params }: HomePageProps) {
         {/* Deferred Content */}
         <div className="relative">
           <Suspense fallback={<div className="min-h-[300px]" />}>
-            <SubheroSection />
+            {/* <SubheroSection /> */}
           </Suspense>
 
           {/* Group related sections */}
           <Suspense fallback={<div className="min-h-[700px]" />}>
             <div>
-              <OurProcess />
-              <OurServices />
+              <MyExpertise />
+              {/* <OurServices /> */}
             </div>
           </Suspense>
 
 
-          <Suspense fallback={<div className="min-h-[300px]" />}>
+          {/* <Suspense fallback={<div className="min-h-[300px]" />}>
             <CaseStudies locale={locale} />
-          </Suspense>
+          </Suspense> */}
 
           {/* Defer less critical sections */}
-          <Suspense fallback={<div className="min-h-[300px]" />}>
+          {/* <Suspense fallback={<div className="min-h-[300px]" />}>
             <TestimonialsSection locale={locale} />
-          </Suspense>
+          </Suspense> */}
 
           {/* Group remaining sections */}
-          <Suspense fallback={<div className="min-h-[900px]" />}>
+          {/* <Suspense fallback={<div className="min-h-[900px]" />}>
             <div>
               <WhyUs />
               <Philosophy />
               <Faq />
-              {/* <StayInformed /> */}
             </div>
-          </Suspense>
+          </Suspense> */}
 
           {/* Load floating video last */}
           {/* <Suspense fallback={null}>

@@ -2,11 +2,9 @@
 
 import Link from 'next/link'
 import { navigationConfig } from '@/config/navigation'
-import { useTranslations } from 'next-intl'
 import { ArrowUpRight } from 'lucide-react'
 
 export function Navbar() {
-  const t = useTranslations('navigation')
 
   return (
     <header 
@@ -35,7 +33,7 @@ export function Navbar() {
             {navigationConfig.mainNav.map((item) =>
               <li
               key={item.href}
-              aria-label={t(item.title)}
+              aria-label={item.title}
               >
               <Link href={item.href}>
                 {item.title}
@@ -49,7 +47,7 @@ export function Navbar() {
             {navigationConfig.mainNavLinks.map((item) =>
             <li
             key={item.href}
-            aria-label={t(item.title)}
+            aria-label={item.title}
             >
               <Link href={item.href} className="flex items-center gap-2">
                 {item.title}
