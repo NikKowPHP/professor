@@ -10,6 +10,7 @@ import {
   Faq,
   TestimonialsSection,
   YoutubeSection,
+  QuoteSection,
 } from '@/helpers/componentsLoad'
 import { companyConfig } from '@/config/company'
 import { siteUrl } from '@/config/constants';
@@ -93,6 +94,10 @@ export default async function HomePage({ params }: HomePageProps) {
             <div>
               <YoutubeSection />
             </div>
+          </Suspense>
+
+          <Suspense fallback={<div className="min-h-[400px]"></div>}> 
+            <QuoteSection />
           </Suspense>
 
           {/* <Suspense fallback={<div className="min-h-[300px]" />}>

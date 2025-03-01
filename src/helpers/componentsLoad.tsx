@@ -121,3 +121,9 @@ export const TestimonialsSection = dynamic(
   }
 )
 
+export const QuoteSection = dynamic(
+  () => import('@/components/sections/quote-section/quote-section').then(mod => mod.QuoteSection),
+  {
+    ssr: true,
+  }
+)
