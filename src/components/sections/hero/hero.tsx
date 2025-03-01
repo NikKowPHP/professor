@@ -2,40 +2,51 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export const HeroSection = async () => {
+
+ const  massiveTransformativePurpose =  ()=> {
+  return "Massive Transformative Purpose: ".split(' ').map((word, index) => (
+    <span key={index}>
+      <strong>{word[0]}</strong>
+      {word.slice(1)}
+      {' '}
+    </span>
+  ))
+  }
+  
+
   return (
     <section
-      className="flex flex-col sm:flex-row justify-between  pt-[180px]  border border-red-500"
+      className="flex grid grid-cols-1 sm:grid-cols-2 justify-between  py-[40px]  border border-red-500"
       itemScope
       itemType="https://schema.org/WebPageElement"
     >
-      <div className="w-full">
+        <div className="w-full border border-blue-500">
         <Image
           src="/images/mf.webp"
           alt="Michael Friebe"
-          width={150}
-          height={51}
-          className="h-[36px] w-[95px]"
+          width={1500}
+          height={1000}
+          className="w-full h-auto"
           priority
         />
       </div>
-
       {/* Optimize heading for LCP */}
       <div className="flex flex-col items-center">
-        <div>
+        <div className="border border-blue-500 flex flex-col items-center gap-[40px]">
           <h1
-            className="font-normal text-[64px] sm:text-[72px] lg:text-[64px] leading-[1.1] font-medium tracking-[-0.02em] mb-2 text-center max-w-[1200px] mx-auto"
+            className="font-bold text-[36px] sm:text-[36px] lg:text-[36px] leading-[1.1] font-bold  mb-2 text-center max-w-[1200px] mx-auto italic "
             itemProp="headline"
           >
             Prof. Michael Friebe, PhD
           </h1>
           <h2
-            className="font-normal text-[64px] sm:text-[72px] lg:text-[64px] leading-[1.1] font-medium tracking-[-0.02em] mb-2 text-center max-w-[1200px] mx-auto"
+            className="font-normal text-[36px] sm:text-[36px] lg:text-[36px] leading-[1.1] font-normal mb-2 text-center max-w-[1200px] mx-auto"
             itemProp="headline"
           >
             HealthTEC: Creating Innovations for Enterprises and New Ventures +
           </h2>
-          <h3>
-            <span>Massive Transformative Purpose: </span>
+          <h3 className="flex flex-col items-center gap-[10px]">
+            <span>{massiveTransformativePurpose()}</span>
             <span>Health Democratise Enabler</span>
           </h3>
           <p>
