@@ -10,7 +10,7 @@ export function Navbar() {
 
   return (
     <header 
-      className="sticky  left-0 right-0 z-50 bg-[#F7F7F7] bg-opacity-80 backdrop-blur-sm bg-[#FAF8F1] border border-blue-500"
+      className="sticky top-0 left-0 right-0 z-50 bg-[#F7F7F7] bg-opacity-80 backdrop-blur-sm bg-[#FAF8F1] border border-blue-500"
       itemScope 
       itemType="https://schema.org/WPHeader"
     >
