@@ -8,13 +8,13 @@ export const QuoteSection = () => {
   return (
       <section
       id='quote-section'
-        className=" py-[50px]  bg-black flex flex-col justify-center items-center"
+        className=" py-[50px] px-[20px] md:px-0 bg-black flex flex-col justify-center items-center"
         itemScope
         itemType="https://schema.org/WebPageElement"
       >
-      <div className='max-w-7xl mx-auto border border-blue-500'>
+      <div className='max-w-7xl mx-auto'>
         
-          <h2 className='text-[48px] font-normal text-center text-white leading-[1.2]'>
+          <h2 className='text-[26px] md:text-[48px] font-normal text-center text-white leading-[1.2]'>
             {quoteItem.quote}
           </h2>
 
