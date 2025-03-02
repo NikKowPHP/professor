@@ -24,7 +24,7 @@ export const MyExpertise = async () => {
           itemType="https://schema.org/HowTo"
           aria-labelledby="process-title"
         >
-          <div className='max-w-7xl mx-auto border border-blue-500'>
+          <div className='max-w-7xl mx-auto  px-[20px] sm:px-0'>
 
           <ProcessTitleSubtitle />
           <ProcessItemList  processItems={processItems} />
@@ -52,7 +52,7 @@ const ProcessTitleSubtitle = () => {
 const ProcessItem = ({ index, item }: { index: number; item: ProcessItemType }) => {
   return (
     <div 
-      className="p-[25px] shadow-sm flex flex-col gap-[60px] leading-[1.2] border border-red-500"
+      className="p-[25px] shadow-sm flex flex-col gap-[60px] leading-[1.2]  "
       style={{ 
         backgroundColor: item.bgColor,
         color: item.textColor 
@@ -88,7 +88,7 @@ const ProcessItemList = async ({
   const items = await processItems
   return (
     <div 
-      className="grid grid-cols-1 sm:grid-cols-3 gap-x-[10px] w-full justify-center mx-auto"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-[20px] sm:gap-y-0 sm:gap-x-[10px] w-full justify-center mx-auto"
       role="list"
       aria-label="Development process steps"
     >
