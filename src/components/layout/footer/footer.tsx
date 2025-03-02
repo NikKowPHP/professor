@@ -52,8 +52,8 @@ export function Footer() {
           <div className="flex flex-col justify-start lg:flex-row gap-[30px] sm:gap-[30px]  lg:gap-[100px]  w-full">
             
             {/* Left Column */}
-            <div className=" flex flex-col md:flex-row gap-[30px] justify-between sm:justify-start lg:justify-start border border-blue-500">
-              <div className="border border-blue-500 p-4">
+            <div className=" flex flex-col md:flex-row gap-[30px] justify-between sm:justify-start lg:justify-start ">
+              <div className=" p-4">
                 <Link
                   href="/"
                   className="inline-block text-[30px] font-bold whitespace-nowrap"
@@ -63,7 +63,7 @@ export function Footer() {
                 </Link>
               </div>
               
-              <div className="border border-blue-500 p-4 space-y-4">
+              <div className=" p-4 space-y-4">
                 <p>
                   Michael Friebe is a professor at AGH University in Kraków and OVG University in Magdeburg, 
                   specializing in computer science and medicine, with a focus on diagnostic imaging and medical 
@@ -74,8 +74,8 @@ export function Footer() {
             </div>
 
             {/* Right Column */}
-            <div className="flex  sm:gap-[30px] justify-between lg:justify-start  lg:gap-[100px] border border-blue-500">
-              <div className="border  border-blue-500 p-4 flex flex-col gap-6">
+            <div className="flex  sm:gap-[30px] justify-between lg:justify-start  lg:gap-[100px] ">
+              <div className=" p-4 flex flex-col gap-6">
                 <ul>
                   {footerConfig.socialLinks.map((item) => (
                     <li key={item.title}>
@@ -92,7 +92,7 @@ export function Footer() {
                 </ul>
               </div>
               
-              <div className="border border-blue-500 p-4 space-y-10">
+              <div className=" p-4 space-y-10">
                 <ul className="flex flex-col  text-[16px]">
                   <li>Berlin</li>
                   <li>Germany</li>
