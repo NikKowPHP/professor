@@ -136,26 +136,14 @@ export default async function BlogPostPage({ params }: PageProps) {
               </p>
             )}
 
-            <div className="  w-full flex items-center justify-center">
-
-
-              {/* <div itemProp="image " className='  w-full aspect-[16/9]'>
-            <Image
-              src={post.imageurl}
-              alt={post.imageAlt || post.title}
-              fill
-              className="mb-4 rounded object-cover"
-            />
-          </div> */}
-
-
-              <div itemProp='image' className="max-w-full mx-auto border border-red-500">
-                <div className="relative w-full aspect-[16/9] h-[400px] sm:h-[400px] mb-16">
+            <div className="w-full flex items-center justify-center">
+              <div itemProp='image' className="w-full max-w-full mx-auto">
+                <div className="relative w-full aspect-[16/9] h-auto">
                   <Image
                     src={post.imageurl}
                     alt={post.imageAlt || post.title}
                     fill
-                    className="object-cover"
+                    className="object-cover w-full h-full"
                     priority
                     itemProp="image"
                     quality={100}
