@@ -17,7 +17,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .order('created_at', { ascending: false })
 
       if (error) {
-        logger.log('Error fetching testimonials:', error)
+        logger.log('Error fetching youtube sections:', error)
         return []
       }
 
@@ -48,7 +48,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .single()
 
     if (error) {
-      logger.log('Error fetching testimonial by ID:', error)
+      logger.log('Error fetching youtube section by ID:', error)
       return null
     }
 
@@ -69,8 +69,8 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .single()
 
     if (error) {
-      logger.log('Error creating testimonial:', error)
-        throw new Error('Failed to create testimonial')
+      logger.log('Error creating youtube section:', error)
+        throw new Error('Failed to create youtube section')
     }
 
     return data
@@ -89,12 +89,12 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .single()
 
     if (error) {
-      logger.log('Error updating testimonial:', error)
-      throw new Error('Failed to update testimonial')
+      logger.log('Error updating youtube section:', error)
+      throw new Error('Failed to update youtube section')
     }
 
     if (!data) {
-      throw new Error('Failed to update testimonial')
+      throw new Error('Failed to update youtube section')
     }
 
     return data
@@ -107,8 +107,8 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .eq('id', id)
 
     if (error) {
-      logger.log('Error deleting testimonial:', error)
-      throw new Error('Failed to delete testimonial')
+      logger.log('Error deleting youtube section:', error)
+      throw new Error('Failed to delete youtube section')
     }
   }
 }
