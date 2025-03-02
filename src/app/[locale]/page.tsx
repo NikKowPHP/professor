@@ -4,20 +4,12 @@ import { type Locale } from '@/i18n'
 import {
   HeroSection,
   MyExpertise,
-  CaseStudies,
-  WhyUs,
-  Philosophy,
-  Faq,
-  TestimonialsSection,
   YoutubeSection,
   QuoteSection,
+  BlogPosts,
 } from '@/helpers/componentsLoad'
 import { companyConfig } from '@/config/company'
 import { siteUrl } from '@/config/constants';
-interface HomePageProps {
-  params: Promise<{ locale: Locale }>
-}
-
 
 // Centralize JSON-LD data
 const jsonLdData = {
@@ -63,8 +55,7 @@ const jsonLdData = {
   }
 }
 
-export default async function HomePage({ params }: HomePageProps) {
-  const { locale } = await params
+export default async function HomePage() {
 
   return (
     <>
@@ -101,7 +92,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </Suspense>
 
           <Suspense fallback={<div className="min-h-[300px]" />}>
-            <CaseStudies locale={locale} />
+            <BlogPosts />
           </Suspense>
 
           {/* Defer less critical sections */}

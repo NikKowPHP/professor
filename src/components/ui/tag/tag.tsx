@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils/cn'
 
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'dark'
+  variant?: 'primary' | 'secondary' | 'outline' | 'dark' | 'simple'
   size?: 'sm' | 'md' | 'lg'
 }
 
@@ -30,6 +30,8 @@ export function Tag({
           'border border-gray-200 text-gray-600': variant === 'outline',
 
           'bg-[#171717] text-white ': variant === 'dark',
+
+          'bg-transparent text-black': variant === 'simple',
         },
 
         // Sizes

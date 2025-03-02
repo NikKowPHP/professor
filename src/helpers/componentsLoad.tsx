@@ -87,15 +87,25 @@ export const Testimonials = dynamic(
 )
 
 // Dynamic imports with loading boundaries
-export const CaseStudies = dynamic(
+// export const CaseStudies = dynamic(
+//   () =>
+//     import('@/components/sections/case-studies/case-studies').then(
+//       (mod) => mod.CaseStudies
+//     ),
+//   {
+//     loading: () => (
+//       <div className="min-h-[300px] sm:min-h-[350px] lg:min-h-[400px]" />
+//     ),
+//     ssr: true,
+//   }
+// )
+
+export const BlogPosts = dynamic(
   () =>
-    import('@/components/sections/case-studies/case-studies').then(
-      (mod) => mod.CaseStudies
+    import('@/components/sections/blog-posts/blog-posts').then(
+      (mod) => mod.BlogPosts
     ),
-  {
-    loading: () => (
-      <div className="min-h-[300px] sm:min-h-[350px] lg:min-h-[400px]" />
-    ),
+  { 
     ssr: true,
   }
 )
