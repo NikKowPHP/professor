@@ -88,18 +88,18 @@ export default async function BlogPostPage({ params }: PageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ 
+        dangerouslySetInnerHTML={{
           __html: JSON.stringify(createArticleJsonLd(post, locale))
         }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ 
+        dangerouslySetInnerHTML={{
           __html: JSON.stringify(createBreadcrumbJsonLd(post, locale))
         }}
       />
-      <article 
-        className="blog-post py-8 py-[100px] max-w-4xl mx-auto flex flex-col gap-[35px]"
+      <article
+        className="blog-post py-8 md:py-[100px] flex flex-col gap-[35px] bg-[#FFE8D8]"
         itemScope
         itemType="https://schema.org/Article"
       >
@@ -110,42 +110,36 @@ export default async function BlogPostPage({ params }: PageProps) {
         <meta itemProp="dateModified" content={post.createdAt} />
         <meta itemProp="author" content="ZIRO Healthcare Solutions" />
         <meta itemProp="publisher" content="ZIRO Healthcare Solutions" />
-        
-        <header className="flex flex-col gap-8">
-          <div className="text-sm text-gray-600 flex items-center justify-center gap-4">
-            <time dateTime={post.createdAt}>
-              {new Date(post.createdAt).toLocaleDateString(locale, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </time>
-            <span>•</span>
-            <span>{readingTime} min read</span>
-          </div>
-          
-          <h1 
-            className="text-3xl font-bold mb-4 text-center"
-            itemProp="name"
-          >
-            {post.title}
-          </h1>
+        <div className='max-w-7xl mx-auto px-[20px] md:px-0 '>
 
-          {post.excerpt && (
-            <p 
-              className="text-xl text-gray-600 text-center max-w-2xl mx-auto"
-              itemProp="abstract"
-              dangerouslySetInnerHTML={{ 
-                __html: post.excerpt.trim() 
-              }}
+
+          <header className="flex flex-col gap-8">
+            <h1
+              className="text-[38px] font-semibold mb-4 "
+              itemProp="name"
             >
-            </p>
-          )}
-          
-          <div className="  w-full flex items-center justify-center">
+              {post.title}
+            </h1>
 
 
-          {/* <div itemProp="image " className='  w-full aspect-[16/9]'>
+
+
+
+            {post.excerpt && (
+              <p
+                className="text-xl text-gray-600 text-center max-w-2xl mx-auto"
+                itemProp="abstract"
+                dangerouslySetInnerHTML={{
+                  __html: post.excerpt.trim()
+                }}
+              >
+              </p>
+            )}
+
+            <div className="  w-full flex items-center justify-center">
+
+
+              {/* <div itemProp="image " className='  w-full aspect-[16/9]'>
             <Image
               src={post.imageurl}
               alt={post.imageAlt || post.title}
@@ -155,34 +149,53 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div> */}
 
 
-          <div itemProp='image' className="max-w-full mx-auto">
-              <div className="relative w-full aspect-[16/9] h-[400px] sm:h-[400px] mb-16">
-                <Image
-                  src={post.imageurl}
-                  alt={post.imageAlt || post.title}
-                  fill
-                  className="object-cover rounded-primary-lg"
-                  priority
-                  itemProp="image"
-                  quality={100}
-                  unoptimized
-                />
+              <div itemProp='image' className="max-w-full mx-auto border border-red-500">
+                <div className="relative w-full aspect-[16/9] h-[400px] sm:h-[400px] mb-16">
+                  <Image
+                    src={post.imageurl}
+                    alt={post.imageAlt || post.title}
+                    fill
+                    className="object-cover"
+                    priority
+                    itemProp="image"
+                    quality={100}
+                    unoptimized
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
+          <div className='flex  gap-8 border border-red-500'>
 
-        <div
-          className={styles.blogPostContent}
-          itemProp="articleBody"
-          dangerouslySetInnerHTML={{ 
-            __html: post.contentHtml.trim() 
-          }}
-        />
+          <aside className=' border border-red-500'>
 
-        <footer className="mt-8 pt-8 border-t border-gray-200">
-          <div className="flex flex-col gap-4">
-            {/* {post.tags && (
+            <div className="text-sm text-gray-600 flex items-center justify-center gap-4">
+              <time dateTime={post.createdAt}>
+                {new Date(post.createdAt).toLocaleDateString(locale, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+              <span>•</span>
+              <span>{readingTime} min read</span>
+            </div>
+
+          </aside>
+
+          <div className='flex-1'>
+
+            <div
+              className={styles.blogPostContent}
+              itemProp="articleBody"
+              dangerouslySetInnerHTML={{
+                __html: post.contentHtml.trim()
+              }}
+            />
+
+            <footer className="mt-8 pt-8 border-t border-gray-200">
+              <div className="flex flex-col gap-4">
+                {/* {post.tags && (
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag: string) => (
                   <span 
@@ -194,19 +207,23 @@ export default async function BlogPostPage({ params }: PageProps) {
                 ))}
               </div>
             )} */}
-            
-            <div className="text-sm text-gray-600">
-              Last updated: {' '}
-              <time dateTime={post.createdAt}>
-                {new Date(post.createdAt).toLocaleDateString(locale, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
-            </div>
+
+                <div className="text-sm text-gray-600">
+                  Last updated: {' '}
+                  <time dateTime={post.createdAt}>
+                    {new Date(post.createdAt).toLocaleDateString(locale, {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                </div>
+              </div>
+            </footer>
           </div>
-        </footer>
+          </div>
+        </div>
+
       </article>
     </>
   )
@@ -216,7 +233,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 export async function generateMetadata({ params }: PageProps) {
   const { slug, locale } = params
   const post = await blogPostService.getBlogPostBySlug(slug, locale)
-  
+
   if (!post) {
     return {}
   }
