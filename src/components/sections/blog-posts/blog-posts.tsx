@@ -19,6 +19,12 @@ export async function BlogPosts() {
         The latest news from me and the insights
 
       </h1>
+      <Link href="/en/blog">
+        <span className='flex items-center gap-2'>
+          Read All
+          <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
+        </span>
+      </Link>
 
       <Suspense
         fallback={
@@ -72,12 +78,12 @@ const BlogPostItem = ({
         {/* Image Section */}
         {post.imageurl && (
           <div
-            className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500"
+            className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500 overflow-hidden"
             role="img"
             aria-label={`${post.title} preview image`}
           >
             <Image
-              className='w-full h-auto object-cover'
+              className='w-full h-full object-cover'
               src={post.imageurl}
               alt={post.imageAlt || post.title}
               width={1000}
@@ -117,13 +123,16 @@ const BlogPostItem = ({
             {post.excerpt}
           </div> */}
 
-<h2
+            <div
               className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium tracking-[-0.02em] flex items-center gap-2"
               itemProp="headline"
             >
-              {post.title} 
+              <div 
+                className="flex-1"
+                dangerouslySetInnerHTML={{ __html: post.excerpt }} 
+              />
               <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
-            </h2>
+            </div>
 
         </div>
         <meta itemProp="position" content={String(position)} />
