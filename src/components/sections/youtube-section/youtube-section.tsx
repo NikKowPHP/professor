@@ -23,15 +23,15 @@ export const YoutubeSection = () => {
   return (
       <section
       id='youtube-section'
-        className="pt-[100px] pb-[50px] border border-green-500"
+        className="pt-[50px] sm:pt-[100px] pb-[50px] px-[20px] md:px-0"
         itemScope
         itemType="https://schema.org/WebPageElement"
       >
         
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-[50px] max-w-7xl mx-auto border border-blue-500'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-[30px] max-w-7xl mx-auto'>
 
-            <div className="relative w-full border border-red-500  ">
-              <div className="pb-[56.25%]">
+            <div className="relative w-full  ">
+              <div className="pb-[80.25%]">
                 <div className="absolute top-0 left-0 w-full h-full  overflow-hidden">
                   <YouTube
                     videoId={youtubeItem.youtube_url}
@@ -42,9 +42,9 @@ export const YoutubeSection = () => {
               </div>
             </div>
 
-          <div className='border border-blue-500 flex flex-col justify-center items-center px-[20px]'>
+          <div className=' flex flex-col justify-center items-center px-[20px]'>
 
-            <h2 className='text-[24px] font-medium'>
+            <h2 className='text-[16px] font-medium text-center'>
               {youtubeItem.quote}
             </h2>
           </div>
