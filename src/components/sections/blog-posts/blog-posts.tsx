@@ -78,12 +78,12 @@ const BlogPostItem = ({
         {/* Image Section */}
         {post.imageurl && (
           <div
-            className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500 overflow-hidden"
+            className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500 overflow-hidden min-h-[500px]"
             role="img"
             aria-label={`${post.title} preview image`}
           >
             <Image
-              className='w-full h-full object-cover'
+              className='w-full h-full object-cover '
               src={post.imageurl}
               alt={post.imageAlt || post.title}
               width={1000}

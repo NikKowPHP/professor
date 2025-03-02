@@ -7,7 +7,7 @@ export const QuoteSection = () => {
 
   return (
       <section
-      id='youtube-section'
+      id='quote-section'
         className=" py-[50px]  bg-black flex flex-col justify-center items-center"
         itemScope
         itemType="https://schema.org/WebPageElement"
