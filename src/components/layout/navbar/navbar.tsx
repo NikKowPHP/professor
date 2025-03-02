@@ -29,15 +29,24 @@ export function Navbar() {
     };
   }, [scrolled])
 
-  // Prevent scrolling when mobile menu is open
+  // Close menu when clicking outside
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const menu = document.getElementById('mobile-menu');
+      const menuButton = document.getElementById('menu-button');
+      
+      if (menu && !menu.contains(target) && menuButton && !menuButton.contains(target)) {
+        setMobileMenuOpen(false);
+      }
+    };
+
     if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      document.addEventListener('mousedown', handleClickOutside);
     }
+    
     return () => {
-      document.body.style.overflow = '';
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [mobileMenuOpen]);
 
@@ -60,8 +69,11 @@ export function Navbar() {
 
           {/* Mobile menu button - always visible on mobile */}
           <button 
+            id="menu-button"
             className="md:hidden flex items-center justify-center" 
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
@@ -123,66 +135,68 @@ export function Navbar() {
               </div>
             </nav>
           )}
-
-          {/* Mobile Menu Overlay */}
-          <div 
-            className={`fixed inset-0 bg-[#FAF8F1] z-40 transform transition-transform duration-300 ease-in-out ${
-              mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            } md:hidden`}
+        </div>
+      </div>
+      
+      {/* Dropdown Mobile Menu */}
+      <div 
+        id="mobile-menu"
+        className={`md:hidden w-full bg-[#FAF8F1] shadow-md overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="px-[5px] py-4 mx-auto w-full max-w-7xl">
+          <nav 
+            aria-label="Mobile navigation"
+            className="flex flex-col gap-6"
           >
-            <div className="flex flex-col h-full p-6 pt-24">
-              <nav 
-                className="flex-1 overflow-y-auto"
-                aria-label="Mobile navigation"
-              >
-                <div className="flex flex-col gap-8">
-                  <ul className="flex flex-col gap-4">
-                    <li className="text-2xl font-medium">
-                      <Link 
-                        href="/book-a-call" 
-                        className="flex items-center gap-2"
-                        onClick={() => setMobileMenuOpen(false)}
-                      > 
-                        Book a call
-                        <ArrowUpRight className="w-6 h-6" />
-                      </Link>
-                    </li>
-                    {navigationConfig.mainNav.map((item) =>
-                      <li
-                        key={item.href}
-                        className="text-2xl font-medium"
-                      >
-                        <Link 
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {item.title}
-                        </Link>
-                      </li>
-                    )}
-                  </ul>
-
-                  <ul className="flex flex-col gap-4">
-                    {navigationConfig.mainNavLinks.map((item) =>
-                      <li
-                        key={item.href}
-                        className="text-2xl font-medium"
-                      >
-                        <Link 
-                          href={item.href} 
-                          className="flex items-center gap-2"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {item.title}
-                          <ArrowUpRight className="w-6 h-6" />
-                        </Link>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              </nav>
-            </div>
-          </div>
+            <ul className="flex flex-col gap-4">
+              <li className="font-medium">
+                <Link 
+                  href="/book-a-call" 
+                  className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+                  onClick={() => setMobileMenuOpen(false)}
+                > 
+                  Book a call
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </li>
+              {navigationConfig.mainNav.map((item) =>
+                <li
+                  key={item.href}
+                  className="font-medium"
+                >
+                  <Link 
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:opacity-70 transition-opacity"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              )}
+            </ul>
+            
+            <div className="border-t border-gray-200"></div>
+            
+            <ul className="flex flex-col gap-4">
+              {navigationConfig.mainNavLinks.map((item) =>
+                <li
+                  key={item.href}
+                  className="font-medium"
+                >
+                  <Link 
+                    href={item.href} 
+                    className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.title}
+                    <ArrowUpRight className="w-5 h-5" />
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </nav>
         </div>
       </div>
     </header>
