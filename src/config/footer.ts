@@ -1,39 +1,34 @@
 export const footerConfig = {
-  mainNav: [
-    {
-      title: 'process',
-      href: 'our-process',
-    },
-    {
-      title: 'services',
-      href: 'our-services',
-    },
-    {
-      title: 'why Ziro?',
-      href: 'why-ziro',
-    },
-    {
-      title: 'FAQs',
-      href: 'faqs',
-    }
-
-  ],
   socialLinks: [
     {
-      title: 'Instagram',
-      href: 'https://www.instagram.com/ziro.space/',
+      title: 'bookCall',
+      href: 'book-call',
+      isRoute: false,
+    },
+    {
+      title: 'email',
+      href: 'email',
+      isRoute: false,
     },
     {
       title: 'LinkedIn',
-      href: 'https://www.linkedin.com/company/ziros/?viewAsMember=true',
+      href: 'https://www.linkedin.com/in/proffessor-website/',
+      isRoute: false,
+    },
+  ],
+  mainNavLinks: [
+    {
+      title: 'patents',
+      href: 'https://patents.google.com/patent/US11964322B2/en',
+      isRoute: false,
     },
     {
-      title: 'Health by Design',
-      href: 'https://www.nikhil.health/',
+      title: 'researchgate',
+      href: 'https://www.researchgate.net/profile/Proffessor-Website',
+      isRoute: false,
     },
-    {
-      title: 'X (Twitter)',
-      href: 'https://x.com/NikhilSing69944',
-    },
-  ]
+  ],
+  
+
 } as const 
+
