@@ -64,37 +64,32 @@ const BlogPostItem = ({
     >
       <Link
         href={`/en/blog/${post.slug}`}
-        className="flex flex-col gap-[8px] relative"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full"
         itemProp="url"
       >
-        <div className='border border-red-500 flex gap-4'>
-          {post.imageurl && (
-            <div
-              className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500"
-              role="img"
-              aria-label={`${post.title} preview image`}
-            >
-              <Image
-                className='w-full h-auto '
-                src={post.imageurl}
-                alt={post.imageAlt || post.title}
-                width={1000}
-                height={1000}
-                loading="lazy"
-              />
-            </div>
-          )}
-          <div className='border border-green-500'>
+        {/* Image Section */}
+        {post.imageurl && (
+          <div
+            className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500"
+            role="img"
+            aria-label={`${post.title} preview image`}
+          >
+            <Image
+              className='w-full h-auto'
+              src={post.imageurl}
+              alt={post.imageAlt || post.title}
+              width={1000}
+              height={1000}
+              loading="lazy"
+            />
+          </div>
+        )}
 
-
-            <h2
-              className="text-xl font-semibold text-center "
-              itemProp="headline"
-            >
-              {post.title}
-            </h2>
-            <div
-              className='absolute top-8 left-8 px-[10px] py-[5px] bg-white rounded-full'
+        {/* Content Section */}
+        <div className="flex flex-col justify-between h-full p-[20px] gap-[20px] border border-green-500 bg-[#FFE8D8]">
+          <header className="flex justify-between gap-2">
+          <div 
+              className="px-[10px] py-[5px]"
               itemProp="datePublished"
             >
               {new Date(post.createdAt).toLocaleDateString('en', {
@@ -103,7 +98,22 @@ const BlogPostItem = ({
                 day: 'numeric'
               })}
             </div>
-          </div>
+           
+          
+          </header>
+
+          {/* Add description if available in BlogPost model */}
+          {/* <div className="text-[16px] line-clamp-4 overflow-hidden">
+            {post.excerpt}
+          </div> */}
+
+<h2
+              className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium tracking-[-0.02em]"
+              itemProp="headline"
+            >
+              {post.title}
+            </h2>
+            
         </div>
         <meta itemProp="position" content={String(position)} />
       </Link>
