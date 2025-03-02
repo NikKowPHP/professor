@@ -1,6 +1,4 @@
-import { unstable_cache } from 'next/cache'
 import { SupabaseClient } from '@supabase/supabase-js'
-import { CACHE_TAGS, CACHE_TIMES } from '@/lib/utils/cache'
 import { supabase } from '../supabase'
 import { BlogPostDTO } from '@/infrastructure/dto/blog-post.dto'
 import { BlogPostMapper } from '@/infrastructure/mappers/blog-post.mapper'
@@ -15,26 +13,19 @@ export class BlogPostRepository implements IBlogPostRepository {
     this.supabaseClient = supabase
   }
 
-  getBlogPosts = unstable_cache(
-    async (locale: string): Promise<BlogPost[]> => {
-      const { data, error } = await this.supabaseClient
-        .from(`${this.tableName}_${locale}`)
-        .select('*')
-        .order('created_at', { ascending: false })
+  getBlogPosts = async (locale: string): Promise<BlogPost[]> => {
+    const { data, error } = await this.supabaseClient
+      .from(`${this.tableName}_${locale}`)
+      .select('*')
+      .order('created_at', { ascending: false })
 
       if (error) {
         logger.log('Error fetching blog posts:', error)
         return []
       }
 
-      return (data as BlogPostDTO[]).map(BlogPostMapper.toDomain)
-    },
-    [CACHE_TAGS.BLOG_POSTS],
-    {
-      revalidate: CACHE_TIMES.MINUTE,
-      tags: [CACHE_TAGS.BLOG_POSTS],
-    }
-  )
+    return (data as BlogPostDTO[]).map(BlogPostMapper.toDomain)
+  }
 
   getBlogPostBySlug = async (slug: string, locale: string): Promise<BlogPost | null> => {
     const { data, error } = await this.supabaseClient
