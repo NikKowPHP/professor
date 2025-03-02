@@ -9,15 +9,23 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 20
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled)
-      }
-    }
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const isScrolled = window.scrollY > 20;
+        if (isScrolled !== scrolled) {
+          setScrolled(isScrolled);
+        }
+      }, 100);
+    };
     
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
+    };
   }, [scrolled])
 
   return (
