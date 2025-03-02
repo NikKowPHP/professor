@@ -11,10 +11,10 @@ export async function BlogPosts() {
   const blogPostService = await getBlogPostService()
   const blogPosts = await blogPostService.getBlogPosts('en')
   return (
-    <section id="work" className="relative overflow-hidden bg-white   py-[100px]">
-      <div className='max-w-7xl mx-auto border flex flex-col gap-[20px] border-blue-500'>
+    <section id="work" className="relative overflow-hidden bg-white   py-[50px] md:py-[100px]">
+      <div className='max-w-7xl px-[20px] md:px-0 mx-auto flex flex-col gap-[20px]'>
         <h1
-          className="text-[40px] sm:text-[56px] lg:text-[48px] leading-[1.1] font-medium tracking-[-0.02em] "
+          className="text-[36px] sm:text-[48px] lg:text-[48px] leading-[1.1] font-medium tracking-[-0.02em] "
           itemProp="headline"
         >
           The latest news from me and the insights
