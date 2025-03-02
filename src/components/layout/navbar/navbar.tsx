@@ -12,24 +12,30 @@ export function Navbar() {
       itemScope 
       itemType="https://schema.org/WPHeader"
     >
-      <div className=" mx-auto px-[5px] w-full max-w-7xl border border-blue-500">
-        <div className="flex  items-center justify-between">
+      <div className=" mx-auto px-[5px] sm:py-[20px] w-full max-w-7xl border border-blue-500">
+        <div className="flex justify-between ">
           <Link 
             href="/" 
-            className="flex items-center gap-2"
-            title="ZIRO - Web Design & Development Agency"
-            aria-label="ZIRO Homepage"
+            className=" gap-2 text-[24px] sm:text-[48px] font-bold"
+            title="Michael Friebe"
+            aria-label="Michael Friebe Homepage"
           >
             Michael Friebe
           </Link>
 
           <nav 
-            className="hidden md:flex items-center gap-8 border border-blue-500"
+            className="hidden md:flex  sm:gap-[100px] border border-blue-500"
             aria-label="Main navigation"
             itemScope 
             itemType="https://schema.org/SiteNavigationElement"
           >
-            <ul className="flex flex-col items-center gap-2 border border-red-500">
+            <ul className="flex flex-col  gap-[5px] border border-red-500">
+            <li>
+              <Link href="/book-a-call" className="flex items-center gap-2"> 
+                Book a call
+                <ArrowUpRight className="w-6 h-6" />
+              </Link>
+            </li>
             {navigationConfig.mainNav.map((item) =>
               <li
               key={item.href}
@@ -40,10 +46,11 @@ export function Navbar() {
               </Link>
             </li>
             )}
+           
             </ul>
 
 
-            <ul className="flex flex-col items-center gap-2 border border-red-500">
+            <ul className="flex flex-col  gap-[5px] border border-red-500">
             {navigationConfig.mainNavLinks.map((item) =>
             <li
             key={item.href}

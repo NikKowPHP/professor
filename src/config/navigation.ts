@@ -1,29 +1,25 @@
 export const navigationConfig = {
   mainNav: [
+   
     {
-      title: 'bookCall',
-      href: 'book-call',
-      isRoute: false,
-    },
-    {
-      title: 'myInvestments',
+      title: 'My Investments',
       href: 'my-investments',
       isRoute: false,
     },
     {
-      title: 'myStory',
+      title: 'My Story',
       href: 'my-story',
       isRoute: false,
     },
     {
-      title: 'newsInsights',
+      title: 'News & Insights',
       href: 'news-insights',
       isRoute: false,
     }
   ],
   mainNavLinks: [
     {
-      title: 'email',
+      title: 'Email',
       href: 'email',
       isRoute: false,
     },
@@ -33,12 +29,12 @@ export const navigationConfig = {
       isRoute: false,
     },
     {
-      title: 'researchgate',
+      title: 'ResearchGate',
       href: 'https://www.researchgate.net/profile/Proffessor-Website',
       isRoute: false,
     },
     {
-      title: 'patents',
+      title: 'Patents',
       href: 'https://patents.google.com/patent/US11964322B2/en',
       isRoute: false,
     },
