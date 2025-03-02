@@ -17,11 +17,11 @@ export const HeroSection = async () => {
 
   return (
     <section
-      className=" px-5 sm:px-0 pb-[20px] sm:py-[40px] "
+      className=" px-5 md:px-0 pb-[20px] sm:py-[40px] "
       itemScope
       itemType="https://schema.org/WebPageElement"
     >
-      <div className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 sm:gap-x-[150px] gap-y-[40px] sm:gap-y-0 '>
+      <div className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-x-0  lg:gap-x-[150px] md:gap-x-[100px] sm:gap-x-[50px] gap-y-[40px] sm:gap-y-0 '>
 
         <div className="w-full ">
           <Image
