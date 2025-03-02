@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getBlogPostService } from '@/lib/services/blog-post.service';
 import { BlogPost } from '@/domain/models/blog-post.model';
 import Image from 'next/image';
+import { Tag } from '@/components/ui/tag/tag';
+import { ArrowUpRight } from 'lucide-react';
 
 
 export async function BlogPosts() {
@@ -75,12 +77,13 @@ const BlogPostItem = ({
             aria-label={`${post.title} preview image`}
           >
             <Image
-              className='w-full h-auto'
+              className='w-full h-auto object-cover'
               src={post.imageurl}
               alt={post.imageAlt || post.title}
               width={1000}
               height={1000}
               loading="lazy"
+              quality={100}
             />
           </div>
         )}
@@ -92,12 +95,19 @@ const BlogPostItem = ({
               className="px-[10px] py-[5px]"
               itemProp="datePublished"
             >
-              {new Date(post.createdAt).toLocaleDateString('en', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+            {new Date(post.createdAt).toLocaleDateString()}
             </div>
+
+            <div  className="flex items-center">
+          <span>
+            <Tag
+            variant='simple'
+              className="px-8 text-sm sm:text-base"
+            >
+              News
+            </Tag>
+          </span>
+        </div>
            
           
           </header>
@@ -108,12 +118,13 @@ const BlogPostItem = ({
           </div> */}
 
 <h2
-              className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium tracking-[-0.02em]"
+              className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium tracking-[-0.02em] flex items-center gap-2"
               itemProp="headline"
             >
-              {post.title}
+              {post.title} 
+              <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
             </h2>
-            
+
         </div>
         <meta itemProp="position" content={String(position)} />
       </Link>
