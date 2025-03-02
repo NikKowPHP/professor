@@ -60,7 +60,7 @@ export function Navbar() {
         <div className="flex justify-between items-center">
           <Link 
             href="/" 
-            className={`gap-2 font-bold transition-all duration-300 ${scrolled ? 'text-[20px]' : 'text-[24px] sm:text-[48px]'}`}
+            className={`gap-2 self-start font-bold transition-all duration-300 ${scrolled ? 'text-[20px]' : 'text-[24px] sm:text-[48px]'}`}
             title="Michael Friebe"
             aria-label="Michael Friebe Homepage"
           >
