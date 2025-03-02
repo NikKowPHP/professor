@@ -119,6 +119,20 @@ export default function AdminDashboard() {
             Manage YouTube Sections
           </Button>
         </Link>
+         <Link
+          href="/admin/sections/quote"
+          className="flex flex-col p-6 bg-white rounded-primary hover:shadow-lg transition-shadow"
+        >
+          <h2 className="text-xl font-medium text-gray-900 mb-2">
+            Quote Section
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Manage the quote section.
+          </p>
+          <Button variant="primary" className="mt-auto w-full sm:w-auto">
+            Manage Quote Section
+          </Button>
+        </Link>
 
         {/* Add more admin sections here as needed */}
       </div>
