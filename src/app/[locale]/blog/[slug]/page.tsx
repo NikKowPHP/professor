@@ -110,7 +110,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <meta itemProp="dateModified" content={post.createdAt} />
         <meta itemProp="author" content="ZIRO Healthcare Solutions" />
         <meta itemProp="publisher" content="ZIRO Healthcare Solutions" />
-        <div className='max-w-7xl mx-auto px-[20px] md:px-0 '>
+        <div className='max-w-7xl mx-auto px-[20px] md:px-0 flex flex-col gap-6'>
 
 
           <header className="flex flex-col gap-8">
@@ -153,11 +153,11 @@ export default async function BlogPostPage({ params }: PageProps) {
               </div>
             </div>
           </header>
-          <div className='flex  gap-8 border border-red-500'>
+          <div className='flex flex-col lg:flex-row gap-8 border '>
 
-          <aside className=' border border-red-500'>
+          <aside className=' border  lg:w-[300px]'>
 
-            <div className="text-sm text-gray-600 flex items-center justify-center gap-4">
+            <div className="text-base flex flex-col  gap-4">
               <time dateTime={post.createdAt}>
                 {new Date(post.createdAt).toLocaleDateString(locale, {
                   year: 'numeric',
@@ -165,7 +165,6 @@ export default async function BlogPostPage({ params }: PageProps) {
                   day: 'numeric'
                 })}
               </time>
-              <span>•</span>
               <span>{readingTime} min read</span>
             </div>
 
