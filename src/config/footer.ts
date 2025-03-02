@@ -1,12 +1,12 @@
 export const footerConfig = {
   socialLinks: [
     {
-      title: 'bookCall',
+      title: 'Book a call',
       href: 'book-call',
       isRoute: false,
     },
     {
-      title: 'email',
+      title: 'Email',
       href: 'email',
       isRoute: false,
     },
@@ -18,12 +18,12 @@ export const footerConfig = {
   ],
   mainNavLinks: [
     {
-      title: 'patents',
+      title: 'Patents',
       href: 'https://patents.google.com/patent/US11964322B2/en',
       isRoute: false,
     },
     {
-      title: 'researchgate',
+      title: 'ResearchGate',
       href: 'https://www.researchgate.net/profile/Proffessor-Website',
       isRoute: false,
     },
