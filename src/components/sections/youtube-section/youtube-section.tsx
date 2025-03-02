@@ -1,9 +1,31 @@
 'use client'
 
-import {  youtubeItem } from '@/lib/data/youtube-section'
+import { youtubeSectionService } from '@/lib/services/youtube-section.service'
 import YouTube from 'react-youtube'
+import { useEffect, useState } from 'react'
+import { YoutubeItem } from '@/lib/data/youtube-section'
 
 export const YoutubeSection = () => {
+  const [youtubeItem, setYoutubeItem] = useState<YoutubeItem | null>(null)
+
+  useEffect(() => {
+    const fetchYoutubeSection = async () => {
+      try {
+        const sections = await youtubeSectionService.getActiveYoutubeSection()
+        if (sections) {
+          setYoutubeItem(sections)
+        }
+      } catch (error) {
+        console.error('Failed to fetch youtube sections:', error)
+      }
+    }
+
+    fetchYoutubeSection()
+  }, [])
+
+  if (!youtubeItem) {
+    return <div>Loading...</div>
+  }
 
   const opts = {
     width: '100%',
@@ -17,7 +39,6 @@ export const YoutubeSection = () => {
       modestbranding: 1,
       rel: 0,
     },
-  
   }
 
   return (
