@@ -44,15 +44,15 @@ export function Footer() {
   return (
     <>
       <footer
-        className="bg-[#027355] w-full py-12 px-2 sm:py-18 sm:px-20 text-white"
+        className="bg-[#027355] w-full py-12 px-[20px] md:px-20 text-white"
         itemScope
         itemType="https://schema.org/Organization"
       >
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-[100px]">
+          <div className="flex flex-col justify-start lg:flex-row gap-[30px] sm:gap-[30px]  lg:gap-[100px]  w-full">
             
             {/* Left Column */}
-            <div className=" flex">
+            <div className=" flex flex-col md:flex-row gap-[30px] justify-between sm:justify-start lg:justify-start border border-blue-500">
               <div className="border border-blue-500 p-4">
                 <Link
                   href="/"
@@ -74,7 +74,7 @@ export function Footer() {
             </div>
 
             {/* Right Column */}
-            <div className="flex  gap-[100px]">
+            <div className="flex  sm:gap-[30px] justify-between lg:justify-start  lg:gap-[100px] border border-blue-500">
               <div className="border  border-blue-500 p-4 flex flex-col gap-6">
                 <ul>
                   {footerConfig.socialLinks.map((item) => (
