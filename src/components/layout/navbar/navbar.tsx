@@ -12,7 +12,7 @@ export function Navbar() {
       itemScope 
       itemType="https://schema.org/WPHeader"
     >
-      <div className=" mx-auto px-[5px] max-w-7xl border border-blue-500">
+      <div className=" mx-auto px-[5px] w-full max-w-7xl border border-blue-500">
         <div className="flex  items-center justify-between">
           <Link 
             href="/" 

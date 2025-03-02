@@ -52,7 +52,7 @@ const ProcessTitleSubtitle = () => {
 const ProcessItem = ({ index, item }: { index: number; item: ProcessItemType }) => {
   return (
     <div 
-      className="p-[36px] shadow-sm flex flex-col gap-[60px] border border-red-500"
+      className="p-[25px] shadow-sm flex flex-col gap-[60px] leading-[1.2] border border-red-500"
       style={{ 
         backgroundColor: item.bgColor,
         color: item.textColor 
@@ -63,7 +63,7 @@ const ProcessItem = ({ index, item }: { index: number; item: ProcessItemType }) 
     >
       <meta itemProp="position" content={`${index + 1}`} />
       <h3 
-        className="text-[30px] font-bold"
+        className="text-[30px] font-bold h:auto sm:h-[70px]"
         itemProp="name"
       >
         {item.title}

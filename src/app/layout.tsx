@@ -6,8 +6,8 @@ import { siteUrl } from '@/config/constants';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'ZIRO | Digital Health Solutions & Development',
-    template: '%s | ZIRO - Healthcare Technology Solutions'
+    default: 'Michael Friebe | Digital Health Solutions & Development',
+    template: '%s | Michael Friebe - Healthcare Technology Solutions'
   },
   description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
   icons: {
@@ -48,22 +48,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
-    siteName: 'ZIRO',
-    title: 'ZIRO - Digital Health Solutions & Development',
-    description: 'Empowering healthcare through innovative digital solutions. We create user-centric medical software and health tech products that enhance patient care and clinical workflows.',
+    siteName: 'Michael Friebe',
+    title: 'Michael Friebe - Digital Health Solutions & Development',
+    description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
     images: [
       {
         url: '/images/ziro.avif',
         width: 1200,
         height: 630,
-        alt: 'ZIRO Digital Health Solutions'
+        alt: 'Michael Friebe Digital Health Solutions'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ZIRO - Digital Health Solutions & Development',
-    description: 'Creating innovative digital health solutions for better healthcare delivery and patient experience.',
+    title: 'Michael Friebe - Digital Health Solutions & Development',
+    description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
     images: ['/images/ziro.avif']
   },
   robots: {
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "HealthcareBusiness",
-  "name": "ZIRO",
+  "name": "Michael Friebe",
   "url": siteUrl,
   "logo": `/images/ziro.avif`,
   "description": "Digital health solutions provider specializing in medical software development and healthcare technology.",
