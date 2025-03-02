@@ -12,7 +12,7 @@ export const QuoteSection = () => {
         itemScope
         itemType="https://schema.org/WebPageElement"
       >
-      <div className='max-w-5xl'>
+      <div className='max-w-7xl mx-auto border border-blue-500'>
         
           <h2 className='text-[48px] font-normal text-center text-white leading-[1.2]'>
             {quoteItem.quote}

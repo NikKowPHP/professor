@@ -12,47 +12,48 @@ export async function BlogPosts() {
   const blogPosts = await blogPostService.getBlogPosts('en')
   return (
     <section id="work" className="relative overflow-hidden bg-white   py-[100px]">
-      <h1
-        className="text-[40px] sm:text-[56px] lg:text-[48px] leading-[1.1] font-medium tracking-[-0.02em] "
-        itemProp="headline"
-      >
-        The latest news from me and the insights
-
-      </h1>
-      <Link href="/en/blog">
-        <span className='flex items-center gap-2'>
-          Read All
-          <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
-        </span>
-      </Link>
-
-      <Suspense
-        fallback={
-          <div className="min-h-[500px]">
-            <span className="sr-only">Loading healthcare articles...</span>
-            Loading posts...
-          </div>
-        }
-      >
-        <ul
-          className="relative mx-auto  flex flex-col gap-16 max-w-5xl"
-          itemScope
-          itemType="https://schema.org/ItemList"
+      <div className='max-w-7xl mx-auto border flex flex-col gap-[20px] border-blue-500'>
+        <h1
+          className="text-[40px] sm:text-[56px] lg:text-[48px] leading-[1.1] font-medium tracking-[-0.02em] "
+          itemProp="headline"
         >
-          {blogPosts.map((post, index) => (
-            <BlogPostItem
-              key={post.slug}
-              post={post}
-              position={index + 1}
-            />
-          ))}
-        </ul>
-      </Suspense>
+          The latest news from me and the insights
 
+        </h1>
+        <Link href="/en/blog">
+          <span className='flex items-center gap-2'>
+            Read All
+            <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
+          </span>
+        </Link>
+
+        <Suspense
+          fallback={
+            <div className="min-h-[500px]">
+              <span className="sr-only">Loading healthcare articles...</span>
+              Loading posts...
+            </div>
+          }
+        >
+          <ul
+            className="relative mx-auto  flex flex-col gap-16 w-full justify-start"
+            itemScope
+            itemType="https://schema.org/ItemList"
+          >
+            {blogPosts.map((post, index) => (
+              <BlogPostItem
+                key={post.slug}
+                post={post}
+                position={index + 1}
+              />
+            ))}
+          </ul>
+        </Suspense>
+
+      </div>
     </section>
   )
 }
-
 
 
 
@@ -65,7 +66,7 @@ const BlogPostItem = ({
 }) => {
   return (
     <li
-      className="border border-blue-500"
+      className="border border-blue-500 max-w-5xl"
       itemScope
       itemType="https://schema.org/BlogPosting"
       itemProp="itemListElement"
@@ -97,25 +98,25 @@ const BlogPostItem = ({
         {/* Content Section */}
         <div className="flex flex-col justify-between h-full p-[20px] gap-[20px] border border-green-500 bg-[#FFE8D8]">
           <header className="flex justify-between gap-2">
-          <div 
+            <div
               className="px-[10px] py-[5px]"
               itemProp="datePublished"
             >
-            {new Date(post.createdAt).toLocaleDateString()}
+              {new Date(post.createdAt).toLocaleDateString()}
             </div>
 
-            <div  className="flex items-center">
-          <span>
-            <Tag
-            variant='simple'
-              className="px-8 text-sm sm:text-base"
-            >
-              News
-            </Tag>
-          </span>
-        </div>
-           
-          
+            <div className="flex items-center">
+              <span>
+                <Tag
+                  variant='simple'
+                  className="px-8 text-sm sm:text-base"
+                >
+                  News
+                </Tag>
+              </span>
+            </div>
+
+
           </header>
 
           {/* Add description if available in BlogPost model */}
@@ -123,16 +124,16 @@ const BlogPostItem = ({
             {post.excerpt}
           </div> */}
 
+          <div
+            className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium tracking-[-0.02em] flex items-center gap-2"
+            itemProp="headline"
+          >
             <div
-              className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium tracking-[-0.02em] flex items-center gap-2"
-              itemProp="headline"
-            >
-              <div 
-                className="flex-1"
-                dangerouslySetInnerHTML={{ __html: post.excerpt }} 
-              />
-              <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
-            </div>
+              className="flex-1"
+              dangerouslySetInnerHTML={{ __html: post.excerpt }}
+            />
+            <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
+          </div>
 
         </div>
         <meta itemProp="position" content={String(position)} />

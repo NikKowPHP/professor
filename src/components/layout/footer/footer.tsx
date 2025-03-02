@@ -48,15 +48,15 @@ export function Footer() {
         itemScope
         itemType="https://schema.org/Organization"
       >
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-[100px]">
             
             {/* Left Column */}
             <div className=" flex">
               <div className="border border-blue-500 p-4">
                 <Link
                   href="/"
-                  className="inline-block"
+                  className="inline-block text-[30px] font-bold whitespace-nowrap"
                   itemProp="url"
                 >
                   Michael Friebe
@@ -74,7 +74,7 @@ export function Footer() {
             </div>
 
             {/* Right Column */}
-            <div className="flex ">
+            <div className="flex  gap-[100px]">
               <div className="border  border-blue-500 p-4 flex flex-col gap-6">
                 <ul>
                   {footerConfig.socialLinks.map((item) => (
@@ -93,13 +93,10 @@ export function Footer() {
               </div>
               
               <div className="border border-blue-500 p-4 space-y-10">
-                <div className="flex flex-col gap-2">
-
-                <p>
-                  Berlin
-                </p>
-                <p>Germany</p>
-                </div>
+                <ul className="flex flex-col  text-[16px]">
+                  <li>Berlin</li>
+                  <li>Germany</li>
+                </ul>
                 <div className="flex flex-col gap-2"> 
                   <address className="not-italic">
                     <ul role="list" className="space-y-[5px]">

@@ -8,11 +8,11 @@ export function Navbar() {
 
   return (
     <header 
-      className="sticky top-0 left-0 right-0 z-50 bg-[#F7F7F7] bg-opacity-80 backdrop-blur-sm bg-[#FAF8F1] border border-blue-500"
+      className="sticky top-0 left-0 right-0 z-50 bg-opacity-80 backdrop-blur-sm bg-[#FAF8F1] border border-blue-500"
       itemScope 
       itemType="https://schema.org/WPHeader"
     >
-      <div className=" mx-auto px-[5px]">
+      <div className=" mx-auto px-[5px] max-w-7xl border border-blue-500">
         <div className="flex  items-center justify-between">
           <Link 
             href="/" 

@@ -23,14 +23,14 @@ export const YoutubeSection = () => {
   return (
       <section
       id='youtube-section'
-        className="py-[150px] border border-green-500"
+        className="pt-[100px] pb-[50px] border border-green-500"
         itemScope
         itemType="https://schema.org/WebPageElement"
       >
         
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-[50px]'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-[50px] max-w-7xl mx-auto border border-blue-500'>
 
-            <div className="relative w-full border border-red-500 max-w-[1200px] mx-auto">
+            <div className="relative w-full border border-red-500  ">
               <div className="pb-[56.25%]">
                 <div className="absolute top-0 left-0 w-full h-full  overflow-hidden">
                   <YouTube
