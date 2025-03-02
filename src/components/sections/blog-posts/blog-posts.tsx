@@ -36,7 +36,7 @@ export async function BlogPosts() {
           }
         >
           <ul
-            className="relative mx-auto  flex flex-col gap-16 w-full justify-start"
+            className="relative mx-auto  flex flex-col gap-[20px] md:gap-[40px] w-full justify-start"
             itemScope
             itemType="https://schema.org/ItemList"
           >
@@ -66,20 +66,20 @@ const BlogPostItem = ({
 }) => {
   return (
     <li
-      className="border border-blue-500 max-w-5xl"
+      className=" max-w-5xl"
       itemScope
       itemType="https://schema.org/BlogPosting"
       itemProp="itemListElement"
     >
       <Link
         href={`/en/blog/${post.slug}`}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full"
+        className="grid grid-cols-1 lg:grid-cols-2 h-full"
         itemProp="url"
       >
         {/* Image Section */}
         {post.imageurl && (
           <div
-            className="w-full aspect-[6/3] sm:h-full sm:w-full border border-red-500 overflow-hidden min-h-[500px]"
+            className="w-full aspect-[6/3] sm:h-full sm:w-full  overflow-hidden min-h-[500px]"
             role="img"
             aria-label={`${post.title} preview image`}
           >
@@ -96,7 +96,7 @@ const BlogPostItem = ({
         )}
 
         {/* Content Section */}
-        <div className="flex flex-col justify-between h-full p-[20px] gap-[20px] border border-green-500 bg-[#FFE8D8]">
+        <div className="flex flex-col justify-between h-full p-[20px] gap-[20px]  bg-[#FFE8D8]">
           <header className="flex justify-between gap-2">
             <div
               className="px-[10px] py-[5px]"
