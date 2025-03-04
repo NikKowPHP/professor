@@ -5,7 +5,7 @@ import logger from '@/lib/logger'
 import { IYoutubeSectionRepository } from '../interfaces/youtubeSectionRepository.interface'
 export class YoutubeSectionRepository implements IYoutubeSectionRepository {
   private supabaseClient: SupabaseClient
-  private tableName: string = 'professor_youtube_section'
+  private tableName: string = 'proffessor_youtube_section'
   constructor() {
     this.supabaseClient = supabase
   }
