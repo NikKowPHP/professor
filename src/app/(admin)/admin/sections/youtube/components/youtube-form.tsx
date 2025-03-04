@@ -57,15 +57,7 @@ export function YoutubeForm({
           required
         />
       </div>
-      <div>
-        <label
-          htmlFor="is_active"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Is Active
-        </label>
-      
-      </div>
+       
       <div className="flex justify-end space-x-4">
      
         <Button variant="primary" type="submit" disabled={loading}>
