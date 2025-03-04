@@ -32,3 +32,15 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+export function OPTIONS() {
+  return NextResponse.json(
+    {},
+    {
+      headers: {
+        'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+    }
+  )
+}
+

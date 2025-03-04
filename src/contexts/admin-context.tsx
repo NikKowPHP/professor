@@ -290,7 +290,7 @@ export function AdminProvider({
         throw new Error('Failed to update quote');
       }
       const updatedQuote = await response.json();
-      console.log('updatedQuote', updatedQuote)
+      console.log('updatedQuote', updatedQuote);
       setQuote(updatedQuote);
     } catch (error: any) {
       setError(error.message || 'Failed to update quote');
