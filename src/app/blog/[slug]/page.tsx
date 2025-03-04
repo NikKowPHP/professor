@@ -14,16 +14,16 @@ interface PageProps {
 }
 
 // Create Article JSON-LD
-const createArticleJsonLd = (post: BlogPost, locale: string) => ({
+const createArticleJsonLd = (post: BlogPost) => ({
   "@context": "https://schema.org",
   "@type": "Article",
-  "@id": `${siteUrl}/${locale}/blog/${post.slug}#article`,
+  "@id": `${siteUrl}/blog/${post.slug}#article`,
   "headline": post.title,
   "description": post.excerpt || post.title,
   "image": post.imageurl,
   "datePublished": post.createdAt,
   "dateModified": post.createdAt,
-  "inLanguage": locale,
+  "inLanguage": 'en',
   "publisher": {
     "@type": "Organization",
     "name": "ZIRO Healthcare Solutions",
@@ -38,12 +38,12 @@ const createArticleJsonLd = (post: BlogPost, locale: string) => ({
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": `${siteUrl}/${locale}/blog/${post.slug}`
+    "@id": `${siteUrl}/blog/${post.slug}`
   }
 })
 
 // Create Breadcrumb JSON-LD
-const createBreadcrumbJsonLd = (post: BlogPost, locale: string) => ({
+const createBreadcrumbJsonLd = (post: BlogPost) => ({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -51,28 +51,28 @@ const createBreadcrumbJsonLd = (post: BlogPost, locale: string) => ({
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": `${siteUrl}/${locale}`
+      "item": `${siteUrl}`
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "Blog",
-      "item": `${siteUrl}/${locale}/blog`
+      "item": `${siteUrl}/blog`
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": post.title,
-      "item": `${siteUrl}/${locale}/blog/${post.slug}`
+      "item": `${siteUrl}/blog/${post.slug}`
     }
   ]
 })
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug, locale } = await params
+  const { slug } = await params
 
   // Find the blog post with the matching slug
-  const post = await blogPostService.getBlogPostBySlug(slug, locale)
+  const post = await blogPostService.getBlogPostBySlug(slug)
 
   // If the post doesn't exist, return a 404
   if (!post) {
@@ -89,13 +89,13 @@ export default async function BlogPostPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(createArticleJsonLd(post, locale))
+          __html: JSON.stringify(createArticleJsonLd(post))
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(createBreadcrumbJsonLd(post, locale))
+          __html: JSON.stringify(createBreadcrumbJsonLd(post))
         }}
       />
       <article
@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       >
         <meta itemProp="headline" content={post.title} />
         <meta itemProp="description" content={post.excerpt || post.title} />
-        <meta itemProp="inLanguage" content={locale} />
+        <meta itemProp="inLanguage" content="en" />
         <meta itemProp="datePublished" content={post.createdAt} />
         <meta itemProp="dateModified" content={post.createdAt} />
         <meta itemProp="author" content="ZIRO Healthcare Solutions" />
@@ -159,7 +159,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             <div className="text-base flex flex-col  gap-4">
               <time dateTime={post.createdAt}>
-                {new Date(post.createdAt).toLocaleDateString(locale, {
+                {new Date(post.createdAt).toLocaleDateString('en', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
@@ -198,7 +198,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <div className="text-sm text-gray-600">
                   Last updated: {' '}
                   <time dateTime={post.createdAt}>
-                    {new Date(post.createdAt).toLocaleDateString(locale, {
+                    {new Date(post.createdAt).toLocaleDateString('en', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
@@ -218,8 +218,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
 // Generate metadata for the page
 export async function generateMetadata({ params }: PageProps) {
-  const { slug, locale } = params
-  const post = await blogPostService.getBlogPostBySlug(slug, locale)
+  const { slug } = params
+  const post = await blogPostService.getBlogPostBySlug(slug)
 
   if (!post) {
     return {}

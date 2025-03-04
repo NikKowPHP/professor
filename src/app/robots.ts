@@ -12,8 +12,6 @@ export default function robots(): MetadataRoute.Robots {
           '/',
           '/blog',
           '/blog/*',
-          '/case-studies',
-          '/case-studies/*',
         ],
         disallow: [
           '/admin/*',
@@ -30,7 +28,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/blog/*',
-          '/case-studies/*',
         ],
         disallow: ['/admin/*', '/api/*'],
       },

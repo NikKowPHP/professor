@@ -30,7 +30,7 @@ export default async function BlogPage() {
             </div>
           }
         >
-          <BlogPosts />
+          <BlogPosts displayReadAll={false} />
         
         </Suspense>
       </div>

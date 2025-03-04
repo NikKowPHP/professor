@@ -1,142 +1,135 @@
-import type { Metadata } from 'next'
-import { Analytics } from "@vercel/analytics/react"
-import { Suspense } from 'react'
+import Script from 'next/script'
+import '@/styles/globals.css'
+import { ClientWrapper } from './client-wrapper'
+import { PageProvider } from '@/contexts/page-context'
 import { siteUrl } from '@/config/constants';
+import type { Metadata } from 'next';
+import { PostHogProvider } from '@/contexts/posthog-context'
+// Your GA Measurement ID
+const GA_MEASUREMENT_ID = process.env.GA_MEASUREMENT_ID
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: 'Michael Friebe | Digital Health Solutions & Development',
-    template: '%s | Michael Friebe - Healthcare Technology Solutions'
-  },
-  description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
-  icons: {
-    icon: [
-      {
-        url: '/images/favicon.ico',
-        sizes: 'any',
-      }
-    ],
-    apple: [
-      {
-        url: '/apple-icon.png',
-        sizes: '180x180',
-        type: 'image/png',
-      }
-    ],
-    other: [
-      {
-        rel: 'mask-icon',
-        url: '/apple-icon.png',
-        color: '#000000',
-      }
-    ]
-  },
-  keywords: [
-    'digital health solutions',
-    'healthcare software development',
-    'medical app design',
-    'health tech UI/UX',
-    'digital health products',
-    'healthcare technology',
-    'medical software solutions',
-    'health app development',
-    'patient experience design',
-    'healthcare UX research'
-  ],
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: siteUrl,
-    siteName: 'Michael Friebe',
-    title: 'Michael Friebe - Digital Health Solutions & Development',
+
+interface LocaleLayoutProps {
+  children: React.ReactNode
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: 'Michael Friebe | Digital Health Solutions & Development',
+      template: '%s | Michael Friebe - Healthcare Technology Solutions',
+    },
     description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
-    images: [
-      {
+    keywords: [
+      'digital health solutions',
+      'healthcare software development',
+      'medical app design',
+      'health tech UI/UX',
+      'patient experience design',
+      'clinical workflow solutions',
+      'healthcare technology',
+      'medical software systems'
+    ],
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: siteUrl,
+      siteName: 'Michael Friebe',
+      title: 'Michael Friebe - Digital Health Solutions & Development',
+      description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
+      images: [{
         url: '/images/ziro.avif',
         width: 1200,
         height: 630,
         alt: 'Michael Friebe Digital Health Solutions'
-      }
-    ]
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Michael Friebe - Digital Health Solutions & Development',
-    description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
-    images: ['/images/ziro.avif']
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+      }]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Michael Friebe - Digital Health Solutions & Development',
+      description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
+      images: ['/images/ziro.avif']
+    },
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/apple-icon.png',
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  verification: {
-    google: 'your-google-verification-code',
-  },
-  manifest: '/manifest.json',
+    verification: {
+      google: 'your-google-verification-code',
+    },
+    manifest: '/manifest.json',
+  }
 }
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "HealthcareBusiness",
-  "name": "Michael Friebe",
-  "url": siteUrl,
-  "logo": `/images/ziro.avif`,
-  "description": "Digital health solutions provider specializing in medical software development and healthcare technology.",
-  "sameAs": [
-    "https://twitter.com/ziro",
-    "https://linkedin.com/company/ziros",
-    "https://www.instagram.com/ziro.space/",
-    "https://www.nikhil.health/",
-    "https://x.com/NikhilSing69944"
-  ],
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "Poland"
-  },
-  "knowsAbout": [
-    "Digital Health Solutions",
-    "Healthcare Software Development",
-    "Medical UX Design",
-    "Health Technology",
-    "Patient Experience Design"
-  ],
-  "serviceType": [
-    "Healthcare Software Development",
-    "Digital Health Product Design",
-    "Medical UX/UI Design",
-    "Health Tech Solutions"
-  ]
-}
-
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: LocaleLayoutProps) {
+
+
+
+ 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="canonical" href={`${siteUrl}`} />
+        <link rel="canonical" href={siteUrl} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Michael Friebe",
+              "url": siteUrl,
+              "image": "/images/ziro.avif",
+              "description": "Digital health solutions provider specializing in medical software development and healthcare technology.",
+              "sameAs": [
+                "https://linkedin.com/in/michaelfriebe",
+                "https://github.com/mfriebe",
+                "https://twitter.com/mfriebe"
+              ],
+              "jobTitle": "Digital Health Solutions Architect",
+              "alumniOf": "Technical University of Munich"
+            })
+          }}
         />
+        {/* Google Analytics Script */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}', {
+              page_path: window.location.pathname,
+              cookie_flags: 'SameSite=None;Secure'
+            });
+          `}
+        </Script>
       </head>
       <body>
-        <Suspense>
-          {children}
-
-        </Suspense>
-        <Analytics mode="production" debug={false} />
+          <PostHogProvider>
+          <PageProvider>
+            <ClientWrapper>
+              <main className="relative">{children}</main>
+              </ClientWrapper>
+            </PageProvider>
+          </PostHogProvider>
       </body>
     </html>
   )
-} 
+}

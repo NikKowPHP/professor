@@ -7,9 +7,9 @@ import { Tag } from '@/components/ui/tag/tag';
 import { ArrowUpRight } from 'lucide-react';
 
 
-export async function BlogPosts() {
+export async function BlogPosts({displayReadAll = true}: {displayReadAll?: boolean}) {
   const blogPostService = await getBlogPostService()
-  const blogPosts = await blogPostService.getBlogPosts('en')
+  const blogPosts = await blogPostService.getBlogPosts()
   return (
     <section id="work" className="relative overflow-hidden    py-[50px] md:py-[100px]">
       <div className='max-w-7xl px-[20px] md:px-0 mx-auto flex flex-col gap-[20px]'>
@@ -20,12 +20,14 @@ export async function BlogPosts() {
           The latest news from me and the insights
 
         </h1>
-        <Link href="/en/blog">
-          <span className='flex items-center gap-2'>
-            Read All
-            <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
-          </span>
-        </Link>
+        {displayReadAll && (
+          <Link href="/blog">
+            <span className='flex items-center gap-2'>
+              Read All
+              <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
+            </span>
+          </Link>
+        )}
 
         <Suspense
           fallback={
@@ -72,7 +74,7 @@ const BlogPostItem = ({
       itemProp="itemListElement"
     >
       <Link
-        href={`/en/blog/${post.slug}`}
+        href={`/blog/${post.slug}`}
         className="grid grid-cols-1 lg:grid-cols-2 h-full"
         itemProp="url"
       >

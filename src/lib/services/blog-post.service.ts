@@ -3,11 +3,11 @@ import { blogPostRepositoryLocal } from "@/lib/repositories/blog-post.local.repo
 import { blogPostRepository } from "@/lib/repositories/blog-post.repository"
 
 export interface IBlogPostService {
-  getBlogPosts(locale: string): Promise<BlogPost[]>
-  getBlogPostBySlug(slug: string, locale: string): Promise<BlogPost | null>
-  createBlogPost(blogPost: Omit<BlogPost, 'id'>, locale: string): Promise<BlogPost>
-  updateBlogPost(id: string, blogPost: Partial<BlogPost>, locale: string): Promise<BlogPost | null>
-  deleteBlogPost(id: string, locale: string): Promise<boolean>
+  getBlogPosts(): Promise<BlogPost[]>
+  getBlogPostBySlug(slug: string): Promise<BlogPost | null>
+  createBlogPost(blogPost: Omit<BlogPost, 'id'>): Promise<BlogPost>
+  updateBlogPost(id: string, blogPost: Partial<BlogPost>): Promise<BlogPost | null>
+  deleteBlogPost(id: string): Promise<boolean>
 }
 
 export class BlogPostService implements IBlogPostService {
@@ -20,32 +20,32 @@ export class BlogPostService implements IBlogPostService {
     }
   }
 
-  getBlogPosts = async (locale: string): Promise<BlogPost[]> => {
-    return this.blogPostRepository.getBlogPosts(locale)
+  getBlogPosts = async (): Promise<BlogPost[]> => {
+    return this.blogPostRepository.getBlogPosts('en')
   }
 
-  getBlogPostBySlug = async (slug: string, locale: string): Promise<BlogPost | null> => {
-    return this.blogPostRepository.getBlogPostBySlug(slug, locale)
+  getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+    return this.blogPostRepository.getBlogPostBySlug(slug, 'en')
   }
 
-  getBlogPostById = async (id: string, locale: string): Promise<BlogPost | null> => {
-    return this.blogPostRepository.getBlogPostById(id, locale)
+  getBlogPostById = async (id: string): Promise<BlogPost | null> => {
+    return this.blogPostRepository.getBlogPostById(id)
   }
 
-  createBlogPost = async (blogPost: Omit<BlogPost, 'id'>, locale: string): Promise<BlogPost> => {
+  createBlogPost = async (blogPost: Omit<BlogPost, 'id'>): Promise<BlogPost> => {
     blogPost.createdAt = new Date().toISOString()
     const trimmedBlogPost = this.trimBlogPost(blogPost)
-    return this.blogPostRepository.createBlogPost(trimmedBlogPost, locale)
+    return this.blogPostRepository.createBlogPost(trimmedBlogPost)
   }
 
-  updateBlogPost = async (id: string, blogPost: Partial<BlogPost>, locale: string): Promise<BlogPost | null> => {
+  updateBlogPost = async (id: string, blogPost: Partial<BlogPost>): Promise<BlogPost | null> => {
     const trimmedBlogPost = this.trimBlogPost(blogPost)
 
-    return this.blogPostRepository.updateBlogPost(id, trimmedBlogPost, locale)
+    return this.blogPostRepository.updateBlogPost(id, trimmedBlogPost)
   }
 
-  deleteBlogPost = async (id: string, locale: string): Promise<boolean> => {
-    return this.blogPostRepository.deleteBlogPost(id, locale)
+  deleteBlogPost = async (id: string): Promise<boolean> => {
+    return this.blogPostRepository.deleteBlogPost(id)
   }
   private trimBlogPost = (blogPost: Partial<BlogPost>): Partial<BlogPost> => {
     return  Object.fromEntries(
