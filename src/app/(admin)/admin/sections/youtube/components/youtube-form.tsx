@@ -17,7 +17,7 @@ export function YoutubeForm({
 }: YoutubeFormProps) {
   const [youtube_url, setYoutubeUrl] = useState(youtubeSection?.youtube_url || '')
   const [quote, setQuote] = useState(youtubeSection?.quote || '')
-
+  console.log('youtubeSection fetched on form', youtubeSection)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await onSubmit({ youtube_url, quote })
