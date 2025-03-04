@@ -15,6 +15,7 @@ export function YoutubeClientWrapper({ youtubeSection }: YoutubeClientWrapperPro
   const onSubmit = async (data: Partial<YoutubeItem>) => {
     setLoading(true)
     try {
+      console.log('youtubeSection fetched', youtubeSection)
       if (youtubeSection) {
         await youtubeSectionService.updateYoutubeSection(data)
       }

@@ -69,7 +69,7 @@ export function YoutubeForm({
       <div className="flex justify-end space-x-4">
      
         <Button variant="primary" type="submit" disabled={loading}>
-          {youtubeSection ? 'Update' : 'Create'}
+          Update
         </Button>
       </div>
     </form>

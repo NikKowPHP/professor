@@ -7,20 +7,15 @@ export class YoutubeSectionService {
   constructor() {
       this.youtubeSectionRepository = youtubeSectionRepository 
   }
-
  
   getYoutubeSection = async ( ): Promise<YoutubeItem | null> => {
     return this.youtubeSectionRepository.getYoutubeSection()
   }
-
  
 
   updateYoutubeSection = async (youtubeSection: Partial<YoutubeItem>): Promise<YoutubeItem> => {
     return this.youtubeSectionRepository.updateYoutubeSection(youtubeSection)
   }
-
-
-
  
 }
 
