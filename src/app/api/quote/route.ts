@@ -20,8 +20,10 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-
-    const updatedQuoteSection = await quoteSectionService.updateQuoteSection( body)
+    if (!body.id) {
+      return NextResponse.json({ message: 'ID is required for updating quote section' }, { status: 400 });
+    }
+    const updatedQuoteSection = await quoteSectionService.updateQuoteSection(body.id, body)
     revalidateTag(CACHE_TAGS.QUOTE)
     return NextResponse.json(updatedQuoteSection)
   } catch (error) {

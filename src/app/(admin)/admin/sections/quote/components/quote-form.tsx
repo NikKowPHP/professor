@@ -6,10 +6,11 @@ import { useAdmin } from '@/contexts/admin-context'
 
 export function QuoteForm() {
   const { quote, updateQuote, loading } = useAdmin()
+  console.log(quote);
   const [quoteText, setQuoteText] = useState(quote?.quote || '')
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await updateQuote({ quote: quoteText })
+    await updateQuote({ quote: quoteText, id: quote?.id, updated_at: new Date().toISOString() })
   }
 
   return (

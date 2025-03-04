@@ -10,10 +10,10 @@ export function YoutubeForm() {
   const [youtube_url, setYoutubeUrl] = useState(youtube?.youtube_url || '')
   const [quote, setQuote] = useState(youtube?.quote || '')
   console.log('youtubeSection fetched on form', youtube)
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await updateYoutube({ youtube_url, quote })
+    await updateYoutube({ youtube_url, quote, id: youtube?.id, updated_at: new Date() })
   }
 
   return (
