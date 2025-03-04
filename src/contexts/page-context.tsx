@@ -5,10 +5,12 @@ import {
   useContext,
   useState,
   useCallback,
+  useMemo,
 } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import { QuoteItem } from '@/lib/data/quote-section'
 import { YoutubeItem } from '@/lib/data/youtube-section'
+import { usePathname } from 'next/navigation'
 
 interface PageContextType {
   blogPost: BlogPost | null
@@ -20,6 +22,7 @@ interface PageContextType {
   youtube: YoutubeItem | null;
   getQuote: () => Promise<void>;
   getYoutube: () => Promise<void>;
+  isAdminRoute: boolean;
 }
 
 interface PageProviderProps {
@@ -36,7 +39,7 @@ export function PageProvider({
   const [youtube, setYoutube] = useState<YoutubeItem | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
+  const pathname = usePathname()
 
    const clearError = () => setError(null)
 
@@ -93,6 +96,10 @@ export function PageProvider({
     }
     }, [])
 
+  const isAdminRoute = useMemo(() => {
+    return pathname.startsWith('/admin')
+  }, [pathname])
+
 
   return (
     <PageContext.Provider
@@ -106,6 +113,7 @@ export function PageProvider({
         youtube,
         getQuote,
         getYoutube,
+        isAdminRoute,
       }}
     >
       {children}
