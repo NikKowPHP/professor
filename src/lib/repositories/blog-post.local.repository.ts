@@ -130,6 +130,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
         SET ${updates.join(', ')}
         WHERE id = ?
       `;
+      console.log('query with id', query, id)
 
       await new Promise<void>((resolve, reject) => {
         this.db.run(query, params, function (err: Error | null) {

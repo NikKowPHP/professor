@@ -1,11 +1,12 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { BlogPostForm } from '../../components/blog-post-form'
 import { useEffect, useState } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import logger from '@/lib/logger'
 import { blogPostService } from '@/lib/services/blog-post.service'
+import { useAdmin } from '@/contexts/admin-context'
 
 interface Props {
   params: { id: string }
@@ -13,11 +14,10 @@ interface Props {
 
 export default function EditBlogPostPage({params}: Props) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const locale = searchParams.get('locale') || 'en';
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [id, setId] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const { updateBlogPost, getBlogPostById, createBlogPost } = useAdmin()
 
   useEffect(() => {
     const { id } = params
@@ -25,14 +25,14 @@ export default function EditBlogPostPage({params}: Props) {
       setId(id)
     }
   
-    blogPostService.getBlogPostById(id).then(post => setBlogPost(post || null))
-  }, [params, blogPostService, locale])
+    getBlogPostById(id).then(post => setBlogPost(post || null))
+  }, [params])
 
   const handleUpdate = async (data: Partial<BlogPost>) => {
     if (!blogPost) return;
     setLoading(true)
     try {
-      await blogPostService.updateBlogPost(id, data)
+      await updateBlogPost(id, data)
       router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to update blog post:', error)
@@ -44,7 +44,7 @@ export default function EditBlogPostPage({params}: Props) {
   const handleCreate = async (data: Partial<BlogPost>) => {
     setLoading(true)
     try {
-      await blogPostService.createBlogPost(data as Omit<BlogPost, 'id'>)
+      await createBlogPost(data as Omit<BlogPost, 'id'>)
       router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to create blog post:', error)

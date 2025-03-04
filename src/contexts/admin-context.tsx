@@ -13,7 +13,7 @@ import { QuoteItem } from '@/lib/data/quote-section'
 import { YoutubeItem } from '@/lib/data/youtube-section'
 
 interface AdminContextType {
-  blogPosts: Record<string, BlogPost[]>
+  blogPosts: BlogPost[] | null
   loading: boolean
   error: string | null
  
@@ -26,7 +26,7 @@ interface AdminContextType {
   ) => Promise<void>
   deleteBlogPost: (id: string) => Promise<void>
   pinBlogPost: (id: string) => Promise<void>
-
+  getBlogPostById: (id: string) => Promise<BlogPost | null>
 
   clearError: () => void
   getBlogPost: (id: string,  ) => Promise<BlogPost | null>
@@ -45,7 +45,7 @@ interface AdminContextType {
 
 interface AdminProviderProps {
   children: React.ReactNode
-  initialBlogPosts?: Record<string, BlogPost[]>
+  initialBlogPosts?: BlogPost[]
   initialQuote?: QuoteItem | null
   initialYoutube?: YoutubeItem | null
 }
@@ -59,8 +59,8 @@ export function AdminProvider({
   initialYoutube,
 }: AdminProviderProps) {
 
-  const [blogPosts, setBlogPosts] = useState<Record<string, BlogPost[]>>(
-    initialBlogPosts || { en: [] }
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(
+    initialBlogPosts || []
   )
   const [quote, setQuote] = useState<QuoteItem | null>(initialQuote || null)
   const [youtube, setYoutube] = useState<YoutubeItem | null>(initialYoutube || null)
@@ -110,10 +110,7 @@ export function AdminProvider({
       }
 
       const newBlogPost = await response.json()
-      setBlogPosts((prev) => ({
-        ...prev,
-        ['en']: [...prev['en'], newBlogPost],
-      }))
+      setBlogPosts((prev) => [...prev, newBlogPost])
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to create blog post'
@@ -145,12 +142,7 @@ export function AdminProvider({
       }
 
       const updatedBlogPost = await response.json()
-      setBlogPosts((prev) => ({
-        ...prev,
-        ['en']: prev['en'].map((bp) =>
-          bp.id === id ? updatedBlogPost : bp
-        ),
-      }))
+      setBlogPosts((prev) => [...prev.filter((bp) => bp.id !== id), updatedBlogPost])
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to update blog post'
@@ -176,10 +168,7 @@ export function AdminProvider({
         throw new Error(errorData.error || 'Failed to delete blog post')
       }
 
-      setBlogPosts((prev) => ({
-        ...prev,
-        ['en']: prev['en'].filter((cs) => cs.id !== id),
-      }))
+      setBlogPosts((prev) => prev.filter((cs) => cs.id !== id))
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to delete blog post'
@@ -205,12 +194,9 @@ export function AdminProvider({
       }
 
       const updatedBlogPost = await response.json()
-      setBlogPosts((prev) => ({
-        ...prev,
-        ['en']: prev['en'].map((bp) =>
+      setBlogPosts((prev) => prev.map((bp) =>
           bp.id === id ? updatedBlogPost : bp
-        ),
-      }))
+        ))
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to pin blog post'
@@ -225,7 +211,22 @@ export function AdminProvider({
 
   const clearError = () => setError(null)
 
-  
+  const getBlogPostById = async (id: string) => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/admin/blog-post?id=${id}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch blog post')
+      }
+      const data = await response.json()
+      return data
+    } catch (error: any) {
+      setError(error.message || 'Failed to fetch blog post')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getBlogPosts = useCallback(async () => {
     setLoading(true)
@@ -236,7 +237,7 @@ export function AdminProvider({
         throw new Error('Failed to fetch blog posts')
       }
       const data = await response.json()
-      setBlogPosts((prev) => ({ ...prev, ['en']: data }))
+      setBlogPosts(data)
     } catch (error: any) {
       setError(error.message || 'Failed to fetch blog posts')
     } finally {
@@ -356,6 +357,7 @@ export function AdminProvider({
         youtube,
         getYoutube,
         updateYoutube,
+        getBlogPostById,
       }}
     >
       {children}

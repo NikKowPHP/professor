@@ -3,31 +3,36 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import logger from '@/lib/logger'
-import { BlogPost } from '@/domain/models/blog-post.model'
+import { useAdmin } from '@/contexts/admin-context'
 
-interface BlogPostListProps {
-  blogPosts: BlogPost[]
-  error: string | null
-  onDelete: (id: string) => Promise<void>
-  loading: boolean
-  onUpdate: (id: string, data: Partial<BlogPost>) => Promise<void>
-}
 
-export function BlogPostList({ blogPosts, error, loading, onDelete, onUpdate }: BlogPostListProps) {
+export function BlogPostList() {
+  const { blogPosts, error, loading, deleteBlogPost, updateBlogPost } = useAdmin()
 
   const router = useRouter()
   const [pinnedPostId, setPinnedPostId] = useState<string | null>(null)
 
+
   useEffect(() => {
-    // Find the currently pinned post on component mount
-    const pinnedPost = blogPosts?.find((post) => post.is_pinned)
-    setPinnedPostId(pinnedPost?.id || null)
+    console.log('blogPosts', blogPosts)
   }, [blogPosts])
+
+  useEffect(() => {
+    if (blogPosts) {
+      const pinnedPost = blogPosts.find((post) => post.is_pinned)
+      setPinnedPostId(pinnedPost?.id || null)
+    }
+  }, [blogPosts])
+
+  useEffect(() => {
+    console.log('pinnedPostId', pinnedPostId)
+  }, [pinnedPostId])
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this blog post?')) {
       try {
-        await onDelete(id)
+        debugger
+        await deleteBlogPost(id)
       } catch (error) {
         logger.log('Failed to delete blog post:', error)
       }
@@ -37,16 +42,19 @@ export function BlogPostList({ blogPosts, error, loading, onDelete, onUpdate }: 
   const handlePin = async (postId: string) => {
     try {
       // Unpin the currently pinned post if there is one
+      console.log('pinnedPostId', pinnedPostId)
+      debugger
       if (pinnedPostId) {
-        await onUpdate(pinnedPostId, { is_pinned: false })
+        await updateBlogPost(pinnedPostId, { is_pinned: false })
       }
       // Pin the selected post
-      await onUpdate(postId, { is_pinned: true })
+      await updateBlogPost(postId, { is_pinned: true })
       setPinnedPostId(postId)
     } catch (error) {
       logger.log('Failed to pin/unpin blog post:', error)
     }
   }
+
 
   return (
     <div className="space-y-8">
@@ -88,57 +96,65 @@ export function BlogPostList({ blogPosts, error, loading, onDelete, onUpdate }: 
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {blogPosts.map((post) => (
-              <tr key={post.id} className={loading ? 'opacity-50' : ''}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {post.title}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{post.slug}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">/blog/{post.slug}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-gray-500 line-clamp-2">
-                    {post.excerpt}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="radio"
-                    name="pinned-post"
-                    value={post.id}
-                    checked={post.is_pinned}
-                    onChange={() => handlePin(post.id)}
-                    disabled={loading}
-                    className="cursor-pointer"
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
-                  <button
-                    onClick={() =>
-                      router.push(
-                        `/admin/sections/blog-posts/edit/${post.id}`
-                      )
-                    }
-                    className="text-primary hover:text-primary/90 disabled:opacity-50"
-                    disabled={loading}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(post.id.toString())}
-                    className="text-red-600 hover:text-red-900 disabled:opacity-50"
-                    disabled={loading}
-                  >
-                    Delete
-                  </button>
+            {blogPosts ? (
+              blogPosts.map((post) => (
+                <tr key={post.id} className={loading ? 'opacity-50' : ''}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {post.title}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500">{post.slug}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500">/blog/{post.slug}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm text-gray-500 line-clamp-2">
+                      {post.excerpt}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="radio"
+                      name="pinned-post"
+                      value={post.id}
+                      checked={post.is_pinned}
+                      onChange={() => handlePin(post.id)}
+                      disabled={loading}
+                      className="cursor-pointer"
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/admin/sections/blog-posts/edit/${post.id}`
+                        )
+                      }
+                      className="text-primary hover:text-primary/90 disabled:opacity-50"
+                      disabled={loading}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(post.id.toString())}
+                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                      disabled={loading}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-center">
+                  {loading ? 'Loading blog posts...' : 'No blog posts found.'}
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
