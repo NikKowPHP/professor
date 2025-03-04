@@ -4,7 +4,11 @@ import { QuoteSectionRepository, quoteSectionRepository } from "../repositories/
 export class QuoteSectionService {
   private quoteSectionRepository: QuoteSectionRepository
   constructor() {
-      this.quoteSectionRepository = quoteSectionRepository 
+      if(process.env.NEXT_PUBLIC_MOCK_REPOSITORIES === 'true') {
+        this.quoteSectionRepository = quoteSectionRepository 
+      } else {
+        this.quoteSectionRepository = quoteSectionRepository 
+      }
   }
 
   getQuoteSection = async (): Promise<QuoteItem | null> => {

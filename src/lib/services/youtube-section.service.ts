@@ -5,7 +5,11 @@ import { youtubeSectionRepository } from "../repositories/youtubeSection.reposit
 export class YoutubeSectionService {
   private youtubeSectionRepository: IYoutubeSectionRepository
   constructor() {
+    if(process.env.NEXT_PUBLIC_MOCK_REPOSITORIES === 'true') {
       this.youtubeSectionRepository = youtubeSectionRepository 
+    } else {
+      this.youtubeSectionRepository = youtubeSectionRepository 
+    }
   }
  
   getYoutubeSection = async ( ): Promise<YoutubeItem | null> => {
