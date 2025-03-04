@@ -1,20 +1,15 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { notFound } from 'next/navigation'
-import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import '@/styles/globals.css'
 import { locales, type Locale } from '@/i18n'
 import { ClientWrapper } from './client-wrapper'
 import { PageProvider } from '@/contexts/page-context'
 import logger from '@/lib/logger'
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
+import { siteUrl } from '@/config/constants';
+import type { Metadata } from 'next';
 import { PostHogProvider } from '@/contexts/posthog-context'
 import { bannerService } from '@/lib/services/banner.service'
-import { siteUrl } from '@/config/constants';
 // Your GA Measurement ID
 const GA_MEASUREMENT_ID = process.env.GA_MEASUREMENT_ID
 
@@ -27,58 +22,63 @@ interface LocaleLayoutProps {
   params: Promise<{ locale: string }>
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-
-  if (!locales.includes(locale as Locale)) {
-    notFound()
-  }
-
+export async function generateMetadata(): Promise<Metadata> {
   return {
-    alternates: {
-      canonical: `${siteUrl}/${locale}`,
-      languages: {
-        'en-US': '/en',
-        'pl-PL': '/pl',
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: 'Michael Friebe | Digital Health Solutions & Development',
+      template: '%s | Michael Friebe - Healthcare Technology Solutions',
+    },
+    description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
+    keywords: [
+      'digital health solutions',
+      'healthcare software development',
+      'medical app design',
+      'health tech UI/UX',
+      'patient experience design',
+      'clinical workflow solutions',
+      'healthcare technology',
+      'medical software systems'
+    ],
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: siteUrl,
+      siteName: 'Michael Friebe',
+      title: 'Michael Friebe - Digital Health Solutions & Development',
+      description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
+      images: [{
+        url: '/images/ziro.avif',
+        width: 1200,
+        height: 630,
+        alt: 'Michael Friebe Digital Health Solutions'
+      }]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Michael Friebe - Digital Health Solutions & Development',
+      description: 'Transforming healthcare through user-centric digital solutions. Specializing in medical software development, health tech UI/UX, and digital health product design.',
+      images: ['/images/ziro.avif']
+    },
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/apple-icon.png',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
       },
     },
-    title: {
-      default:
-        locale === 'en'
-          ? 'ZIRO | Digital Health Solutions & Development'
-          : 'ZIRO | Rozwiązania Cyfrowe dla Służby Zdrowia',
-      template: '%s | ZIRO Healthcare Technology',
+    verification: {
+      google: 'your-google-verification-code',
     },
-    description:
-      locale === 'en'
-        ? 'Transforming healthcare through innovative digital solutions. We specialize in medical software development, health tech UI/UX, and patient-centric digital products.'
-        : 'Transformacja ochrony zdrowia poprzez innowacyjne rozwiązania cyfrowe. Specjalizujemy się w tworzeniu oprogramowania medycznego, projektowaniu UI/UX dla sektora zdrowia i rozwiązaniach zorientowanych na pacjenta.',
-    keywords:
-      locale === 'en'
-        ? [
-            'digital health solutions',
-            'healthcare software development',
-            'medical app design',
-            'health tech UI/UX',
-            'patient experience design',
-            'clinical workflow solutions',
-            'healthcare technology',
-            'medical software systems'
-          ]
-        : [
-            'rozwiązania cyfrowe dla zdrowia',
-            'rozwój oprogramowania medycznego',
-            'projektowanie aplikacji medycznych',
-            'technologia medyczna',
-            'doświadczenie pacjenta',
-            'systemy dla służby zdrowia',
-            'informatyka medyczna',
-            'rozwiązania dla klinik'
-          ],
+    manifest: '/manifest.json',
   }
 }
 
@@ -104,8 +104,29 @@ export default async function LocaleLayout({
   console.log('initialActiveBanner', initialActiveBanner)
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="canonical" href={siteUrl} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Michael Friebe",
+              "url": siteUrl,
+              "image": "/images/ziro.avif",
+              "description": "Digital health solutions provider specializing in medical software development and healthcare technology.",
+              "sameAs": [
+                "https://linkedin.com/in/michaelfriebe",
+                "https://github.com/mfriebe",
+                "https://twitter.com/mfriebe"
+              ],
+              "jobTitle": "Digital Health Solutions Architect",
+              "alumniOf": "Technical University of Munich"
+            })
+          }}
+        />
         {/* Google Analytics Script */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
@@ -123,7 +144,7 @@ export default async function LocaleLayout({
           `}
         </Script>
       </head>
-      <body className={inter.variable}>
+      <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <PostHogProvider>
           <PageProvider initialActiveBanner={initialActiveBanner || undefined}>

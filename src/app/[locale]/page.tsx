@@ -1,6 +1,4 @@
 import { Suspense } from 'react'
-
-import { type Locale } from '@/i18n'
 import {
   HeroSection,
   MyExpertise,
@@ -9,7 +7,6 @@ import {
   BlogPosts,
 } from '@/helpers/componentsLoad'
 import { companyConfig } from '@/config/company'
-import { siteUrl } from '@/config/constants';
 
 // Centralize JSON-LD data
 const jsonLdData = {
@@ -95,28 +92,7 @@ export default async function HomePage() {
             <BlogPosts />
           </Suspense>
 
-          {/* Defer less critical sections */}
-          {/* <Suspense fallback={<div className="min-h-[300px]" />}>
-            <TestimonialsSection locale={locale} />
-          </Suspense> */}
-
-          {/* Group remaining sections */}
-          {/* <Suspense fallback={<div className="min-h-[900px]" />}>
-            <div>
-              <WhyUs />
-              <Philosophy />
-              <Faq />
-            </div>
-          </Suspense> */}
-
-          {/* Load floating video last */}
-          {/* <Suspense fallback={null}>
-            <FloatVideo />
-          </Suspense>
-
-          <Suspense fallback={null}>
-            <BannerModalWrapper  />
-          </Suspense> */}
+        
         </div>
 
         {/* Metadata */}
@@ -138,49 +114,3 @@ export default async function HomePage() {
   )
 }
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
-  const { locale } = params
-
-  return {
-    alternates: {
-      canonical: `${siteUrl}/${locale}`,
-      languages: {
-        'en-US': '/en',
-        'pl-PL': '/pl',
-      },
-    },
-    title: {
-      default:
-        locale === 'en'
-          ? 'ZIRO | Digital Health Solutions & Development'
-          : 'ZIRO | Rozwiązania Cyfrowe dla Służby Zdrowia',
-      template: '%s | ZIRO Healthcare Technology',
-    },
-    description:
-      locale === 'en'
-        ? 'Transforming healthcare through innovative digital solutions. We specialize in medical software development, health tech UI/UX, and patient-centric digital products.'
-        : 'Transformacja ochrony zdrowia poprzez innowacyjne rozwiązania cyfrowe. Specjalizujemy się w tworzeniu oprogramowania medycznego, projektowaniu UI/UX dla sektora zdrowia i rozwiązaniach zorientowanych na pacjenta.',
-    keywords:
-      locale === 'en'
-        ? [
-            'digital health solutions',
-            'healthcare software development',
-            'medical app design',
-            'health tech UI/UX',
-            'patient experience design',
-            'clinical workflow solutions',
-            'healthcare technology',
-            'medical software systems',
-          ]
-        : [
-            'rozwiązania cyfrowe dla zdrowia',
-            'rozwój oprogramowania medycznego',
-            'projektowanie aplikacji medycznych',
-            'technologia medyczna',
-            'doświadczenie pacjenta',
-            'systemy dla służby zdrowia',
-            'informatyka medyczna',
-            'rozwiązania dla klinik',
-          ],
-  }
-}
