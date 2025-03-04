@@ -1,11 +1,14 @@
 import { QuoteItem } from "../data/quote-section"
 import { QuoteSectionRepository, quoteSectionRepository } from "../repositories/quote.repository"
+import { quoteSectionRepositoryLocal } from "../repositories/quote.repository.local"
+import { IQuoteSectionRepository } from "../interfaces/quoteSectionRepository.interface"
+
 
 export class QuoteSectionService {
-  private quoteSectionRepository: QuoteSectionRepository
+  private quoteSectionRepository: IQuoteSectionRepository
   constructor() {
       if(process.env.NEXT_PUBLIC_MOCK_REPOSITORIES === 'true') {
-        this.quoteSectionRepository = quoteSectionRepository 
+        this.quoteSectionRepository = quoteSectionRepositoryLocal 
       } else {
         this.quoteSectionRepository = quoteSectionRepository 
       }

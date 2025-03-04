@@ -40,4 +40,4 @@ class QuoteSectionRepository extends SqlLiteAdapter<QuoteItem, string> {
 }
 
 // export singleton
-export const quoteSectionRepository = new QuoteSectionRepository()
+export const quoteSectionRepositoryLocal = new QuoteSectionRepository()

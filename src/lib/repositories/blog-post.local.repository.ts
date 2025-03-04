@@ -9,7 +9,7 @@ const db = new Database(dbPath);
 
 export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> implements IBlogPostRepository {
   constructor() {
-    super("blog_posts", db);
+    super("professor_news_posts", db);
   }
 
   async getBlogPosts( ): Promise<BlogPost[]> {
@@ -19,7 +19,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
 
   async getBlogPostBySlug(slug: string,  ): Promise<BlogPost | null> {
     try {
-      const query = `SELECT * FROM blog_posts WHERE slug = ?`;
+      const query = `SELECT * FROM ${this.tableName} WHERE slug = ?`;
       console.log('query with slug', query, slug)
       const result = await new Promise<any>((resolve, reject) => {
         this.db.get(query, [slug], (err, row) => {
@@ -44,7 +44,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
 
   async getBlogPostById(id: string,  ): Promise<BlogPost | null> {
     try {
-      const query = `SELECT * FROM blog_posts WHERE id = ?`;
+      const query = `SELECT * FROM ${this.tableName} WHERE id = ?`;
       const result = await new Promise<any>((resolve, reject) => {
         this.db.get(query, [id], (err, row) => {
           if (err) {
@@ -69,7 +69,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
   async createBlogPost(blogPost: Omit<BlogPost, 'id'>,   ): Promise<BlogPost> {
     try {
       const query = `
-        INSERT INTO blog_posts (title, slug, image_url, created_at, image_alt, excerpt, content_html)
+        INSERT INTO ${this.tableName} (title, slug, image_url, created_at, image_alt, excerpt, content_html)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
       const params = [
@@ -126,7 +126,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
       params.push(id);
 
       const query = `
-        UPDATE blog_posts
+        UPDATE ${this.tableName}
         SET ${updates.join(', ')}
         WHERE id = ?
       `;
@@ -150,7 +150,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
 
   async deleteBlogPost(id: string,  ): Promise<boolean> {
     try {
-      const query = `DELETE FROM blog_posts WHERE id = ?`;
+      const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
 
       console.log('query with id', query, id)
       await new Promise<void>((resolve, reject) => {
@@ -172,7 +172,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
 
   async list( ): Promise<BlogPost[]> {
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM blog_posts`;
+      const query = `SELECT * FROM ${this.tableName}`;
       
 
       this.db.all(query, [], (err, rows: any[]) => {

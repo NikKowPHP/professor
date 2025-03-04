@@ -50,4 +50,4 @@ class YoutubeSectionRepository
 }
 
 // export singleton
-export const youtubeSectionRepository = new YoutubeSectionRepository()
+export const youtubeSectionRepositoryLocal = new YoutubeSectionRepository()

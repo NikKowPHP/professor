@@ -1,6 +1,7 @@
 import { BlogPost } from "@/domain/models/blog-post.model"
-// import { blogPostRepositoryLocal } from "@/lib/repositories/blog-post.local.repository"
+import { blogPostRepositoryLocal } from "@/lib/repositories/blog-post.local.repository"
 import { blogPostRepository } from "@/lib/repositories/blog-post.repository"
+import { IBlogPostRepository } from "../interfaces/blog-post.interface"
 
 export interface IBlogPostService {
   getBlogPosts(): Promise<BlogPost[]>
@@ -8,24 +9,25 @@ export interface IBlogPostService {
   createBlogPost(blogPost: Omit<BlogPost, 'id'>): Promise<BlogPost>
   updateBlogPost(id: string, blogPost: Partial<BlogPost>): Promise<BlogPost | null>
   deleteBlogPost(id: string): Promise<boolean>
+  getBlogPostById(id: string): Promise<BlogPost | null>
 }
 
 export class BlogPostService implements IBlogPostService {
-  private blogPostRepository: any //IBlogPostRepository
+  private blogPostRepository: IBlogPostRepository
   constructor() {
-    // if(process.env.MOCK_REPOSITORIES === 'true') {
-    //   this.blogPostRepository = blogPostRepositoryLocal
-    // } else {
+    if(process.env.MOCK_REPOSITORIES === 'true') {
+      this.blogPostRepository = blogPostRepositoryLocal
+    } else {
       this.blogPostRepository = blogPostRepository // TODO: implement postgres repo
-    // }
+    }
   }
 
   getBlogPosts = async (): Promise<BlogPost[]> => {
-    return this.blogPostRepository.getBlogPosts('en')
+    return this.blogPostRepository.getBlogPosts()
   }
 
   getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
-    return this.blogPostRepository.getBlogPostBySlug(slug, 'en')
+    return this.blogPostRepository.getBlogPostBySlug(slug)
   }
 
   getBlogPostById = async (id: string): Promise<BlogPost | null> => {
@@ -34,26 +36,17 @@ export class BlogPostService implements IBlogPostService {
 
   createBlogPost = async (blogPost: Omit<BlogPost, 'id'>): Promise<BlogPost> => {
     blogPost.created_at = new Date().toISOString()
-    const trimmedBlogPost = this.trimBlogPost(blogPost)
-    return this.blogPostRepository.createBlogPost(trimmedBlogPost)
+    return this.blogPostRepository.createBlogPost(blogPost)
   }
 
   updateBlogPost = async (id: string, blogPost: Partial<BlogPost>): Promise<BlogPost | null> => {
-    const trimmedBlogPost = this.trimBlogPost(blogPost)
-
-    return this.blogPostRepository.updateBlogPost(id, trimmedBlogPost)
+    return this.blogPostRepository.updateBlogPost(id, blogPost)
   }
 
   deleteBlogPost = async (id: string): Promise<boolean> => {
     return this.blogPostRepository.deleteBlogPost(id)
   }
-  private trimBlogPost = (blogPost: Partial<BlogPost>): Partial<BlogPost> => {
-    return  Object.fromEntries(
-      Object.entries(blogPost)
-        .filter(([_, value]) => value !== null && value !== undefined)
-        .map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
-    );
-  }
+
 }
 
 // export singleton

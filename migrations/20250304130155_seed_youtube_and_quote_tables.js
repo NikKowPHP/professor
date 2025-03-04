@@ -16,7 +16,7 @@ exports.up = async function(knex) {
   await knex('youtube_section').insert([
     {
       id: 'youtubeItem1',
-      youtube_url: 'SDrQH84YzU0',
+      youtube_url: 'uYPRGHoWT3E',
       quote:
         '"Embrace failure! It is essential to innovation. Treat every failure as a learning opportunity, not a setback.',
       created_at: new Date().toISOString(),
