@@ -9,7 +9,9 @@ export class YoutubeSectionService {
   }
  
   getYoutubeSection = async ( ): Promise<YoutubeItem | null> => {
-    return this.youtubeSectionRepository.getYoutubeSection()
+    const youtubeSection = await this.youtubeSectionRepository.getYoutubeSection()
+    console.log('youtubeSection fetched in service', youtubeSection)
+     return youtubeSection
   }
  
 

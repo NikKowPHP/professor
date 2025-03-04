@@ -23,6 +23,10 @@ export const YoutubeSection = () => {
     fetchYoutubeSection()
   }, [])
 
+  useEffect(() => {
+    console.log('youtubeItem fetched', youtubeItem)
+  }, [youtubeItem])
+
   if (!youtubeItem) {
     return <div>Loading...</div>
   }
