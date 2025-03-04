@@ -1,19 +1,20 @@
 'use client'
-
-import { youtubeSectionService } from '@/lib/services/youtube-section.service'
+  
 import YouTube from 'react-youtube'
 import { useEffect, useState } from 'react'
 import { YoutubeItem } from '@/lib/data/youtube-section'
+import { usePage } from '@/contexts/page-context'
 
 export const YoutubeSection = () => {
   const [youtubeItem, setYoutubeItem] = useState<YoutubeItem | null>(null)
+  const { getYoutube, youtube } = usePage()
 
   useEffect(() => {
     const fetchYoutubeSection = async () => {
       try {
-        const sections = await youtubeSectionService.getYoutubeSection()
-        if (sections) {
-          setYoutubeItem(sections)
+        await getYoutube()
+        if (youtube) {
+          setYoutubeItem(youtube)
         }
       } catch (error) {
         console.error('Failed to fetch youtube sections:', error)

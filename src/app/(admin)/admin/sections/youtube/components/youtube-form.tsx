@@ -2,25 +2,18 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button/button'
-import { YoutubeItem } from '@/lib/data/youtube-section'
+import { useAdmin } from '@/contexts/admin-context'
 
-interface YoutubeFormProps {
-  youtubeSection?: YoutubeItem
-  onSubmit: (data: Partial<YoutubeItem>) => Promise<void>
-  loading: boolean
-}
 
-export function YoutubeForm({
-  youtubeSection,
-  onSubmit,
-  loading,
-}: YoutubeFormProps) {
-  const [youtube_url, setYoutubeUrl] = useState(youtubeSection?.youtube_url || '')
-  const [quote, setQuote] = useState(youtubeSection?.quote || '')
-  console.log('youtubeSection fetched on form', youtubeSection)
+export function YoutubeForm() {
+  const { youtube, updateYoutube, loading } = useAdmin()
+  const [youtube_url, setYoutubeUrl] = useState(youtube?.youtube_url || '')
+  const [quote, setQuote] = useState(youtube?.quote || '')
+  console.log('youtubeSection fetched on form', youtube)
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await onSubmit({ youtube_url, quote })
+    await updateYoutube({ youtube_url, quote })
   }
 
   return (

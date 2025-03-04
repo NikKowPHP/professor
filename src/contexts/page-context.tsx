@@ -7,6 +7,8 @@ import {
   useCallback,
 } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
+import { QuoteItem } from '@/lib/data/quote-section'
+import { YoutubeItem } from '@/lib/data/youtube-section'
 
 interface PageContextType {
   blogPost: BlogPost | null
@@ -14,7 +16,10 @@ interface PageContextType {
   error: string | null
   clearError: () => void
   getBlogPost: (slug: string) => Promise<void>
-
+  quote: QuoteItem | null;
+  youtube: YoutubeItem | null;
+  getQuote: () => Promise<void>;
+  getYoutube: () => Promise<void>;
 }
 
 interface PageProviderProps {
@@ -27,6 +32,8 @@ export function PageProvider({
   children,
 }: PageProviderProps) {
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null)
+  const [quote, setQuote] = useState<QuoteItem | null>(null)
+  const [youtube, setYoutube] = useState<YoutubeItem | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -52,6 +59,39 @@ export function PageProvider({
     }
   }, [])
 
+  const getQuote = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/quote`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch quote')
+      }
+      const data = await response.json()
+      setQuote(data)
+    } catch (error: any) {
+      setError(error.message || 'Failed to fetch quote')
+    } finally {
+      setLoading(false)
+    }
+    }, [])
+
+  const getYoutube = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/youtube`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch youtube')
+      }
+      const data = await response.json()
+      setYoutube(data)
+    } catch (error: any) {
+      setError(error.message || 'Failed to fetch youtube')
+    } finally {
+      setLoading(false)
+    }
+    }, [])
 
 
   return (
@@ -62,6 +102,10 @@ export function PageProvider({
         error,
         clearError,
         getBlogPost,
+        quote,
+        youtube,
+        getQuote,
+        getYoutube,
       }}
     >
       {children}

@@ -9,6 +9,8 @@ import {
 } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import logger from '@/lib/logger'
+import { QuoteItem } from '@/lib/data/quote-section'
+import { YoutubeItem } from '@/lib/data/youtube-section'
 
 interface AdminContextType {
   blogPosts: Record<string, BlogPost[]>
@@ -29,11 +31,23 @@ interface AdminContextType {
   clearError: () => void
   getBlogPost: (id: string,  ) => Promise<BlogPost | null>
   getBlogPosts: () => Promise<void>
+
+  // Quote Section
+  quote: QuoteItem | null;
+  getQuote: () => Promise<void>;
+  updateQuote: (data: Partial<QuoteItem>) => Promise<void>;
+
+  // Youtube Section
+  youtube: YoutubeItem | null;
+  getYoutube: () => Promise<void>;
+  updateYoutube: (data: Partial<YoutubeItem>) => Promise<void>;
 }
 
 interface AdminProviderProps {
   children: React.ReactNode
   initialBlogPosts?: Record<string, BlogPost[]>
+  initialQuote?: QuoteItem | null
+  initialYoutube?: YoutubeItem | null
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
@@ -41,11 +55,15 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined)
 export function AdminProvider({
   children,
   initialBlogPosts,
+  initialQuote,
+  initialYoutube,
 }: AdminProviderProps) {
 
   const [blogPosts, setBlogPosts] = useState<Record<string, BlogPost[]>>(
     initialBlogPosts || { en: [] }
   )
+  const [quote, setQuote] = useState<QuoteItem | null>(initialQuote || null)
+  const [youtube, setYoutube] = useState<YoutubeItem | null>(initialYoutube || null)
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -60,6 +78,17 @@ export function AdminProvider({
   }, [initialBlogPosts])
 
   
+  useEffect(() => {
+    if (initialQuote) {
+      setQuote(initialQuote)
+    }
+  }, [initialQuote])
+
+  useEffect(() => {
+    if (initialYoutube) {
+      setYoutube(initialYoutube)
+    }
+  }, [initialYoutube])
 
 
 
@@ -229,7 +258,83 @@ export function AdminProvider({
     }
   }
 
-  
+  // Quote Section
+  const getQuote = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/quote');
+      if (!response.ok) {
+        throw new Error('Failed to fetch quote');
+      }
+      const data = await response.json();
+      setQuote(data);
+    } catch (error: any) {
+      setError(error.message || 'Failed to fetch quote');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateQuote = async (data: Partial<QuoteItem>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/quote', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update quote');
+      }
+      const updatedQuote = await response.json();
+      setQuote(updatedQuote);
+    } catch (error: any) {
+      setError(error.message || 'Failed to update quote');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Youtube Section
+  const getYoutube = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/youtube');
+      if (!response.ok) {
+        throw new Error('Failed to fetch youtube');
+      }
+      const data = await response.json();
+      setYoutube(data);
+    } catch (error: any) {
+      setError(error.message || 'Failed to fetch youtube');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateYoutube = async (data: Partial<YoutubeItem>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/youtube', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update youtube');
+      }
+      const updatedYoutube = await response.json();
+      setYoutube(updatedYoutube);
+    } catch (error: any) {
+      setError(error.message || 'Failed to update youtube');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <AdminContext.Provider
@@ -244,6 +349,12 @@ export function AdminProvider({
         clearError,
         getBlogPosts,
         getBlogPost,
+        quote,
+        getQuote,
+        updateQuote,
+        youtube,
+        getYoutube,
+        updateYoutube,
       }}
     >
       {children}

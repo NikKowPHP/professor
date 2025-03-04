@@ -1,18 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import { quoteSectionService } from '@/lib/services/quote-section.service';
-import { QuoteItem } from '@/lib/data/quote-section';
+import { useEffect } from 'react';
+import { usePage } from '@/contexts/page-context';
 
 export const QuoteSection = () => {
-  const [quote, setQuote] = useState<QuoteItem | null>(null);
+  const { getQuote, quote } = usePage()
 
   useEffect(() => {
     const fetchQuote = async () => {
       try {
-        const quoteSection = await quoteSectionService.getQuoteSection();
-        console.log('quoteSection', quoteSection)
-        setQuote(quoteSection);
+        await getQuote()
+        console.log('quoteSection', quote)
       } catch (error) {
         console.error('Failed to fetch quote section:', error);
       }
