@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   )
 
 const isAdminRoute = (path: string) => {
-  const adminRoutes = ['/admin', '/admin/login', '/admin/sections/dashboard', '/admin/sections/case-studies', '/admin/sections/case-study-sliders', '/admin/sections/testimonials']
+  const adminRoutes = ['/admin', '/admin/login', '/admin/sections/dashboard', '/admin/sections/blog-posts', '/admin/sections/youtube', '/admin/sections/quote']
   return adminRoutes.some(route => path.startsWith(route))
 }
 

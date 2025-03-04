@@ -1,7 +1,7 @@
 import { siteUrl } from '@/config/constants';
 
 export const companyConfig = {
-  name: 'ZIRO Healthcare Solutions',
+  name: 'Michael Friebe',
   url: siteUrl,
   description:
     'Digital health solutions provider specializing in medical software development, healthcare technology innovation, and patient-centric digital products.',

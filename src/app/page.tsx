@@ -8,50 +8,6 @@ import {
 } from '@/helpers/componentsLoad'
 import { companyConfig } from '@/config/company'
 
-// Centralize JSON-LD data
-const jsonLdData = {
-  organization: {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": `${companyConfig.url}/#organization`,
-    "name": companyConfig.name,
-    "url": companyConfig.url,
-    "logo": {
-      "@type": "ImageObject",
-      "url": `${companyConfig.url}/images/ziro.avif`,
-      "width": "180",
-      "height": "180"
-    },
-    "sameAs": Object.values(companyConfig.social),
-    "description": companyConfig.description,
-    "areaServed": {
-      "@type": "Country",
-      "name": "Poland"
-    },
-    "knowsAbout": companyConfig.expertise
-  },
-  service: {
-    "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
-    "name": `${companyConfig.name} Services`,
-    "serviceType": companyConfig.services,
-    "audience": {
-      "@type": "Audience",
-      "audienceType": companyConfig.audience
-    }
-  },
-  breadcrumb: {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": companyConfig.url
-    }]
-  }
-}
-
 export default async function HomePage() {
 
   return (
@@ -66,23 +22,17 @@ export default async function HomePage() {
 
         {/* Deferred Content */}
         <div className="relative">
-          <Suspense fallback={<div className="min-h-[300px]" />}>
-            {/* <SubheroSection /> */}
-          </Suspense>
-
-          {/* Group related sections */}
           <Suspense fallback={<div className="min-h-[700px]" />}>
             <div>
               <MyExpertise />
-              {/* <OurServices /> */}
             </div>
           </Suspense>
 
-          <Suspense fallback={<div className="min-h-[400px]">Loading video...</div>}>
+          {/* <Suspense fallback={<div className="min-h-[400px]">Loading video...</div>}>
             <div>
               <YoutubeSection />
             </div>
-          </Suspense>
+          </Suspense> */}
 
           <Suspense fallback={<div className="min-h-[400px]"></div>}> 
             <QuoteSection />
@@ -102,14 +52,7 @@ export default async function HomePage() {
         <meta itemProp="dateModified" content={new Date().toISOString().split('T')[0]} />
       </div>
 
-      {/* Structured Data */}
-      {Object.values(jsonLdData).map((data, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-        />
-      ))}
+   
     </>
   )
 }

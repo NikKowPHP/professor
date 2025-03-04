@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 
   // Get all blog posts for each locale
-  const posts = await blogPostService.getBlogPosts('en')
+  const posts = await blogPostService.getBlogPosts()
   const blogUrls = posts.map(post => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: post.createdAt,

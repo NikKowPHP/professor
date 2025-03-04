@@ -9,15 +9,7 @@ export const HeroSection = dynamic(
   }
 )
 
-export const SubheroSection = dynamic(
-  () =>
-    import('@/components/sections/subhero/subhero').then(
-      (mod) => mod.SubheroSection
-    ),
-  {
-    ssr: true,
-  }
-)
+
 export const MyExpertise = dynamic(
   () =>
     import('@/components/sections/my-expertise/my-expertise').then(
