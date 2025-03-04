@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS youtube_sections;
 
-CREATE TABLE youtube_sections (
+CREATE TABLE proffessor_youtube_section (
     id TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     youtube_url TEXT NOT NULL,
     quote TEXT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE youtube_sections (
 );
 
 
-INSERT INTO youtube_sections (id, youtube_url, quote, is_active, created_at, updated_at)
+INSERT INTO proffessor_youtube_section (id, youtube_url, quote, is_active, created_at, updated_at)
 VALUES (
     'youtubeItem1',
     'SDrQH84YzU0',

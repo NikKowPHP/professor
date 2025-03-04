@@ -5,7 +5,7 @@ import logger from '@/lib/logger'
 
 export class QuoteSectionRepository {
   private supabaseClient: SupabaseClient
-  private tableName: string = 'quote_section'
+  private tableName: string = 'professor_quote_section'
   constructor() {
     this.supabaseClient = supabase
   }

@@ -28,11 +28,11 @@ export default async function HomePage() {
             </div>
           </Suspense>
 
-          {/* <Suspense fallback={<div className="min-h-[400px]">Loading video...</div>}>
+          <Suspense fallback={<div className="min-h-[400px]">Loading video...</div>}>
             <div>
               <YoutubeSection />
             </div>
-          </Suspense> */}
+          </Suspense>
 
           <Suspense fallback={<div className="min-h-[400px]"></div>}> 
             <QuoteSection />

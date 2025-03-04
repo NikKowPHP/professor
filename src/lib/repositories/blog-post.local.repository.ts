@@ -1,5 +1,4 @@
 import { BlogPost } from '@/domain/models/blog-post.model';
-import { BlogPostMapper } from '@/infrastructure/mappers/blog-post.mapper';
 import { IBlogPostRepository } from '@/lib/interfaces/blog-post.interface';
 import logger from '@/lib/logger'
 import { getDatabaseFilePath } from '@/lib/config/database.config';
@@ -13,14 +12,14 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
     super("blog_posts", db);
   }
 
-  async getBlogPosts(locale: string): Promise<BlogPost[]> {
-    const blogPosts = await this.list(locale)
+  async getBlogPosts( ): Promise<BlogPost[]> {
+    const blogPosts = await this.list()
     return blogPosts
   }
 
-  async getBlogPostBySlug(slug: string, locale: string): Promise<BlogPost | null> {
+  async getBlogPostBySlug(slug: string,  ): Promise<BlogPost | null> {
     try {
-      const query = `SELECT * FROM blog_posts_${locale} WHERE slug = ?`;
+      const query = `SELECT * FROM blog_posts WHERE slug = ?`;
       console.log('query with slug', query, slug)
       const result = await new Promise<any>((resolve, reject) => {
         this.db.get(query, [slug], (err, row) => {
@@ -36,16 +35,16 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
         return null;
       }
 
-      return BlogPostMapper.toDomain(result);
+      return result;
     } catch (error: any) {
       logger.log(`Error fetching blog post with slug ${slug}:`, error);
       throw new Error(`Failed to fetch blog post: ${error.message}`);
     }
   }
 
-  async getBlogPostById(id: string, locale: string): Promise<BlogPost | null> {
+  async getBlogPostById(id: string,  ): Promise<BlogPost | null> {
     try {
-      const query = `SELECT * FROM blog_posts_${locale} WHERE id = ?`;
+      const query = `SELECT * FROM blog_posts WHERE id = ?`;
       const result = await new Promise<any>((resolve, reject) => {
         this.db.get(query, [id], (err, row) => {
           if (err) {
@@ -60,27 +59,27 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
         return null;
       }
 
-      return BlogPostMapper.toDomain(result);
+      return result;
     } catch (error: any) {
       logger.log(`Error fetching blog post with id ${id}:`, error);
       throw new Error(`Failed to fetch blog post: ${error.message}`);
     }
   }
 
-  async createBlogPost(blogPost: Omit<BlogPost, 'id'>, locale: string ): Promise<BlogPost> {
+  async createBlogPost(blogPost: Omit<BlogPost, 'id'>,   ): Promise<BlogPost> {
     try {
       const query = `
-        INSERT INTO blog_posts_${locale} (title, slug, image_url, created_at, image_alt, excerpt, content_html)
+        INSERT INTO blog_posts (title, slug, image_url, created_at, image_alt, excerpt, content_html)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
       const params = [
         blogPost.title,
         blogPost.slug,
-        blogPost.imageurl,
-        blogPost.createdAt,
-        blogPost.imageAlt,
+        blogPost.image_url,
+        blogPost.created_at,
+        blogPost.image_alt,
         blogPost.excerpt,
-        blogPost.contentHtml,
+        blogPost.content_html,
       ];
 
       await new Promise<void>((resolve, reject) => {
@@ -103,19 +102,15 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
     }
   }
 
-  async updateBlogPost(id: string, blogPost: Partial<BlogPost>, locale: string): Promise<BlogPost | null> {
+  async updateBlogPost(id: string, blogPost: Partial<BlogPost>,  ): Promise<BlogPost | null> {
     try {
       const updates: string[] = [];
       const params: any[] = [];
 
-      // Convert to persistence DTO and only include the fields that are being updated
-      const persistenceBlogPost = BlogPostMapper.toPersistence({
-        ...await this.getBlogPostById(id, locale), // Get existing post
+      const persistenceBlogPost = {
+        ...await this.getBlogPostById(id), // Get existing post
         ...blogPost // Merge with updates
-      } as BlogPost);
-
-      // Remove id from the persistence object to prevent update
-      // delete persistenceBlogPost.id;
+      } as BlogPost;
 
       for (const [key, value] of Object.entries(persistenceBlogPost)) {
         if (value !== undefined) {
@@ -125,13 +120,13 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
       }
 
       if (updates.length === 0) {
-        return this.getBlogPostById(id, locale);
+        return this.getBlogPostById(id);
       }
 
       params.push(id);
 
       const query = `
-        UPDATE blog_posts_${locale}
+        UPDATE blog_posts
         SET ${updates.join(', ')}
         WHERE id = ?
       `;
@@ -146,16 +141,16 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
         });
       });
 
-      return this.getBlogPostById(id, locale);
+      return this.getBlogPostById(id);
     } catch (error: any) {
       logger.log(`Error updating blog post with id ${id}:`, error);
       throw new Error(`Failed to update blog post: ${error.message}`);
     }
   }
 
-  async deleteBlogPost(id: string, locale: string): Promise<boolean> {
+  async deleteBlogPost(id: string,  ): Promise<boolean> {
     try {
-      const query = `DELETE FROM blog_posts_${locale} WHERE id = ?`;
+      const query = `DELETE FROM blog_posts WHERE id = ?`;
 
       console.log('query with id', query, id)
       await new Promise<void>((resolve, reject) => {
@@ -175,9 +170,9 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
     }
   }
 
-  async list(locale: string): Promise<BlogPost[]> {
+  async list( ): Promise<BlogPost[]> {
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM blog_posts_${locale}`;
+      const query = `SELECT * FROM blog_posts`;
       
 
       this.db.all(query, [], (err, rows: any[]) => {
@@ -186,8 +181,7 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
           reject(new Error(`Database error listing blog posts: ${err.message || 'Unknown error'}`));
           return;
         }
-        const blogPosts = rows.map(BlogPostMapper.toDomain);
-        resolve(blogPosts || []);
+        resolve(rows || []);
       });
     });
   }

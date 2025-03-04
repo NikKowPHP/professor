@@ -33,7 +33,7 @@ export class BlogPostService implements IBlogPostService {
   }
 
   createBlogPost = async (blogPost: Omit<BlogPost, 'id'>): Promise<BlogPost> => {
-    blogPost.createdAt = new Date().toISOString()
+    blogPost.created_at = new Date().toISOString()
     const trimmedBlogPost = this.trimBlogPost(blogPost)
     return this.blogPostRepository.createBlogPost(trimmedBlogPost)
   }

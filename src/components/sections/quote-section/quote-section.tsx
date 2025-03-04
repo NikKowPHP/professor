@@ -11,6 +11,7 @@ export const QuoteSection = () => {
     const fetchQuote = async () => {
       try {
         const quoteSection = await quoteSectionService.getQuoteSection();
+        console.log('quoteSection', quoteSection)
         setQuote(quoteSection);
       } catch (error) {
         console.error('Failed to fetch quote section:', error);

@@ -1,8 +1,6 @@
-const createNextIntlPlugin = require('next-intl/plugin');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 const { PERFORMANCE_CONFIG } = require('./src/config/performance');
 
-const withNextIntl = createNextIntlPlugin();
 const withAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
@@ -125,4 +123,4 @@ try {
 }
 
 // Export your configuration using CommonJS
-module.exports = withNextIntl(withAnalyzer(config));
+module.exports = withAnalyzer(config);

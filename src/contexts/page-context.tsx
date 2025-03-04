@@ -6,7 +6,6 @@ import {
   useState,
   useCallback,
 } from 'react'
-import { Locale } from '@/i18n'
 import { BlogPost } from '@/domain/models/blog-post.model'
 
 interface PageContextType {
@@ -14,7 +13,7 @@ interface PageContextType {
   loading: boolean
   error: string | null
   clearError: () => void
-  getBlogPost: (slug: string, locale: Locale) => Promise<void>
+  getBlogPost: (slug: string) => Promise<void>
 
 }
 
@@ -35,12 +34,12 @@ export function PageProvider({
    const clearError = () => setError(null)
 
 
-  const getBlogPost = useCallback(async (slug: string, locale: Locale) => {
+  const getBlogPost = useCallback(async (slug: string) => {
     setLoading(true)
     setError(null)
 
     try {
-      const response = await fetch(`/api/admin/blog-post?slug=${slug}&locale=${locale}`)
+      const response = await fetch(`/api/admin/blog-post?slug=${slug}`)
       if (!response.ok) {
         throw new Error('Failed to fetch blog post')
       }

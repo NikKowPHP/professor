@@ -1,21 +1,19 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { supabase } from '../supabase'
-import { BlogPostDTO } from '@/infrastructure/dto/blog-post.dto'
-import { BlogPostMapper } from '@/infrastructure/mappers/blog-post.mapper'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import { IBlogPostRepository } from '@/lib/interfaces/blog-post.interface'
 import logger from '@/lib/logger'
 export class BlogPostRepository implements IBlogPostRepository {
   private supabaseClient: SupabaseClient
-  private tableName: string = 'zirospace_blog_posts'
+  private tableName: string = 'proffessor_news'
 
   constructor() {
     this.supabaseClient = supabase
   }
 
-  getBlogPosts = async (locale: string): Promise<BlogPost[]> => {
+  getBlogPosts = async ( ): Promise<BlogPost[]> => {
     const { data, error } = await this.supabaseClient
-      .from(`${this.tableName}_${locale}`)
+      .from(this.tableName)
       .select('*')
       .order('created_at', { ascending: false })
 
@@ -24,12 +22,12 @@ export class BlogPostRepository implements IBlogPostRepository {
         return []
       }
 
-    return (data as BlogPostDTO[]).map(BlogPostMapper.toDomain)
+    return data
   }
 
-  getBlogPostBySlug = async (slug: string, locale: string): Promise<BlogPost | null> => {
+  getBlogPostBySlug = async (slug: string,  ): Promise<BlogPost | null> => {
     const { data, error } = await this.supabaseClient
-      .from(`${this.tableName}_${locale}`)
+      .from(this.tableName)
       .select('*')
       .eq('slug', slug)
       .single()
@@ -43,25 +41,25 @@ export class BlogPostRepository implements IBlogPostRepository {
       return null
     }
 
-    return BlogPostMapper.toDomain(data as BlogPostDTO)
+    return data
   }
 
   createBlogPost = async (
     blogPost: Omit<BlogPost, 'id'>,
-    locale: string
+     
   ): Promise<BlogPost> => {
     const { data, error } = await this.supabaseClient
-      .from(`${this.tableName}_${locale}`)
+      .from(this.tableName)
       .insert([
         {
           title: blogPost.title,
           slug: blogPost.slug,
-          image_url: blogPost.imageurl,
-          image_alt: blogPost.imageAlt,
+          image_url: blogPost.image_url,
+          image_alt: blogPost.image_alt,
           excerpt: blogPost.excerpt,
-          content_html: blogPost.contentHtml,
-          is_pinned: blogPost.isPinned || false,
-          created_at: blogPost.createdAt,
+          content_html: blogPost.content_html,
+          is_pinned: blogPost.is_pinned || false,
+          created_at: blogPost.created_at,
         },
       ])
       .select()
@@ -72,24 +70,24 @@ export class BlogPostRepository implements IBlogPostRepository {
       throw new Error('Failed to create blog post')
     }
 
-    return BlogPostMapper.toDomain(data as BlogPostDTO)
+    return data
   }
 
   updateBlogPost = async (
     id: string,
     blogPost: Partial<BlogPost>,
-    locale: string
+     
   ): Promise<BlogPost | null> => {
     const { data, error } = await this.supabaseClient
-      .from(`${this.tableName}_${locale}`)
+      .from(this.tableName)
       .update({
         title: blogPost.title,
         slug: blogPost.slug,
-        image_url: blogPost.imageurl,
-        image_alt: blogPost.imageAlt,
+        image_url: blogPost.image_url,
+        image_alt: blogPost.image_alt,
         excerpt: blogPost.excerpt,
-        content_html: blogPost.contentHtml,
-        is_pinned: blogPost.isPinned,
+        content_html: blogPost.content_html,
+        is_pinned: blogPost.is_pinned,
       })
       .eq('id', id)
       .select()
@@ -104,12 +102,12 @@ export class BlogPostRepository implements IBlogPostRepository {
       return null
     }
 
-    return BlogPostMapper.toDomain(data as BlogPostDTO)
+    return data
   }
 
-  getBlogPostById = async (id: string, locale: string): Promise<BlogPost | null> => {
+  getBlogPostById = async (id: string,  ): Promise<BlogPost | null> => {
     const { data, error } = await this.supabaseClient
-      .from(`${this.tableName}_${locale}`)
+      .from(this.tableName)
       .select('*')
       .eq('id', id)
       .single()
@@ -123,12 +121,12 @@ export class BlogPostRepository implements IBlogPostRepository {
       return null
     }
 
-    return BlogPostMapper.toDomain(data as BlogPostDTO)
+    return data
   }
 
-  deleteBlogPost = async (id: string, locale: string): Promise<boolean> => {
+  deleteBlogPost = async (id: string,  ): Promise<boolean> => {
     const { error } = await this.supabaseClient
-      .from(`${this.tableName}_${locale}`)
+      .from(this.tableName)
       .delete()
       .eq('id', id)
 

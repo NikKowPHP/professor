@@ -1,72 +1,14 @@
 import { notFound } from 'next/navigation'
-import { type Locale } from '@/i18n'
 import Image from 'next/image'
 import styles from './blog-post.module.css'
 import { blogPostService } from '@/lib/services/blog-post.service'
-import { BlogPost } from '@/domain/models/blog-post.model'
-import { siteUrl } from '@/config/constants';
 
 interface PageProps {
   params: {
     slug: string
-    locale: Locale
   }
 }
 
-// Create Article JSON-LD
-const createArticleJsonLd = (post: BlogPost) => ({
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "@id": `${siteUrl}/blog/${post.slug}#article`,
-  "headline": post.title,
-  "description": post.excerpt || post.title,
-  "image": post.imageurl,
-  "datePublished": post.createdAt,
-  "dateModified": post.createdAt,
-  "inLanguage": 'en',
-  "publisher": {
-    "@type": "Organization",
-    "name": "ZIRO Healthcare Solutions",
-    "logo": {
-      "@type": "ImageObject",
-      "url": `${siteUrl}/images/ziro.avif`
-    }
-  },
-  "author": {
-    "@type": "Organization",
-    "name": "ZIRO Healthcare Solutions"
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": `${siteUrl}/blog/${post.slug}`
-  }
-})
-
-// Create Breadcrumb JSON-LD
-const createBreadcrumbJsonLd = (post: BlogPost) => ({
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": `${siteUrl}`
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Blog",
-      "item": `${siteUrl}/blog`
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": post.title,
-      "item": `${siteUrl}/blog/${post.slug}`
-    }
-  ]
-})
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params
@@ -81,23 +23,12 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   // Calculate reading time
   const wordsPerMinute = 200;
-  const wordCount = post.contentHtml.trim().split(/\s+/).length;
+  const wordCount = post.content_html.trim().split(/\s+/).length;
   const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(createArticleJsonLd(post))
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(createBreadcrumbJsonLd(post))
-        }}
-      />
+    
       <article
         className="blog-post py-8 md:py-[100px] flex flex-col gap-[35px] bg-[#FFE8D8]"
         itemScope
@@ -106,8 +37,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         <meta itemProp="headline" content={post.title} />
         <meta itemProp="description" content={post.excerpt || post.title} />
         <meta itemProp="inLanguage" content="en" />
-        <meta itemProp="datePublished" content={post.createdAt} />
-        <meta itemProp="dateModified" content={post.createdAt} />
+        <meta itemProp="datePublished" content={post.created_at} />
+        <meta itemProp="dateModified" content={post.created_at} />
         <meta itemProp="author" content="ZIRO Healthcare Solutions" />
         <meta itemProp="publisher" content="ZIRO Healthcare Solutions" />
         <div className='max-w-7xl mx-auto px-[20px] md:px-0 flex flex-col gap-6'>
@@ -140,8 +71,8 @@ export default async function BlogPostPage({ params }: PageProps) {
               <div itemProp='image' className="w-full max-w-full mx-auto">
                 <div className="relative w-full aspect-[16/9] h-auto">
                   <Image
-                    src={post.imageurl}
-                    alt={post.imageAlt || post.title}
+                    src={post.image_url}
+                    alt={post.image_alt || post.title}
                     fill
                     className="object-cover w-full h-full"
                     priority
@@ -158,8 +89,8 @@ export default async function BlogPostPage({ params }: PageProps) {
           <aside className=' border  lg:w-[300px]'>
 
             <div className="text-base flex flex-col  gap-4">
-              <time dateTime={post.createdAt}>
-                {new Date(post.createdAt).toLocaleDateString('en', {
+              <time dateTime={post.created_at}>
+                {new Date(post.created_at).toLocaleDateString('en', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
@@ -176,7 +107,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               className={styles.blogPostContent}
               itemProp="articleBody"
               dangerouslySetInnerHTML={{
-                __html: post.contentHtml.trim()
+                __html: post.content_html.trim()
               }}
             />
 
@@ -197,8 +128,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
                 <div className="text-sm text-gray-600">
                   Last updated: {' '}
-                  <time dateTime={post.createdAt}>
-                    {new Date(post.createdAt).toLocaleDateString('en', {
+                  <time dateTime={post.created_at}>
+                    {new Date(post.created_at).toLocaleDateString('en', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
@@ -214,40 +145,4 @@ export default async function BlogPostPage({ params }: PageProps) {
       </article>
     </>
   )
-}
-
-// Generate metadata for the page
-export async function generateMetadata({ params }: PageProps) {
-  const { slug } = params
-  const post = await blogPostService.getBlogPostBySlug(slug)
-
-  if (!post) {
-    return {}
-  }
-
-  return {
-    title: post.title,
-    description: post.excerpt || post.title,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt || post.title,
-      type: 'article',
-      publishedTime: post.createdAt,
-      modifiedTime: post.createdAt,
-      images: [
-        {
-          url: post.imageurl,
-          width: 600,
-          height: 400,
-          alt: post.imageAlt || post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.excerpt || post.title,
-      images: [post.imageurl],
-    },
-  }
 }

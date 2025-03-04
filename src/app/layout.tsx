@@ -39,7 +39,7 @@ export default async function LocaleLayout({
           `}
         </Script> */}
       </head>
-      <body>
+      <body suppressHydrationWarning>
           <PageProvider>
             <ClientWrapper>
               <main className="relative">{children}</main>

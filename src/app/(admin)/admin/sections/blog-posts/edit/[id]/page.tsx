@@ -1,6 +1,5 @@
 'use client'
 
-import { Locale } from '@/i18n'
 import { useAdmin } from '@/contexts/admin-context'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { BlogPostForm } from '../../components/blog-post-form'
@@ -26,13 +25,13 @@ export default function EditBlogPostPage({params}: Props) {
       setId(id)
     }
   
-    getBlogPost(id, locale).then(post => setBlogPost(post || null))
+    getBlogPost(id).then(post => setBlogPost(post || null))
   }, [params, getBlogPost, locale])
 
   const handleUpdate = async (data: Partial<BlogPost>) => {
     if (!blogPost) return;
     try {
-      await updateBlogPost(id, data, locale)
+      await updateBlogPost(id, data)
       router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to update blog post:', error)
@@ -51,7 +50,6 @@ export default function EditBlogPostPage({params}: Props) {
       <h1>Edit Blog Post</h1>
       <BlogPostForm
         post={blogPost}
-        locale={locale as Locale}
         onSubmit={handleUpdate}
         onCancel={() => router.push('/admin/sections/blog-posts')}
         loading={loading}

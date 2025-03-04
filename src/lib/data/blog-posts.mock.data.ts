@@ -5,11 +5,11 @@ export const blogPosts: BlogPost[] = [
       id: 'blog-post-1',
       slug: 'first-post',
       title: 'First Blog Post',
-      imageurl: '/images/case-studies/gsense/gsense.avif',
-      createdAt: '2024-03-01',
-      imageAlt: 'First Blog Post',
+      image_url: '/images/case-studies/gsense/gsense.avif',
+      created_at: '2024-03-01',
+      image_alt: 'First Blog Post',
       excerpt: '<p><em>Excerpt:</em> This is a comprehensive introduction to our first blog post, covering a range of topics and designed to engage readers from start to finish.</p>',
-      contentHtml: `
+      content_html: `
         <h1>Introduction</h1>
         <p>Welcome to our first blog post! In this article, we'll explore various aspects of modern web development and share insights on how to build better web applications.</p>
 
@@ -52,28 +52,31 @@ export const blogPosts: BlogPost[] = [
         <h2>Conclusion</h2>
         <p>Thank you for reading our first blog post! We hope you found it informative and helpful. Stay tuned for more articles on web development.</p>
       `,
-      isPinned:true
+    is_pinned: true,
+      updated_at: '2024-03-01',
     },
     {
       id: 'blog-post-2',
       slug: 'second-post',
       title: 'Second Blog Post: Deep Dive into Next.js',
-      imageurl: '/images/case-studies/gsense/gsense.avif',
-      createdAt: '2024-03-05',
-      imageAlt: 'Second Blog Post',
+      image_url: '/images/case-studies/gsense/gsense.avif',
+      created_at: '2024-03-05',
+      image_alt: 'Second Blog Post',
       excerpt: '<p><em>Excerpt:</em> A detailed exploration of Next.js features and best practices for building modern web applications.</p>',
-      contentHtml: '<p>In this post, we delve into the advanced features of Next.js, including server-side rendering, static site generation, and API routes. We will also cover performance optimization techniques and deployment strategies.</p><img src="/images/case-studies/gsense/gsense.avif" alt="Next.js" /><p>Learn how to leverage Next.js to create fast, scalable, and SEO-friendly web applications.</p>',
-      isPinned:false
+      content_html: '<p>In this post, we delve into the advanced features of Next.js, including server-side rendering, static site generation, and API routes. We will also cover performance optimization techniques and deployment strategies.</p><img src="/images/case-studies/gsense/gsense.avif" alt="Next.js" /><p>Learn how to leverage Next.js to create fast, scalable, and SEO-friendly web applications.</p>',
+      is_pinned: false,
+      updated_at: '2024-03-05',
     },
     {
       id: 'blog-post-3',
       slug: 'third-post',
       title: 'Third Blog Post: The Future of Web Development',
-      imageurl: '/images/case-studies/gsense/gsense.avif',
-      createdAt: '2024-03-10',
-      imageAlt: 'Third Blog Post',
+      image_url: '/images/case-studies/gsense/gsense.avif',
+      created_at: '2024-03-10',
+      image_alt: 'Third Blog Post',
       excerpt: '<p><em>Excerpt:</em> An overview of the emerging trends and technologies that are shaping the future of web development.</p>',
-      contentHtml: '<p>This post explores the latest trends in web development, such as WebAssembly, serverless computing, and progressive web apps. We will discuss how these technologies are transforming the way we build and deploy web applications.</p><img src="/images/case-studies/gsense/gsense.avif" alt="Web Development Trends" /><p>Stay ahead of the curve by understanding the technologies that will define the future of the web.</p>',
-      isPinned:false
+      content_html: '<p>This post explores the latest trends in web development, such as WebAssembly, serverless computing, and progressive web apps. We will discuss how these technologies are transforming the way we build and deploy web applications.</p><img src="/images/case-studies/gsense/gsense.avif" alt="Web Development Trends" /><p>Stay ahead of the curve by understanding the technologies that will define the future of the web.</p>',
+      is_pinned: false,
+      updated_at: '2024-03-10',
     },
   ]

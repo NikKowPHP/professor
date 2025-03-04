@@ -79,7 +79,7 @@ const BlogPostItem = ({
         itemProp="url"
       >
         {/* Image Section */}
-        {post.imageurl && (
+        {post.image_url && (
           <div
             className="w-full aspect-[6/3] sm:h-full sm:w-full  overflow-hidden min-h-[500px]"
             role="img"
@@ -87,8 +87,8 @@ const BlogPostItem = ({
           >
             <Image
               className='w-full h-full object-cover '
-              src={post.imageurl}
-              alt={post.imageAlt || post.title}
+              src={post.image_url}
+              alt={post.image_alt || post.title}
               width={1000}
               height={1000}
               loading="lazy"
@@ -104,7 +104,7 @@ const BlogPostItem = ({
               className="px-[10px] py-[5px]"
               itemProp="datePublished"
             >
-              {new Date(post.createdAt).toLocaleDateString()}
+              {new Date(post.created_at).toLocaleDateString()}
             </div>
 
             <div className="flex items-center">

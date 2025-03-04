@@ -27,7 +27,7 @@ interface AdminContextType {
 
 
   clearError: () => void
-  getBlogPost: (id: string, locale: string) => Promise<BlogPost | null>
+  getBlogPost: (id: string,  ) => Promise<BlogPost | null>
   getBlogPosts: () => Promise<void>
 }
 
