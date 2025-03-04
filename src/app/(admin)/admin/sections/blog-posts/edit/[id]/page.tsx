@@ -1,23 +1,23 @@
 'use client'
 
-import { useAdmin } from '@/contexts/admin-context'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { BlogPostForm } from '../../components/blog-post-form'
 import { useEffect, useState } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import logger from '@/lib/logger'
+import { blogPostService } from '@/lib/services/blog-post.service'
 
 interface Props {
   params: { id: string }
 }
 
 export default function EditBlogPostPage({params}: Props) {
-  const { updateBlogPost, loading, getBlogPost  } = useAdmin()
   const router = useRouter()
   const searchParams = useSearchParams()
   const locale = searchParams.get('locale') || 'en';
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [id, setId] = useState<string>('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const { id } = params
@@ -25,22 +25,34 @@ export default function EditBlogPostPage({params}: Props) {
       setId(id)
     }
   
-    getBlogPost(id).then(post => setBlogPost(post || null))
-  }, [params, getBlogPost, locale])
+    blogPostService.getBlogPostById(id).then(post => setBlogPost(post || null))
+  }, [params, blogPostService, locale])
 
   const handleUpdate = async (data: Partial<BlogPost>) => {
     if (!blogPost) return;
+    setLoading(true)
     try {
-      await updateBlogPost(id, data)
+      await blogPostService.updateBlogPost(id, data)
       router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to update blog post:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
-  if(!blogPost && loading) {
-    return <div>Loading...</div>
+  const handleCreate = async (data: Partial<BlogPost>) => {
+    setLoading(true)
+    try {
+      await blogPostService.createBlogPost(data as Omit<BlogPost, 'id'>)
+      router.push('/admin/sections/blog-posts')
+    } catch (error) {
+      logger.log('Failed to create blog post:', error)
+    } finally {
+      setLoading(false)
+    }
   }
+
   if(!blogPost) {
     return <div>Blog post not found</div>
   }
@@ -50,7 +62,8 @@ export default function EditBlogPostPage({params}: Props) {
       <h1>Edit Blog Post</h1>
       <BlogPostForm
         post={blogPost}
-        onSubmit={handleUpdate}
+        onUpdate={handleUpdate}
+        onSubmit={handleCreate}
         onCancel={() => router.push('/admin/sections/blog-posts')}
         loading={loading}
       />

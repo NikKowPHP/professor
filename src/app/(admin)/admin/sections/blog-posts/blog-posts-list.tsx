@@ -1,26 +1,33 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useAdmin } from '@/contexts/admin-context'
 import { useRouter } from 'next/navigation'
 import logger from '@/lib/logger'
+import { BlogPost } from '@/domain/models/blog-post.model'
 
-export function BlogPostList() {
-  const { blogPosts, deleteBlogPost, error, loading, updateBlogPost } =
-    useAdmin()
+interface BlogPostListProps {
+  blogPosts: BlogPost[]
+  error: string | null
+  onDelete: (id: string) => Promise<void>
+  loading: boolean
+  onUpdate: (id: string, data: Partial<BlogPost>) => Promise<void>
+}
+
+export function BlogPostList({ blogPosts, error, loading, onDelete, onUpdate }: BlogPostListProps) {
+
   const router = useRouter()
   const [pinnedPostId, setPinnedPostId] = useState<string | null>(null)
 
   useEffect(() => {
     // Find the currently pinned post on component mount
-    const pinnedPost = blogPosts.en?.find((post) => post.is_pinned)
+    const pinnedPost = blogPosts?.find((post) => post.is_pinned)
     setPinnedPostId(pinnedPost?.id || null)
   }, [blogPosts])
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this blog post?')) {
       try {
-        await deleteBlogPost(id)
+        await onDelete(id)
       } catch (error) {
         logger.log('Failed to delete blog post:', error)
       }
@@ -31,10 +38,10 @@ export function BlogPostList() {
     try {
       // Unpin the currently pinned post if there is one
       if (pinnedPostId) {
-        await updateBlogPost(pinnedPostId, { is_pinned: false })
+        await onUpdate(pinnedPostId, { is_pinned: false })
       }
       // Pin the selected post
-      await updateBlogPost(postId, { is_pinned: true })
+      await onUpdate(postId, { is_pinned: true })
       setPinnedPostId(postId)
     } catch (error) {
       logger.log('Failed to pin/unpin blog post:', error)
@@ -81,7 +88,7 @@ export function BlogPostList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {blogPosts.en.map((post) => (
+            {blogPosts.map((post) => (
               <tr key={post.id} className={loading ? 'opacity-50' : ''}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">

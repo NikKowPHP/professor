@@ -13,6 +13,7 @@ import 'quill/dist/quill.snow.css'
 interface BlogPostFormProps {
   post?: BlogPost
   onSubmit: (data: Partial<BlogPost>) => Promise<void>
+  onUpdate: (data: Partial<BlogPost>) => Promise<void>
   onCancel: () => void
   loading: boolean
 }
@@ -20,6 +21,7 @@ interface BlogPostFormProps {
 export function BlogPostForm({
   post,
   onSubmit,
+  onUpdate,
   onCancel,
   loading,
 }: BlogPostFormProps) {
@@ -58,7 +60,11 @@ export function BlogPostForm({
   }, [quillExcerpt, post?.excerpt])
 
   const submitHandler = async (data: Partial<BlogPost>) => {
-    await onSubmit({ ...data, content_html: content, excerpt: excerpt })
+    if (post?.id) {
+      await onUpdate({ ...data, content_html: content, excerpt: excerpt })
+    } else {
+      await onSubmit({ ...data, content_html: content, excerpt: excerpt })
+    }
   }
 
   return (
