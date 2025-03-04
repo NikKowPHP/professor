@@ -147,8 +147,7 @@ exports.up = async function(knex) {
     },
   ];
 
-  await knex('blog_posts_en').insert(blogPostsEn);
-  await knex('blog_posts_pl').insert(blogPostsPl);
+  await knex('professor_news_posts').insert(blogPostsEn);
 };
 
 /**
@@ -156,6 +155,5 @@ exports.up = async function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = async function(knex) {
-  await knex('blog_posts_en').del();
-  await knex('blog_posts_pl').del();
+  await knex('professor_news_posts').del();
 };
