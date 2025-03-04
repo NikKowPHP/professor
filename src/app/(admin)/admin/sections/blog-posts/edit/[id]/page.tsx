@@ -5,7 +5,6 @@ import { BlogPostForm } from '../../components/blog-post-form'
 import { useEffect, useState } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import logger from '@/lib/logger'
-import { blogPostService } from '@/lib/services/blog-post.service'
 import { useAdmin } from '@/contexts/admin-context'
 
 interface Props {
