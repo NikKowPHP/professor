@@ -20,7 +20,7 @@ export const QuoteSection = () => {
   }, []);
 
   if (!quote) {
-    return <div>Loading...</div>;
+    return <div className="py-[50px] px-[20px] md:px-0 bg-black flex flex-col justify-center items-center">Loading...</div>;
   }
 
   return (

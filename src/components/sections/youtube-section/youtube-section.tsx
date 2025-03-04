@@ -1,12 +1,11 @@
 'use client'
 
 import YouTube from 'react-youtube'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { usePage } from '@/contexts/page-context'
 
 export const YoutubeSection = () => {
   const { getYoutube, youtube, loading } = usePage()
-  const [opts, setOpts] = useState<any>(null)
 
   useEffect(() => {
     const fetchYoutubeSection = async () => {
@@ -20,31 +19,18 @@ export const YoutubeSection = () => {
     fetchYoutubeSection()
   }, [getYoutube])
 
-  useEffect(() => {
-    console.log('youtubeItem fetched', youtube)
-    if (youtube) {
-      setOpts({
-        width: '100%',
-        height: '100%',
-        playerVars: {
-          autoplay: 0,
-          mute: 1,
-          controls: 1,
-          playlist: youtube.youtube_url,
-          loop: 1,
-          modestbranding: 1,
-          rel: 0,
-        },
-      })
-    }
-  }, [youtube])
+
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div  className="pt-[50px] sm:pt-[100px] pb-[50px] px-[20px] md:px-0">Loading...</div>
+  }
+
+  if (!youtube && !loading) {
+    return <div className="pt-[50px] sm:pt-[100px] pb-[50px] px-[20px] md:px-0">No YouTube data available.</div>
   }
 
   if (!youtube) {
-    return <div>No YouTube data available.</div>
+    return <div className="pt-[50px] sm:pt-[100px] pb-[50px] px-[20px] md:px-0">No YouTube data available.</div>
   }
 
   return (
@@ -59,8 +45,20 @@ export const YoutubeSection = () => {
           <div className="pb-[80.25%]">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
               <YouTube
-                videoId={youtube.youtube_url}
-                opts={opts}
+                videoId={youtube!.youtube_url}
+                opts={{
+                  width: '100%',
+                  height: '100%',
+                  playerVars: {
+                    autoplay: 0,
+                    mute: 1,
+                    controls: 1,
+                    playlist: youtube!.youtube_url,
+                    loop: 1,
+                    modestbranding: 1,
+                    rel: 0,
+                  },
+                }}
                 className="w-full h-full"
               />
             </div>
