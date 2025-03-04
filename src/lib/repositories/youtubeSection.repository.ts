@@ -10,41 +10,13 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
     this.supabaseClient = supabase
   }
 
-  getYoutubeSections = async (): Promise<YoutubeItem[]> => {
+  
+
+
+  getYoutubeSection = async (): Promise<YoutubeItem | null> => {
     const { data, error } = await this.supabaseClient
       .from(this.tableName)
       .select('*')
-      .order('created_at', { ascending: false })
-
-      if (error) {
-        logger.log('Error fetching youtube sections:', error)
-        return []
-      }
-
-      return data;
-
-    }
-
-    getActiveYoutubeSection = async() => {
-      const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .select('*')
-      .eq('is_active', true)
-      .single()
-
-      if (error) {
-        logger.log('Error fetching active youtube section:', error)
-        return null
-      }
-
-      return data
-    }
-
-  getYoutubeSectionById = async (id: string): Promise<YoutubeItem | null> => {
-    const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .select('*')
-      .eq('id', id)
       .single()
 
     if (error) {
@@ -59,24 +31,8 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
     return data
   }
 
-  createYoutubeSection = async (youtubeSection: Partial<YoutubeItem>): Promise<YoutubeItem> => {
-    logger.log('youtubeSection data ', youtubeSection)
 
-    const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .insert(youtubeSection)
-      .select()
-      .single()
-
-    if (error) {
-      logger.log('Error creating youtube section:', error)
-        throw new Error('Failed to create youtube section')
-    }
-
-    return data
-  }
-
-  updateYoutubeSection = async (id: string, youtubeSection: Partial<YoutubeItem>): Promise<YoutubeItem> => {
+  updateYoutubeSection = async (youtubeSection: Partial<YoutubeItem>): Promise<YoutubeItem> => {
     const { data, error } = await this.supabaseClient
       .from(this.tableName)
       .update({
@@ -84,7 +40,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
         quote: youtubeSection.quote,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq('id', youtubeSection.id)
       .select()
       .single()
 
@@ -99,19 +55,8 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
 
     return data
   }
-
-  deleteYoutubeSection = async (id: string): Promise<void> => {
-    const { error } = await this.supabaseClient
-      .from(this.tableName)
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      logger.log('Error deleting youtube section:', error)
-      throw new Error('Failed to delete youtube section')
-    }
-  }
 }
+
 
 // export singleton
 export const youtubeSectionRepository = new YoutubeSectionRepository()

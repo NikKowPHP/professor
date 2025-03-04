@@ -7,23 +7,20 @@ import { YoutubeItem } from '@/lib/data/youtube-section'
 interface YoutubeFormProps {
   youtubeSection?: YoutubeItem
   onSubmit: (data: Partial<YoutubeItem>) => Promise<void>
-  onCancel: () => void
   loading: boolean
 }
 
 export function YoutubeForm({
   youtubeSection,
   onSubmit,
-  onCancel,
   loading,
 }: YoutubeFormProps) {
   const [youtube_url, setYoutubeUrl] = useState(youtubeSection?.youtube_url || '')
   const [quote, setQuote] = useState(youtubeSection?.quote || '')
-  const [is_active, setIsActive] = useState(youtubeSection?.is_active || false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await onSubmit({ youtube_url, quote, is_active })
+    await onSubmit({ youtube_url, quote })
   }
 
   return (
@@ -67,18 +64,10 @@ export function YoutubeForm({
         >
           Is Active
         </label>
-        <input
-          type="checkbox"
-          id="is_active"
-          className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-          checked={is_active}
-          onChange={(e) => setIsActive(e.target.checked)}
-        />
+      
       </div>
       <div className="flex justify-end space-x-4">
-        <Button variant="secondary" onClick={onCancel} disabled={loading}>
-          Cancel
-        </Button>
+     
         <Button variant="primary" type="submit" disabled={loading}>
           {youtubeSection ? 'Update' : 'Create'}
         </Button>

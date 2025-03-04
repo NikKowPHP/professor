@@ -1,11 +1,10 @@
-// import { TestimonialList } from './testimonial-list'
 import { Suspense } from 'react'
 import { AdminProvider } from '@/contexts/admin-context'
 import { YoutubeClientWrapper } from './components/youtube-client-wrapper'
 import { youtubeSectionService } from '@/lib/services/youtube-section.service'
 
 export default async function YoutubeAdminPage() {
-  const youtubeSection = await youtubeSectionService.getActiveYoutubeSection()
+  const youtubeSection = await youtubeSectionService.getYoutubeSection()
 
   return (
     <AdminProvider>

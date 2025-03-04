@@ -11,7 +11,7 @@ export const YoutubeSection = () => {
   useEffect(() => {
     const fetchYoutubeSection = async () => {
       try {
-        const sections = await youtubeSectionService.getActiveYoutubeSection()
+        const sections = await youtubeSectionService.getYoutubeSection()
         if (sections) {
           setYoutubeItem(sections)
         }

@@ -16,7 +16,7 @@ export function YoutubeClientWrapper({ youtubeSection }: YoutubeClientWrapperPro
     setLoading(true)
     try {
       if (youtubeSection) {
-        await youtubeSectionService.updateYoutubeSection(youtubeSection.id, data)
+        await youtubeSectionService.updateYoutubeSection(data)
       }
       console.log('onSubmit', data)
     } catch (error) {
@@ -26,14 +26,11 @@ export function YoutubeClientWrapper({ youtubeSection }: YoutubeClientWrapperPro
     }
   }
 
-  const onCancel = () => {
-    // TODO: Implement cancel logic
-  }
+
 
   return (
     <YoutubeForm
       onSubmit={onSubmit}
-      onCancel={onCancel}
       loading={loading}
       youtubeSection={youtubeSection || undefined}
     />
