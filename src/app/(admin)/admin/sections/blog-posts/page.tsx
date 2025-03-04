@@ -1,13 +1,9 @@
 import { Suspense } from 'react'
-import { AdminProvider } from '@/contexts/admin-context'
-import { blogPostService } from '@/lib/services/blog-post.service'
 import { BlogPostList } from './blog-posts-list'
 
 export default async function BlogPostsAdminPage() {
-  const enBlogPosts = await blogPostService.getBlogPosts()
 
   return (
-    <AdminProvider initialBlogPosts={enBlogPosts}>
       <div className="bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <h2 className="text-2xl font-bold mb-6">Blog Posts Management</h2>
@@ -16,6 +12,5 @@ export default async function BlogPostsAdminPage() {
           </Suspense>
         </div>
       </div>
-    </AdminProvider>
   )
 }

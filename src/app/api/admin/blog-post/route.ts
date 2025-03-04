@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/utils/cache'
 import { getBlogPostService } from '@/lib/services/blog-post.service'
 import logger from '@/lib/logger'
 const blogPostService = await getBlogPostService()
@@ -18,8 +16,6 @@ export async function POST(request: NextRequest) {
 
     const newBlogPost = await blogPostService.createBlogPost(data)
 
-    // Revalidate cache
-    revalidateTag(CACHE_TAGS.BLOG_POSTS)
 
     return NextResponse.json(newBlogPost)
   } catch (error) {
@@ -70,7 +66,6 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Blog post not found' }, { status: 404 })
     }
 
-    revalidateTag(CACHE_TAGS.BLOG_POSTS)
     return NextResponse.json(updatedBlogPost)
   } catch (error) {
     logger.error(`Error updating blog post: ${error}`)
@@ -94,7 +89,6 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Revalidate cache
-    revalidateTag(CACHE_TAGS.BLOG_POSTS)
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -45,52 +45,34 @@ interface AdminContextType {
 
 interface AdminProviderProps {
   children: React.ReactNode
-  initialBlogPosts?: BlogPost[]
-  initialQuote?: QuoteItem | null
-  initialYoutube?: YoutubeItem | null
+
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
 
 export function AdminProvider({
   children,
-  initialBlogPosts,
-  initialQuote,
-  initialYoutube,
+ 
 }: AdminProviderProps) {
 
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(
-    initialBlogPosts || []
-  )
-  const [quote, setQuote] = useState<QuoteItem | null>(initialQuote || null)
-  const [youtube, setYoutube] = useState<YoutubeItem | null>(initialYoutube || null)
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [quote, setQuote] = useState<QuoteItem | null>(null)
+  const [youtube, setYoutube] = useState<YoutubeItem | null>(null)
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Initialize case studies when initialCaseStudies changes
+    // Initialize case studies when initialCaseStudies changes
 
 
   useEffect(() => {
-    if (initialBlogPosts) {
-      setBlogPosts(initialBlogPosts)
-    }
-  }, [initialBlogPosts])
+    getBlogPosts()
+    getQuote()
+    getYoutube()
+  }, [])
 
   
-  useEffect(() => {
-    if (initialQuote) {
-      setQuote(initialQuote)
-    }
-  }, [initialQuote])
-
-  useEffect(() => {
-    if (initialYoutube) {
-      setYoutube(initialYoutube)
-    }
-  }, [initialYoutube])
-
-
+  
 
   const createBlogPost = async (data: Partial<BlogPost> ) => {
     setLoading(true)

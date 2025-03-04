@@ -17,6 +17,8 @@ export class BlogPostRepository implements IBlogPostRepository {
       .select('*')
       .order('created_at', { ascending: false })
 
+    console.log('data', data)
+
       if (error) {
         logger.log('Error fetching blog posts:', error)
         return []
@@ -50,18 +52,7 @@ export class BlogPostRepository implements IBlogPostRepository {
   ): Promise<BlogPost> => {
     const { data, error } = await this.supabaseClient
       .from(this.tableName)
-      .insert([
-        {
-          title: blogPost.title,
-          slug: blogPost.slug,
-          image_url: blogPost.image_url,
-          image_alt: blogPost.image_alt,
-          excerpt: blogPost.excerpt,
-          content_html: blogPost.content_html,
-          is_pinned: blogPost.is_pinned || false,
-          created_at: blogPost.created_at,
-        },
-      ])
+      .insert(blogPost)
       .select()
       .single()
 
@@ -80,26 +71,18 @@ export class BlogPostRepository implements IBlogPostRepository {
   ): Promise<BlogPost | null> => {
     const { data, error } = await this.supabaseClient
       .from(this.tableName)
-      .update({
-        title: blogPost.title,
-        slug: blogPost.slug,
-        image_url: blogPost.image_url,
-        image_alt: blogPost.image_alt,
-        excerpt: blogPost.excerpt,
-        content_html: blogPost.content_html,
-        is_pinned: blogPost.is_pinned,
-      })
+      .update(blogPost)
       .eq('id', id)
       .select()
       .single()
 
     if (error) {
       logger.log('Error updating blog post:', error)
-      return null
+      throw new Error('Failed to update blog post')
     }
 
     if (!data) {
-      return null
+      throw new Error('Failed to update blog post')
     }
 
     return data
@@ -114,11 +97,11 @@ export class BlogPostRepository implements IBlogPostRepository {
 
     if (error) {
       logger.log('Error fetching blog post by id:', error)
-      return null
+      throw new Error('Failed to fetch blog post by id')
     }
 
     if (!data) {
-      return null
+      throw new Error('Failed to fetch blog post by id')
     }
 
     return data
@@ -132,7 +115,7 @@ export class BlogPostRepository implements IBlogPostRepository {
 
     if (error) {
       logger.log('Error deleting blog post:', error)
-      return false
+      throw new Error('Failed to delete blog post')
     }
 
     return true
