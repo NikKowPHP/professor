@@ -36,7 +36,7 @@ export default function AdminDashboard() {
 
         <Link
           href="/admin/sections/blog-posts"
-          className="flex flex-col p-6 bg-white rounded-primary hover:shadow-lg transition-shadow"
+          className="flex flex-col p-6 bg-white  border-2 border-gray-200 hover:shadow-lg transition-shadow"
         >
           <h2 className="text-xl font-medium text-gray-900 mb-2">
             News Posts
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
        
          <Link
           href="/admin/sections/youtube"
-          className="flex flex-col p-6 bg-white rounded-primary hover:shadow-lg transition-shadow"
+          className="flex flex-col p-6 bg-white border-2 border-gray-200 hover:shadow-lg transition-shadow"
         >
           <h2 className="text-xl font-medium text-gray-900 mb-2">
             YouTube Section
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         </Link>
          <Link
           href="/admin/sections/quote"
-          className="flex flex-col p-6 bg-white rounded-primary hover:shadow-lg transition-shadow"
+          className="flex flex-col p-6 bg-white border-2 border-gray-200 hover:shadow-lg transition-shadow"
         >
           <h2 className="text-xl font-medium text-gray-900 mb-2">
             Quote Section

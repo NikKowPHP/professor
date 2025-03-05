@@ -44,9 +44,9 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className='max-w-7xl mx-auto px-[20px] md:px-0 flex flex-col gap-6'>
 
 
-          <header className="flex flex-col gap-8">
+          <header className="flex flex-col gap-[20px]">
             <h1
-              className="text-[38px] font-semibold mb-4 "
+              className="text-[38px] sm:text-[42px] leading-[120%] font-[500] mb-4 max-w-[800px]"
               itemProp="name"
             >
               {post.title}
@@ -55,7 +55,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
 
 
-
+{/* 
             {post.excerpt && (
               <p
                 className="text-xl text-gray-600 text-center max-w-2xl mx-auto"
@@ -65,7 +65,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 }}
               >
               </p>
-            )}
+            )} */}
 
             <div className="w-full flex items-center justify-center">
               <div itemProp='image' className="w-full max-w-full mx-auto">

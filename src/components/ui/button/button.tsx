@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'white' | 'navbar' | 'modal'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'white' | 'navbar' | 'modal' | 'danger' | 'success'
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
   isActive?: boolean
   isFullWidth?: boolean
@@ -17,9 +17,11 @@ export interface ButtonProps
 const buttonStyles = {
   base: 'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   variants: {
-    primary: 'bg-primary text-white hover:bg-[#0066FF]/90 active:bg-[#0066FF]/80',
-    secondary: 'bg-[#0066FF]/10 text-[#0066FF] hover:bg-[#0066FF]/20 active:bg-[#0066FF]/30',
-    outline: 'border-2 border-[#0066FF] text-[#0066FF] hover:bg-[#0066FF]/5 active:bg-[#0066FF]/10',
+    primary: 'bg-green-700 text-white hover:bg-green-800 active:bg-green-900',
+    secondary: 'bg-gray-500 text-white hover:bg-gray-400 active:bg-gray-300',
+    outline: 'border-2 border-green text-green hover:bg-green/5 active:bg-green/10',
+    danger: 'bg-red-500 text-white hover:bg-red-600 active:bg-red-700',
+    success: 'bg-green-500 text-white hover:bg-green-600 active:bg-green-700',
     ghost: (isActive: boolean) =>
       isActive
         ? 'bg-[#0066FF] text-white'
@@ -29,9 +31,9 @@ const buttonStyles = {
     modal: 'bg-primary text-white hover:bg-[#0066FF]/90 active:bg-[#0066FF]/80',
   },
   sizes: {
-    sm: 'py-[6px] px-[12px] text-[15px] rounded-full',
-    md: 'h-[56px] px-8 text-[16px] rounded-full',
-    lg: 'h-[64px] px-10 text-[18px] rounded-full',
+    sm: 'py-[2px] px-[12px] text-[15px] ',
+    md: 'p-[10px] text-[16px] ',
+    lg: 'p-[10px] text-[18px] ',
     xl: 'h-[72px] px-12 text-[20px] rounded-full w-full',
     full: 'w-full px-4 py-8 rounded-lg ',
   

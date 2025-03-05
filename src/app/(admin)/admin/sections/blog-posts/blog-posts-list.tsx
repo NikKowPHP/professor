@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import logger from '@/lib/logger'
 import { useAdmin } from '@/contexts/admin-context'
+import { Button } from '@/components/ui/button/button'
 
 
 export function BlogPostList() {
@@ -11,7 +12,7 @@ export function BlogPostList() {
 
   const router = useRouter()
   const [pinnedPostId, setPinnedPostId] = useState<string | null>(null)
-
+  const [localLoading, setLocalLoading] = useState(false)
 
   useEffect(() => {
     console.log('blogPosts', blogPosts)
@@ -29,6 +30,7 @@ export function BlogPostList() {
   }, [pinnedPostId])
 
   const handleDelete = async (id: string) => {
+    setLocalLoading(true)
     if (confirm('Are you sure you want to delete this blog post?')) {
       try {
         debugger
@@ -37,6 +39,7 @@ export function BlogPostList() {
         logger.log('Failed to delete blog post:', error)
       }
     }
+    setLocalLoading(false)
   }
 
   const handlePin = async (postId: string) => {
@@ -55,20 +58,27 @@ export function BlogPostList() {
     }
   }
 
+  const handleEdit = (id: string) => {
+    setLocalLoading(true)
+    router.push(`/admin/sections/blog-posts/edit/${id}`)
+    setLocalLoading(false)
+  }
 
   return (
     <div className="space-y-8">
       {error && <div className="p-4 bg-red-50 text-red-600  ">{error}</div>}
 
+      {localLoading && <div className="p-4 bg-gray-50 text-gray-600 animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900">Loading...</div>}
+
       <div className="flex justify-between items-center">
      
-        <button
+        <Button
           onClick={() => router.push(`/admin/sections/blog-posts/create`)}
-          className="px-6 py-3 text-white bg-primary rounded-full hover:bg-primary/90 transition-colors"
+          variant="primary"
           disabled={loading}
         >
           Add Blog Post
-        </button>
+        </Button>
       </div>
 
       <div className="overflow-hidden bg-white   shadow">
@@ -101,7 +111,7 @@ export function BlogPostList() {
                 <tr key={post.id} className={loading ? 'opacity-50' : ''}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {post.title}
+                      {post.title.length > 30 ? post.title.slice(0, 30) + '…' : post.title}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -112,7 +122,7 @@ export function BlogPostList() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-500 line-clamp-2">
-                      {post.excerpt}
+                    {post.excerpt.length > 30 ? post.excerpt.slice(0, 30) + '…' : post.excerpt}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -127,24 +137,24 @@ export function BlogPostList() {
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
-                    <button
+                    <Button
                       onClick={() =>
-                        router.push(
-                          `/admin/sections/blog-posts/edit/${post.id}`
-                        )
+                        handleEdit(post.id)
                       }
-                      className="text-primary hover:text-primary/90 disabled:opacity-50"
+                      variant="success"
+                      size='sm'
                       disabled={loading}
                     >
                       Edit
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleDelete(post.id.toString())}
-                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                      variant="danger"
+                      size='sm'
                       disabled={loading}
                     >
                       Delete
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))

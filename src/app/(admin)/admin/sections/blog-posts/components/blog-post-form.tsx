@@ -135,7 +135,7 @@ export function BlogPostForm({
         </div>
       </div>
 
-      <div className="flex justify-end pt-20">
+      <div className="flex justify-end gap-5 pt-20">
         <Button variant="secondary" onClick={onCancel} disabled={loading}>
           Cancel
         </Button>
