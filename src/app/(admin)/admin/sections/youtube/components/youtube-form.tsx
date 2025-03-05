@@ -9,19 +9,26 @@ import { LoadingSpinner } from '@/components/ui/loadingSpinner'
 export function YoutubeForm() {
   const { youtube, updateYoutube, loading, getYoutube } = useAdmin()
 
-
-  const [youtube_url, setYoutubeUrl] = useState(youtube?.youtube_url || '')
-  const [quote, setQuote] = useState(youtube?.quote || '')
+  const [youtube_url, setYoutubeUrl] = useState('')
+  const [quote, setQuote] = useState('')
 
   useEffect(() => {
     getYoutube()
+  }, [getYoutube])
 
-  }, [])
+  useEffect(() => {
+    if (youtube) {
+      setYoutubeUrl(youtube.youtube_url || '')
+      setQuote(youtube.quote || '')
+    }
+  }, [youtube])
+
   console.log('youtubeSection fetched on form', youtube)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await updateYoutube({ youtube_url, quote, id: youtube?.id, updated_at: new Date() })
+    await getYoutube()
   }
 
   if(loading) return <LoadingSpinner />

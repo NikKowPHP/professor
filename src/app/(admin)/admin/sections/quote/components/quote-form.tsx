@@ -5,19 +5,31 @@ import { Button } from '@/components/ui/button/button'
 import { useAdmin } from '@/contexts/admin-context'
 
 export function QuoteForm() {
-  const { quote, updateQuote, loading , getQuote} = useAdmin()
-  
-  console.log(quote);
-  const [quoteText, setQuoteText] = useState(quote?.quote || '')
+  const { quote, updateQuote, loading, getQuote } = useAdmin()
+  const [quoteText, setQuoteText] = useState('')
+
+  // Sync form state with context
+  useEffect(() => {
+    setQuoteText(quote?.quote || '')
+  }, [quote])
+  useEffect(() => {
+    getQuote();
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await updateQuote({ quote: quoteText, id: quote?.id, updated_at: new Date().toISOString() })
+    try {
+      await updateQuote({ 
+        quote: quoteText,
+        id: quote?.id,
+        updated_at: new Date().toISOString()
+      })
+      // Refresh data after update
+      await getQuote()
+    } catch (error) {
+      console.error('Update failed:', error)
+    }
   }
-
-  useEffect(() => {
-    getQuote()
-
-  }, [])
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -31,16 +43,15 @@ export function QuoteForm() {
         <textarea
           id="quote"
           rows={3}
-          className="mt-1 block w-full   border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-lg"
+          className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-lg"
           value={quoteText}
           onChange={(e) => setQuoteText(e.target.value)}
           required
         />
       </div>
       <div className="flex justify-end space-x-4">
-        
         <Button variant="primary" type="submit" disabled={loading}>
-          Update
+          {loading ? 'Updating...' : 'Update'}
         </Button>
       </div>
     </form>
