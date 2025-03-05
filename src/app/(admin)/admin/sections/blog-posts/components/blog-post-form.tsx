@@ -35,7 +35,6 @@ export function BlogPostForm({
   })
   const [content, setContent] = useState(post?.content_html || '')
   const [excerpt, setExcerpt] = useState(post?.excerpt || '')
-  const [tag, setTag] = useState(post?.tag || '')
   const { quill: quillContent, quillRef: quillRefContent } = useQuill({ theme: 'snow' })
   const { quill: quillExcerpt, quillRef: quillRefExcerpt } = useQuill({ theme: 'snow' })
 
@@ -63,9 +62,9 @@ export function BlogPostForm({
 
   const submitHandler = async (data: Partial<BlogPost>) => {
     if (post?.id) {
-      await onUpdate({ ...data, content_html: content, excerpt: excerpt })
+      await onUpdate({ ...data, content_html: content, excerpt: excerpt, tag: tag })
     } else {
-      await onSubmit({ ...data, content_html: content, excerpt: excerpt })
+      await onSubmit({ ...data, content_html: content, excerpt: excerpt, tag: tag })
     }
   }
 
@@ -121,6 +120,16 @@ export function BlogPostForm({
       </div>
 
       <div>
+        <Label htmlFor="tag">Tag</Label>
+        <Input
+          type="text"
+          id="tag"
+          {...register('tag')}
+          className="w-full"
+        />
+      </div>
+
+      <div>
         <Label htmlFor="excerpt">Excerpt</Label>
         <div style={{ width: '100%', height: 100 }}>
           <div ref={quillRefExcerpt} />
@@ -129,8 +138,6 @@ export function BlogPostForm({
           <p className="text-red-600">{errors.excerpt.message}</p>
         )}
       </div>
-
-
 
       <div className="pt-20">
         <Label htmlFor="contentHtml">Content</Label>
