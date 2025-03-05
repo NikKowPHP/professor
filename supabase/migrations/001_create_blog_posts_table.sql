@@ -11,8 +11,9 @@ CREATE TABLE proffessor_news (
     excerpt TEXT NOT NULL,
     content_html TEXT NOT NULL,
     is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
 
 INSERT INTO proffessor_news (slug, title, image_url, image_alt, excerpt, content_html, is_pinned, created_at, updated_at, tag)
 VALUES (
