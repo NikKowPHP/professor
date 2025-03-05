@@ -26,7 +26,7 @@ const config: Config = {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Roboto Serif' ],
       },
       fontSize: {
         'xs': '12px',
