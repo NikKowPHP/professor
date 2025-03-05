@@ -13,7 +13,7 @@ import { YoutubeItem } from '@/lib/data/youtube-section'
 import { usePathname } from 'next/navigation'
 
 interface PageContextType {
-  blogPost: BlogPost | null
+  blogPosts: BlogPost[] | null
   loading: boolean
   error: string | null
   clearError: () => void
@@ -22,6 +22,7 @@ interface PageContextType {
   youtube: YoutubeItem | null;
   getQuote: () => Promise<void>;
   getYoutube: () => Promise<void>;
+  getBlogPosts: () => Promise<void>
   isAdminRoute: boolean;
 }
 
@@ -34,7 +35,7 @@ const PageContext = createContext<PageContextType | undefined>(undefined)
 export function PageProvider({
   children,
 }: PageProviderProps) {
-  const [blogPost, setBlogPost] = useState<BlogPost | null>(null)
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [quote, setQuote] = useState<QuoteItem | null>(null)
   const [youtube, setYoutube] = useState<YoutubeItem | null>(null)
   const [loading, setLoading] = useState(false)
@@ -42,6 +43,26 @@ export function PageProvider({
   const pathname = usePathname()
 
    const clearError = () => setError(null)
+
+  
+  
+
+  const getBlogPosts = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/admin/blog-posts`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch blog posts')
+      }
+      const data = await response.json()
+      setBlogPosts(data)
+    } catch (error: any) {
+      setError(error.message || 'Failed to fetch blog posts')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
 
   const getBlogPost = useCallback(async (slug: string) => {
@@ -53,8 +74,7 @@ export function PageProvider({
       if (!response.ok) {
         throw new Error('Failed to fetch blog post')
       }
-      const data = await response.json()
-      setBlogPost(data)
+      return await response.json()
     } catch (error: any) {
       setError(error.message || 'Failed to fetch blog post')
     } finally {
@@ -104,7 +124,7 @@ export function PageProvider({
   return (
     <PageContext.Provider
       value={{
-        blogPost,
+        blogPosts,
         loading,
         error,
         clearError,
@@ -114,6 +134,8 @@ export function PageProvider({
         getQuote,
         getYoutube,
         isAdminRoute,
+        getBlogPosts,
+
       }}
     >
       {children}

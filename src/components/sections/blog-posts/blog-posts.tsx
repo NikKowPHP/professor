@@ -1,15 +1,18 @@
+// 'use client'
 import { Suspense } from 'react';
 import Link from 'next/link';
-import { getBlogPostService } from '@/lib/services/blog-post.service';
+import { blogPostService} from '@/lib/services/blog-post.service';
 import { BlogPost } from '@/domain/models/blog-post.model';
 import Image from 'next/image';
 import { Tag } from '@/components/ui/tag/tag';
 import { ArrowUpRight } from 'lucide-react';
+import logger from '@/lib/logger';
 
 
 export async function BlogPosts({displayReadAll = true}: {displayReadAll?: boolean}) {
-  const blogPostService = await getBlogPostService()
-  const blogPosts = await blogPostService.getBlogPosts()
+  const blogPosts = await blogPostService.getBlogPosts();
+  logger.log('blogposts in blog posts component', blogPosts)
+
   return (
     <section id="work" className="relative overflow-hidden    py-[50px] md:py-[100px]">
       <div className='max-w-7xl px-[20px] md:px-0 mx-auto flex flex-col gap-[20px]'>

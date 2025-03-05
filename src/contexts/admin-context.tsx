@@ -29,7 +29,7 @@ interface AdminContextType {
   getBlogPostById: (id: string) => Promise<BlogPost | null>
 
   clearError: () => void
-  getBlogPost: (id: string,  ) => Promise<BlogPost | null>
+  getBlogPost: (id: string  ) => Promise<BlogPost | null>
   getBlogPosts: () => Promise<void>
 
   // Quote Section

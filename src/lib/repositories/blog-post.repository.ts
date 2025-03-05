@@ -27,7 +27,7 @@ export class BlogPostRepository implements IBlogPostRepository {
     return data
   }
 
-  getBlogPostBySlug = async (slug: string,  ): Promise<BlogPost | null> => {
+  getBlogPostBySlug = async (slug: string ): Promise<BlogPost | null> => {
     const { data, error } = await this.supabaseClient
       .from(this.tableName)
       .select('*')

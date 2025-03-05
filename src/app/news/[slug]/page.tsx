@@ -13,7 +13,7 @@ interface PageProps {
 
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = await params
+  const { slug } = params
 
   // Find the blog post with the matching slug
   const post = await blogPostService.getBlogPostBySlug(slug)

@@ -2,6 +2,7 @@ import { BlogPost } from "@/domain/models/blog-post.model"
 import { blogPostRepositoryLocal } from "@/lib/repositories/blog-post.local.repository"
 import { blogPostRepository } from "@/lib/repositories/blog-post.repository"
 import { IBlogPostRepository } from "../interfaces/blog-post.interface"
+import logger from "../logger"
 
 export interface IBlogPostService {
   getBlogPosts(): Promise<BlogPost[]>
@@ -27,7 +28,10 @@ export class BlogPostService implements IBlogPostService {
   }
 
   getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
-    return this.blogPostRepository.getBlogPostBySlug(slug)
+    const blogPost =  this.blogPostRepository.getBlogPostBySlug(slug.trim())
+    logger.log('is mocked repos ? ', process.env.MOCK_REPOSITORIES)
+    logger.log('blog post by slug in service', blogPost)
+    return blogPost;
   }
 
   getBlogPostById = async (id: string): Promise<BlogPost | null> => {
