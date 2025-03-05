@@ -113,7 +113,7 @@ const BlogPostItem = ({
                   variant='simple'
                   className="px-8 text-sm sm:text-base"
                 >
-                  News
+                  {post.tag}
                 </Tag>
               </span>
             </div>

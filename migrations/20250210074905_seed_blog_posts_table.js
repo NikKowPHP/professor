@@ -6,8 +6,7 @@ exports.up = async function (knex) {
   const blogPostsEn = [
     {
       slug: 'first-post',
-      title: 'The study of Indonesian etymology and loan words reveals both its historical and social contexts. Examples are the early Sanskrit borrowings from the 7th century during the trading era
-',
+      title: 'The study of Indonesian etymology and loan words reveals both its historical and social contexts. Examples are the early Sanskrit borrowings from the 7th century during the trading era',
       image_url: '/images/image1.jpg',
       image_alt: 'First Blog Post',
       excerpt:

@@ -62,9 +62,9 @@ export function BlogPostForm({
 
   const submitHandler = async (data: Partial<BlogPost>) => {
     if (post?.id) {
-      await onUpdate({ ...data, content_html: content, excerpt: excerpt, tag: tag })
+      await onUpdate({ ...data, content_html: content, excerpt: excerpt  })
     } else {
-      await onSubmit({ ...data, content_html: content, excerpt: excerpt, tag: tag })
+      await onSubmit({ ...data, content_html: content, excerpt: excerpt})
     }
   }
 
