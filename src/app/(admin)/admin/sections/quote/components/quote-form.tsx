@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button/button'
 import { useAdmin } from '@/contexts/admin-context'
 
 export function QuoteForm() {
-  const { quote, updateQuote, loading, getQuote } = useAdmin()
+  const { quote, updateQuote, loading, getQuote,revalidateCache } = useAdmin()
   const [quoteText, setQuoteText] = useState('')
 
   // Sync form state with context
@@ -30,6 +30,9 @@ export function QuoteForm() {
       console.error('Update failed:', error)
     }
   }
+  const handleRefresh = async () => {
+    await Promise.all([getQuote(), revalidateCache()])
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -49,7 +52,16 @@ export function QuoteForm() {
           required
         />
       </div>
+
       <div className="flex justify-end space-x-4">
+        <Button 
+          variant="secondary" 
+          type="button" 
+          onClick={handleRefresh} 
+          disabled={loading}
+        >
+          Refresh
+        </Button>
         <Button variant="primary" type="submit" disabled={loading}>
           {loading ? 'Updating...' : 'Update'}
         </Button>
