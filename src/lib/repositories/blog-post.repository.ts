@@ -33,23 +33,26 @@ export class BlogPostRepository implements IBlogPostRepository {
     return cachedData
   }
 
-  getBlogPostBySlug = async (slug: string ): Promise<BlogPost | null> => {
-    const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .select('*')
-      .eq('slug', slug)
-      .maybeSingle()
+  getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+    const cachedData = await unstable_cache(
+      async () => {
+        const { data, error } = await this.supabaseClient
+          .from(this.tableName)
+          .select('*')
+          .eq('slug', slug)
+          .maybeSingle()
 
-    if (error) {
-      logger.error('Error fetching blog post by slug:', error)
-      return null
-    }
-
-    if (!data) {
-      return null
-    }
-
-    return data
+        if (error) throw error
+        return data
+      },
+      [`blog-post-slug-${slug}`],
+      { 
+        tags: [CACHE_TAGS.BLOG_POSTS, `blog-post-slug-${slug}`],
+        revalidate: CACHE_TIMES.MINUTE 
+      }
+    )()
+    
+    return cachedData
   }
 
   createBlogPost = async (
