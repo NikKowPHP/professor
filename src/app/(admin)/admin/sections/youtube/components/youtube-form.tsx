@@ -7,7 +7,7 @@ import { LoadingSpinner } from '@/components/ui/loadingSpinner'
 
 
 export function YoutubeForm() {
-  const { youtube, updateYoutube, loading, getYoutube } = useAdmin()
+  const { youtube, updateYoutube, loading, getYoutube, revalidateCache } = useAdmin()
 
   const [youtube_url, setYoutubeUrl] = useState('')
   const [quote, setQuote] = useState('')
@@ -28,7 +28,11 @@ export function YoutubeForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await updateYoutube({ youtube_url, quote, id: youtube?.id, updated_at: new Date() })
-    await getYoutube()
+    await revalidateCache()
+  }
+
+  const handleRefresh = async () => {
+    await Promise.all([getYoutube(), revalidateCache()])
   }
 
   if(loading) return <LoadingSpinner />
@@ -69,7 +73,14 @@ export function YoutubeForm() {
       </div>
        
       <div className="flex justify-end space-x-4">
-     
+        <Button 
+          variant="secondary" 
+          type="button" 
+          onClick={handleRefresh} 
+          disabled={loading}
+        >
+          Refresh
+        </Button>
         <Button variant="primary" type="submit" disabled={loading}>
           Update
         </Button>

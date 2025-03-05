@@ -21,6 +21,8 @@ type AdminContextType = ReturnType<typeof useAdminBlogPosts> & {
   loading: boolean;
   error: string | null;
   clearError: () => void;
+
+  revalidateCache: () => Promise<void>;
 };
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -71,6 +73,14 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     }).then(result => result || Promise.reject('Update failed'));
   }, [fetchApi]);
 
+  const revalidateCache = useCallback(async () => {
+    await fetchApi({
+      url: '/api/admin/revalidate',
+      method: 'GET',
+      errorMessage: 'Failed to revalidate cache'
+    });
+  }, [fetchApi]);
+
   const clearError = () => setError(null);
 
   return (
@@ -84,7 +94,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       updateYoutube,
       loading,
       error,
-      clearError
+      clearError,
+      revalidateCache
     }}>
       {children}
     </AdminContext.Provider>
