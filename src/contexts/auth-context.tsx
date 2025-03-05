@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isMock] = useState(() => process.env.NEXT_PUBLIC_MOCK_REPOSITORIES === 'true')
+  const [isMock] = useState(() => process.env.NEXT_PUBLIC_MOCK_AUTH === 'true')
   const [authService] = useState(() => 
     isMock ? new MockAuthService() : new SupabaseAuthService()
   )
