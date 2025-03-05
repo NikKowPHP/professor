@@ -85,6 +85,14 @@ export function Navbar() {
     }
   }, [mobileMenuOpen])
 
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+    document.body.style.overflowX = 'hidden';
+    } else {
+    document.body.style.overflowX = '';
+    }
+    }, [mobileMenuOpen]);
+
   return (
     <header
       className={`sticky top-0 left-0 right-0 z-50 bg-opacity-80 backdrop-blur-sm bg-[#FAF8F1] transition-all duration-300 ${
@@ -216,8 +224,8 @@ export function Navbar() {
       {/* Combined Offcanvas Menu */}
       <div
         id="offcanvas-menu"
-        className={`fixed inset-y-0 right-0 w-[80%] md:w-[320px] h-screen z-[60] bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed inset-y-0  right-0 w-[80%] md:w-[320px] h-screen z-[60] bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
+          mobileMenuOpen ? ' translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="p-6 h-full">
