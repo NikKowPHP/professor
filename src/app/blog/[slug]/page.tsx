@@ -104,9 +104,10 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             <div className="sm:text-lg  flex flex-col leading-[120%]   gap-4">
               <p>Share:</p>
-              <ul>
+              <ul className="flex flex-col gap-4">
                 <li>
                   <Link
+                  className="hover:bg-blue-300 p-4 transition-all duration-100"
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
                      `${siteUrl}/blog/${slug}`
                     )}`}
@@ -117,7 +118,8 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </Link>
                 </li>
                 <li>
-                  <Link
+                    <Link
+                          className="hover:bg-orange-300 p-4 transition-all duration-100"
                     href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
                       `${siteUrl}/blog/${slug}`
                     )}&text=${encodeURIComponent(post.title)}`}
@@ -129,6 +131,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </li>
                 <li>
                   <Link
+                          className="hover:bg-pink-300 p-4 transition-all duration-100"
                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
                    `${siteUrl}/blog/${slug}`
                     )}`}
