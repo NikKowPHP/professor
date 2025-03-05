@@ -54,6 +54,7 @@ export const blogPosts: BlogPost[] = [
       `,
     is_pinned: true,
       updated_at: '2024-03-01',
+      tag: 'News'
     },
     {
       id: 'blog-post-2',
@@ -66,6 +67,7 @@ export const blogPosts: BlogPost[] = [
       content_html: '<p>In this post, we delve into the advanced features of Next.js, including server-side rendering, static site generation, and API routes. We will also cover performance optimization techniques and deployment strategies.</p><img src="/images/case-studies/gsense/gsense.avif" alt="Next.js" /><p>Learn how to leverage Next.js to create fast, scalable, and SEO-friendly web applications.</p>',
       is_pinned: false,
       updated_at: '2024-03-05',
+      tag: 'News'
     },
     {
       id: 'blog-post-3',
@@ -78,5 +80,7 @@ export const blogPosts: BlogPost[] = [
       content_html: '<p>This post explores the latest trends in web development, such as WebAssembly, serverless computing, and progressive web apps. We will discuss how these technologies are transforming the way we build and deploy web applications.</p><img src="/images/case-studies/gsense/gsense.avif" alt="Web Development Trends" /><p>Stay ahead of the curve by understanding the technologies that will define the future of the web.</p>',
       is_pinned: false,
       updated_at: '2024-03-10',
+
+      tag: 'News'
     },
   ]
