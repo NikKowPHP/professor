@@ -244,7 +244,7 @@ export function Navbar() {
       >
         <div className="p-6 h-full">
           <button
-            className="absolute top-4 right-4 p-2"
+            className="absolute top-4 right-4 p-2 bg-opacity-100"
             onClick={() => setMobileMenuOpen(false)}
             aria-label="Close menu"
           >
@@ -253,32 +253,46 @@ export function Navbar() {
           <nav className="mt-10 flex flex-col gap-6">
             <Link
               href="/book-a-call"
-              className="transition-colors text-lg duration-200 inline-flex items-center font-medium  gap-2  px-[8px] py-[4px]"
+              className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
               style={
                 {
                   '--hover-color': '#f9a8d4',
                 } as React.CSSProperties
               }
-           
               onClick={() => setMobileMenuOpen(false)}
             >
               Book a call
               <ArrowUpRight className="w-5 h-5" />
             </Link>
-            {navigationConfig.mainNav.concat(navigationConfig.mainNavLinks).map((item) => (
+            {navigationConfig.mainNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="transition-colors text-lg duration-200 inline-flex items-center font-medium  gap-2  px-[8px] py-[4px]"
+                className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
                 style={
                   {
                     '--hover-color': '#f9a8d4',
                   } as React.CSSProperties
                 }
-              
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.title}
+              </Link>
+            ))}
+            {navigationConfig.mainNavLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
+                style={
+                  {
+                    '--hover-color': '#f9a8d4',
+                  } as React.CSSProperties
+                }
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.title}
+                <ArrowUpRight className="w-5 h-5" />
               </Link>
             ))}
           </nav>
