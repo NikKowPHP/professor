@@ -121,7 +121,7 @@ export function Navbar() {
 
                       <Link
                          href="/book-a-call"
-                        className="transition-colors duration-200 flex items-center gap-2 px-[8px] py-[4px]"
+                        className="transition-colors duration-200 inline-flex items-center  gap-2  px-[8px] py-[4px]"
                         style={
                           {
                             '--hover-color': '#f9a8d4',
@@ -138,7 +138,7 @@ export function Navbar() {
                     <li key={item.href} aria-label={item.title}>
                       <Link
                         href={item.href}
-                        className="transition-colors duration-200 p-[8px]"
+                        className="transition-colors inline-flex items-center  gap-2 duration-200 px-[8px] py-[4px]"
                         style={
                           {
                             '--hover-color': item.color,
