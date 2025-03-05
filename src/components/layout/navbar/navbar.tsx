@@ -184,7 +184,7 @@ export function Navbar() {
       {/* Backdrop overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 h-screen bg-black/50 backdrop-blur-sm z-50 md:hidden"
+          className="fixed inset-0 h-screen bg-black/50 backdrop-blur-sm z-50 transition-all duration-100"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
