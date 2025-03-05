@@ -124,7 +124,9 @@ export function AdminProvider({
       }
 
       const updatedBlogPost = await response.json()
-      setBlogPosts((prev) => [...prev.filter((bp) => bp.id !== id), updatedBlogPost])
+      setBlogPosts((prev) =>
+        prev.map((bp) => (bp.id === id ? updatedBlogPost : bp))
+      )
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to update blog post'
@@ -176,9 +178,9 @@ export function AdminProvider({
       }
 
       const updatedBlogPost = await response.json()
-      setBlogPosts((prev) => prev.map((bp) =>
-          bp.id === id ? updatedBlogPost : bp
-        ))
+      setBlogPosts((prev) =>
+        prev.map((bp) => (bp.id === id ? updatedBlogPost : bp))
+      )
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to pin blog post'
