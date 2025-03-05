@@ -1,358 +1,98 @@
-'use client'
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react'
-import { BlogPost } from '@/domain/models/blog-post.model'
-import logger from '@/lib/logger'
-import { QuoteItem } from '@/lib/data/quote-section'
-import { YoutubeItem } from '@/lib/data/youtube-section'
+import { createContext, useCallback, useContext, useState } from 'react';
+import { useAdminBlogPosts } from '@/hooks/use-admin-blogposts';
+import { useApi } from '@/hooks/use-api';
+import { QuoteItem } from '@/lib/data/quote-section';
+import { YoutubeItem } from '@/lib/data/youtube-section';
 
-interface AdminContextType {
-  blogPosts: BlogPost[] | null
-  loading: boolean
-  error: string | null
- 
-
-
-  createBlogPost: (data: Partial<BlogPost>) => Promise<void>
-  updateBlogPost: (
-    id: string,
-    data: Partial<BlogPost>,
-  ) => Promise<void>
-  deleteBlogPost: (id: string) => Promise<void>
-  pinBlogPost: (id: string) => Promise<void>
-  getBlogPostById: (id: string) => Promise<BlogPost | null>
-
-  clearError: () => void
-  getBlogPost: (id: string  ) => Promise<BlogPost | null>
-  getBlogPosts: () => Promise<void>
-
+type AdminContextType = ReturnType<typeof useAdminBlogPosts> & {
   // Quote Section
   quote: QuoteItem | null;
-  getQuote: () => Promise<void>;
-  updateQuote: (data: Partial<QuoteItem>) => Promise<void>;
+  getQuote: () => Promise<QuoteItem | undefined>;
+  updateQuote: (data: Partial<QuoteItem>) => Promise<QuoteItem>;
 
   // Youtube Section
   youtube: YoutubeItem | null;
-  getYoutube: () => Promise<void>;
-  updateYoutube: (data: Partial<YoutubeItem>) => Promise<void>;
-}
+  getYoutube: () => Promise<YoutubeItem | undefined>;
+  updateYoutube: (data: Partial<YoutubeItem>) => Promise<YoutubeItem>;
 
-interface AdminProviderProps {
-  children: React.ReactNode
+  // Common
+  loading: boolean;
+  error: string | null;
+  clearError: () => void;
+};
 
-}
+const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
-const AdminContext = createContext<AdminContextType | undefined>(undefined)
-
-export function AdminProvider({
-  children,
- 
-}: AdminProviderProps) {
-
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-  const [quote, setQuote] = useState<QuoteItem | null>(null)
-  const [youtube, setYoutube] = useState<YoutubeItem | null>(null)
-
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-    // Initialize case studies when initialCaseStudies changes
-
-
-  useEffect(() => {
-    getBlogPosts()
-    getQuote()
-    getYoutube()
-  }, [])
-
-  
-  
-
-  const createBlogPost = async (data: Partial<BlogPost> ) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`/api/admin/blog-post`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response
-          .json()
-          .catch(() => ({ error: 'Failed to create blog post' }))
-        throw new Error(errorData.error || 'Failed to create blog post')
-      }
-
-      const newBlogPost = await response.json()
-      setBlogPosts((prev) => [...prev, newBlogPost])
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to create blog post'
-      )
-      logger.error(`Failed to create blog post ${err}`)
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const updateBlogPost = async (
-    id: string,
-    data: Partial<BlogPost>,
-  ) => {
-    setLoading(true)
-    setError(null)
-    try {
-      console.log('updateBlogPost', {data})
-      const response = await fetch(`/api/admin/blog-post?id=${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to update blog post')
-      }
-
-      const updatedBlogPost = await response.json()
-      setBlogPosts((prev) =>
-        prev.map((bp) => (bp.id === id ? updatedBlogPost : bp))
-      )
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to update blog post'
-      )
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const deleteBlogPost = async (id: string) => {
-    setLoading(true)
-    setError(null)
-    try {
-      console.log('perfoming delete', id)
-      const response = await fetch(`/api/admin/blog-post?id=${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to delete blog post')
-      }
-
-      setBlogPosts((prev) => prev.filter((cs) => cs.id !== id))
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to delete blog post'
-      )
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const pinBlogPost = async (id: string) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`/api/admin/blog-post/pin?id=${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to pin blog post')
-      }
-
-      const updatedBlogPost = await response.json()
-      setBlogPosts((prev) =>
-        prev.map((bp) => (bp.id === id ? updatedBlogPost : bp))
-      )
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to pin blog post'
-      )
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  
-
-  const clearError = () => setError(null)
-
-  const getBlogPostById = async (id: string) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`/api/admin/blog-post?id=${id}`)
-      if (!response.ok) {
-        throw new Error('Failed to fetch blog post')
-      }
-      const data = await response.json()
-      return data
-    } catch (error: any) {
-      setError(error.message || 'Failed to fetch blog post')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const getBlogPosts = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`/api/admin/blog-posts`)
-      if (!response.ok) {
-        throw new Error('Failed to fetch blog posts')
-      }
-      const data = await response.json()
-      setBlogPosts(data)
-    } catch (error: any) {
-      setError(error.message || 'Failed to fetch blog posts')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  const getBlogPost = async (id: string) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`/api/admin/blog-post?id=${id}`)
-      const data = await response.json()
-      return data
-    } catch (error: any) {
-      setError(error.message || 'Failed to fetch blog post')
-    } finally {
-      setLoading(false)
-    }
-  }
+export function AdminProvider({ children }: { children: React.ReactNode }) {
+  const blogPosts = useAdminBlogPosts();
+  const { fetchApi, loading, error, setError } = useApi();
+  const [quote, setQuote] = useState<QuoteItem | null>(null);
+  const [youtube, setYoutube] = useState<YoutubeItem | null>(null);
 
   // Quote Section
-  const getQuote = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/quote');
-      if (!response.ok) {
-        throw new Error('Failed to fetch quote');
-      }
-      const data = await response.json();
-      setQuote(data);
-    } catch (error: any) {
-      setError(error.message || 'Failed to fetch quote');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const getQuote = useCallback(async () => {
+    return fetchApi<QuoteItem>({
+      url: '/api/quote',
+      method: 'GET',
+      onSuccess: setQuote,
+      errorMessage: 'Failed to fetch quote'
+    });
+  }, [fetchApi]);
 
-  const updateQuote = async (data: Partial<QuoteItem>) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/quote', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update quote');
-      }
-      const updatedQuote = await response.json();
-      console.log('updatedQuote', updatedQuote);
-      setQuote(updatedQuote);
-    } catch (error: any) {
-      setError(error.message || 'Failed to update quote');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const updateQuote = useCallback(async (data: Partial<QuoteItem>) => {
+    return fetchApi<QuoteItem>({
+      url: '/api/quote',
+      method: 'PUT',
+      data,
+      onSuccess: setQuote,
+      errorMessage: 'Failed to update quote'
+    }).then(result => result || Promise.reject('Update failed'));
+  }, [fetchApi]);
 
   // Youtube Section
-  const getYoutube = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/youtube');
-      if (!response.ok) {
-        throw new Error('Failed to fetch youtube');
-      }
-      const data = await response.json();
-      setYoutube(data);
-    } catch (error: any) {
-      setError(error.message || 'Failed to fetch youtube');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const getYoutube = useCallback(async () => {
+    return fetchApi<YoutubeItem>({
+      url: '/api/youtube',
+      method: 'GET',
+      onSuccess: setYoutube,
+      errorMessage: 'Failed to fetch YouTube data'
+    });
+  }, [fetchApi]);
 
-  const updateYoutube = async (data: Partial<YoutubeItem>) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/youtube', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update youtube');
-      }
-      const updatedYoutube = await response.json();
-      setYoutube(updatedYoutube);
-    } catch (error: any) {
-      setError(error.message || 'Failed to update youtube');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const updateYoutube = useCallback(async (data: Partial<YoutubeItem>) => {
+    return fetchApi<YoutubeItem>({
+      url: '/api/youtube',
+      method: 'PUT',
+      data,
+      onSuccess: setYoutube,
+      errorMessage: 'Failed to update YouTube data'
+    }).then(result => result || Promise.reject('Update failed'));
+  }, [fetchApi]);
+
+  const clearError = () => setError(null);
 
   return (
-    <AdminContext.Provider
-      value={{
-        blogPosts,
-        loading,
-        error,
-        createBlogPost,
-        updateBlogPost,
-        deleteBlogPost,
-        pinBlogPost,
-        clearError,
-        getBlogPosts,
-        getBlogPost,
-        quote,
-        getQuote,
-        updateQuote,
-        youtube,
-        getYoutube,
-        updateYoutube,
-        getBlogPostById,
-      }}
-    >
+    <AdminContext.Provider value={{
+      ...blogPosts,
+      quote,
+      youtube,
+      getQuote,
+      updateQuote,
+      getYoutube,
+      updateYoutube,
+      loading,
+      error,
+      clearError
+    }}>
       {children}
     </AdminContext.Provider>
-  )
+  );
 }
 
 export const useAdmin = () => {
-  const context = useContext(AdminContext)
-  if (context === undefined) {
-    throw new Error('useAdmin must be used within an AdminProvider')
-  }
-  return context
-}
+  const context = useContext(AdminContext);
+  if (!context) throw new Error('useAdmin must be used within AdminProvider');
+  return context;
+};

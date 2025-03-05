@@ -1,23 +1,25 @@
-import { revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
-import { CACHE_TAGS } from '@/lib/utils/cache';
+import {  NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache'
+import { CACHE_TAGS } from '@/lib/utils/cache'
 import logger from '@/lib/logger'
-export async function POST(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
 
-  if (token !== process.env.REVALIDATION_TOKEN) {
-    return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-  }
-
+export async function GET() {
   try {
-    revalidateTag(CACHE_TAGS.BLOG_POSTS);
-    return NextResponse.json({ revalidated: true, now: Date.now() });
+   
+    console.log('Revalidating cache')
+
+    // Revalidate cache
+    Object.values(CACHE_TAGS).forEach(tag => {
+      console.log('Revalidating tag:', tag)
+      revalidateTag(tag)
+    })
+
+    return NextResponse.json({ message: 'Cache revalidated' })
   } catch (error) {
-    logger.log('Error revalidating', error);
+    logger.log('Error revalidating cache:', error)
     return NextResponse.json(
-      { message: 'Error revalidating' }, 
+      { error: 'Failed to revalidate cache', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
-    );
+    )
   }
-} 
+}

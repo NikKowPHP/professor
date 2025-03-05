@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import logger from '@/lib/logger'
 import { useAdmin } from '@/contexts/admin-context'
+import { LoadingSpinner } from '@/components/ui/loadingSpinner'
 
 interface Props {
   params: { id: string }
@@ -16,15 +17,27 @@ export default function EditBlogPostPage({params}: Props) {
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [id, setId] = useState<string>('')
   const { updateBlogPost, getBlogPostById, createBlogPost, loading} = useAdmin()
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const { id } = params
-    if (id) {
-      setId(id)
-    }
-  
-    getBlogPostById(id).then(post => setBlogPost(post || null))
-  }, [params])
+    const fetchBlogPost = async () => {
+      try {
+        setIsLoading(true);
+        const { id } = params;
+        if (id) {
+          setId(id);
+          const post = await getBlogPostById(id);
+          setBlogPost(post || null);
+        }
+      } catch (error) {
+        logger.error('Error fetching blog post:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogPost();
+  }, [params]);
 
   const handleUpdate = async (data: Partial<BlogPost>) => {
     if (!blogPost) return;
@@ -46,10 +59,15 @@ export default function EditBlogPostPage({params}: Props) {
     } finally {
     }
   }
-  if(loading)
+ 
+ 
 
-  if(!blogPost) {
-    return <div>Blog post not found</div>
+  if (isLoading || loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!blogPost) {
+    return <div className="p-4 text-red-600">Blog post not found</div>;
   }
 
   return (

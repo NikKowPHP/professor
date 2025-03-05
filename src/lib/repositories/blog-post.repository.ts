@@ -16,12 +16,13 @@ export class BlogPostRepository implements IBlogPostRepository {
       .from(this.tableName)
       .select('*')
       .order('created_at', { ascending: false })
+      .throwOnError() 
 
     console.log('data', data)
 
       if (error) {
-        logger.log('Error fetching blog posts:', error)
-        return []
+        logger.error('Error fetching blog posts:', error)
+        throw error 
       }
 
     return data
@@ -32,10 +33,10 @@ export class BlogPostRepository implements IBlogPostRepository {
       .from(this.tableName)
       .select('*')
       .eq('slug', slug)
-      .single()
+      .maybeSingle()
 
     if (error) {
-      logger.log('Error fetching blog post by slug:', error)
+      logger.error('Error fetching blog post by slug:', error)
       return null
     }
 
@@ -57,7 +58,7 @@ export class BlogPostRepository implements IBlogPostRepository {
       .single()
 
     if (error) {
-      logger.log('Error creating blog post:', error)
+      logger.error('Error creating blog post:', error)
       throw new Error('Failed to create blog post')
     }
 
@@ -77,7 +78,7 @@ export class BlogPostRepository implements IBlogPostRepository {
       .single()
 
     if (error) {
-      logger.log('Error updating blog post:', error)
+      logger.error('Error updating blog post:', error)
       throw new Error('Failed to update blog post')
     }
 
@@ -96,7 +97,7 @@ export class BlogPostRepository implements IBlogPostRepository {
       .single()
 
     if (error) {
-      logger.log('Error fetching blog post by id:', error)
+      logger.error('Error fetching blog post by id:', error)
       throw new Error('Failed to fetch blog post by id')
     }
 
@@ -114,7 +115,7 @@ export class BlogPostRepository implements IBlogPostRepository {
       .eq('id', id)
 
     if (error) {
-      logger.log('Error deleting blog post:', error)
+      logger.error('Error deleting blog post:', error)
       throw new Error('Failed to delete blog post')
     }
 

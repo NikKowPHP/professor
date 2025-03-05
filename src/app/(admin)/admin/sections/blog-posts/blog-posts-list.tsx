@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation'
 import logger from '@/lib/logger'
 import { useAdmin } from '@/contexts/admin-context'
 import { Button } from '@/components/ui/button/button'
+import { LoadingSpinner } from '@/components/ui/loadingSpinner'
 
 
 export function BlogPostList() {
-  const { blogPosts, error, loading, deleteBlogPost, updateBlogPost } = useAdmin()
+  const { blogPosts, error, loading, deleteBlogPost, updateBlogPost, getBlogPosts } = useAdmin()
 
   const router = useRouter()
   const [pinnedPostId, setPinnedPostId] = useState<string | null>(null)
@@ -24,6 +25,9 @@ export function BlogPostList() {
       setPinnedPostId(pinnedPost?.id || null)
     }
   }, [blogPosts])
+  useEffect(() => {
+    getBlogPosts();
+  }, [])
 
   useEffect(() => {
     console.log('pinnedPostId', pinnedPostId)
@@ -68,7 +72,7 @@ export function BlogPostList() {
     <div className="space-y-8">
       {error && <div className="p-4 bg-red-50 text-red-600  ">{error}</div>}
 
-      {localLoading && <div className="p-4 bg-gray-50 text-gray-600 animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900">Loading...</div>}
+      {localLoading || loading && <LoadingSpinner />}
 
       <div className="flex justify-between items-center">
      
