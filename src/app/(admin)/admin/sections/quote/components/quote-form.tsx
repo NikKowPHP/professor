@@ -1,17 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button/button'
 import { useAdmin } from '@/contexts/admin-context'
 
 export function QuoteForm() {
-  const { quote, updateQuote, loading } = useAdmin()
+  const { quote, updateQuote, loading , getQuote} = useAdmin()
+  
   console.log(quote);
   const [quoteText, setQuoteText] = useState(quote?.quote || '')
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await updateQuote({ quote: quoteText, id: quote?.id, updated_at: new Date().toISOString() })
   }
+
+  useEffect(() => {
+    getQuote()
+
+  }, [])
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,20 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button/button'
 import { useAdmin } from '@/contexts/admin-context'
+import { LoadingSpinner } from '@/components/ui/loadingSpinner'
 
 
 export function YoutubeForm() {
-  const { youtube, updateYoutube, loading } = useAdmin()
+  const { youtube, updateYoutube, loading, getYoutube } = useAdmin()
+
+
   const [youtube_url, setYoutubeUrl] = useState(youtube?.youtube_url || '')
   const [quote, setQuote] = useState(youtube?.quote || '')
+
+  useEffect(() => {
+    getYoutube()
+
+  }, [])
   console.log('youtubeSection fetched on form', youtube)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await updateYoutube({ youtube_url, quote, id: youtube?.id, updated_at: new Date() })
   }
+
+  if(loading) return <LoadingSpinner />
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
