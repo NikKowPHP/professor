@@ -29,6 +29,11 @@ export function Navbar() {
       clearTimeout(timeoutId)
     }
   }, [scrolled])
+  useEffect(() => {
+    if (!scrolled) {
+      setMobileMenuOpen(false)
+    }
+  }, [scrolled])
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -248,7 +253,13 @@ export function Navbar() {
           <nav className="mt-10 flex flex-col gap-6">
             <Link
               href="/book-a-call"
-              className="flex items-center gap-2 text-lg font-medium hover:opacity-70 transition-opacity"
+              className="transition-colors text-lg duration-200 inline-flex items-center font-medium  gap-2  px-[8px] py-[4px]"
+              style={
+                {
+                  '--hover-color': '#f9a8d4',
+                } as React.CSSProperties
+              }
+           
               onClick={() => setMobileMenuOpen(false)}
             >
               Book a call
@@ -258,7 +269,13 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-lg font-medium hover:opacity-70 transition-opacity"
+                className="transition-colors text-lg duration-200 inline-flex items-center font-medium  gap-2  px-[8px] py-[4px]"
+                style={
+                  {
+                    '--hover-color': '#f9a8d4',
+                  } as React.CSSProperties
+                }
+              
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.title}
