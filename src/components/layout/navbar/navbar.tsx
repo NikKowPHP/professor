@@ -181,8 +181,15 @@ export function Navbar() {
         </div>
       </div>
 
-  
-      {/* Desktop Offcanvas */}
+      {/* Backdrop overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 h-screen bg-black/50 backdrop-blur-sm z-50 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Combined Offcanvas Menu */}
       <div
         id="offcanvas-menu"
         className={`fixed inset-y-0 right-0 w-[80%] md:w-[320px] h-screen z-[60] bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
