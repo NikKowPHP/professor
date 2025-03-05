@@ -15,8 +15,8 @@ export const navigationConfig = {
     },
     {
       title: 'News & Insights',
-      href: 'news-insights',
-      isRoute: false,
+      href: 'news',
+      isRoute: true,
        color: '#f9a8d4' // pink
 
     }

@@ -21,7 +21,7 @@ export async function BlogPosts({displayReadAll = true}: {displayReadAll?: boole
 
         </h1>
         {displayReadAll && (
-          <Link href="/blog">
+          <Link href="/news">
             <span className='flex items-center gap-2 text-[21px]'>
               Read All
               <ArrowUpRight className="transition-transform group-hover:translate-x-1 w-[17px] h-[17px]" />
@@ -82,7 +82,7 @@ const BlogPostItem = ({
       itemProp="itemListElement"
     >
       <Link
-        href={`/blog/${post.slug}`}
+        href={`/news/${post.slug}`}
         className="grid grid-cols-1 lg:grid-cols-2 h-full"
         itemProp="url"
       >

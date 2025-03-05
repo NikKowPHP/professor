@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <Link
                   className="hover:bg-blue-300 p-4 transition-all duration-100"
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                     `${siteUrl}/blog/${slug}`
+                     `${siteUrl}/news/${slug}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -121,7 +121,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     <Link
                           className="hover:bg-orange-300 p-4 transition-all duration-100"
                     href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                      `${siteUrl}/blog/${slug}`
+                      `${siteUrl}/news/${slug}`
                     )}&text=${encodeURIComponent(post.title)}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <Link
                           className="hover:bg-pink-300 p-4 transition-all duration-100"
                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                   `${siteUrl}/blog/${slug}`
+                   `${siteUrl}/news/${slug}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

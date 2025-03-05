@@ -118,7 +118,7 @@ export function BlogPostList() {
                     <div className="text-sm text-gray-500">{post.slug}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">/blog/{post.slug}</div>
+                    <div className="text-sm text-gray-500">/news/{post.slug}</div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-500 line-clamp-2">

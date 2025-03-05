@@ -10,8 +10,8 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: [
           '/',
-          '/blog',
-          '/blog/*',
+          '/news',
+          '/news/*',
         ],
         disallow: [
           '/admin/*',
@@ -27,7 +27,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Google-Extended',
         allow: [
           '/',
-          '/blog/*',
+          '/news/*',
         ],
         disallow: ['/admin/*', '/api/*'],
       },
