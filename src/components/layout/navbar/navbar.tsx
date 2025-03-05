@@ -181,66 +181,13 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Dropdown Mobile Menu */}
-      <div
-        id="mobile-menu"
-        className={`md:hidden w-full bg-[#FAF8F1] shadow-md overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="px-[5px] py-4 mx-auto w-full max-w-7xl">
-          <nav aria-label="Mobile navigation" className="flex flex-col gap-6">
-            <ul className="flex flex-col gap-4">
-              <li className="font-medium">
-                <Link
-                  href="/book-a-call"
-                  className="flex items-center gap-2 hover:opacity-70 transition-opacity"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Book a call
-                  <ArrowUpRight className="w-5 h-5" />
-                </Link>
-              </li>
-              {navigationConfig.mainNav.map((item) => (
-                <li key={item.href} className="font-medium">
-                  <Link
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="hover:opacity-70 transition-opacity"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <div className="border-t border-gray-200"></div>
-
-            <ul className="flex flex-col gap-4">
-              {navigationConfig.mainNavLinks.map((item) => (
-                <li key={item.href} className="font-medium">
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-2 hover:opacity-70 transition-opacity"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.title}
-                    <ArrowUpRight className="w-5 h-5" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </div>
-
+  
       {/* Desktop Offcanvas */}
       <div
-        id="desktop-offcanvas"
-        className={`hidden md:block fixed inset-y-0 right-0 h-screen z-[60] bg-opacity-90 backdrop-blur-lg bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
+        id="offcanvas-menu"
+        className={`fixed inset-y-0 right-0 w-[80%] md:w-[320px] h-screen z-[60] bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        style={{ width: '320px' }}
       >
         <div className="p-6 h-full">
           <button
@@ -251,44 +198,39 @@ export function Navbar() {
             <X className="w-6 h-6" />
           </button>
           <nav className="mt-10 flex flex-col gap-6">
-            <Link
-              href="/book-a-call"
-              className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
-              style={
-                {
-                  '--hover-color': '#f9a8d4',
-                } as React.CSSProperties
-              }
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Book a call
-              <ArrowUpRight className="w-5 h-5" />
-            </Link>
+            {/* Mobile-specific content */}
+            <div className="md:hidden">
+              <Link
+                href="/book-a-call"
+                className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
+                style={{ '--hover-color': '#f9a8d4' } as React.CSSProperties}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Book a call
+                <ArrowUpRight className="w-5 h-5" />
+              </Link>
+            </div>
+
+            {/* Combined navigation links */}
             {navigationConfig.mainNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
-                style={
-                  {
-                    '--hover-color': '#f9a8d4',
-                  } as React.CSSProperties
-                }
+                style={{ '--hover-color': '#f9a8d4' } as React.CSSProperties}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.title}
               </Link>
             ))}
+
+            {/* External links with arrows */}
             {navigationConfig.mainNavLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className="transition-colors text-lg duration-200 flex items-center w-fit gap-2 px-[8px] py-[4px]"
-                style={
-                  {
-                    '--hover-color': '#f9a8d4',
-                  } as React.CSSProperties
-                }
+                style={{ '--hover-color': '#f9a8d4' } as React.CSSProperties}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.title}
