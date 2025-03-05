@@ -69,8 +69,8 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
   async createBlogPost(blogPost: Omit<BlogPost, 'id'>,   ): Promise<BlogPost> {
     try {
       const query = `
-        INSERT INTO ${this.tableName} (title, slug, image_url, created_at, image_alt, excerpt, content_html)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO ${this.tableName} (title, slug, image_url, created_at, image_alt, excerpt, content_html, tag)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
       const params = [
         blogPost.title,
@@ -80,6 +80,8 @@ export class BlogPostRepositoryLocal extends SqlLiteAdapter<BlogPost, string> im
         blogPost.image_alt,
         blogPost.excerpt,
         blogPost.content_html,
+        blogPost.tag,
+
       ];
 
       await new Promise<void>((resolve, reject) => {

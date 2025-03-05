@@ -43,7 +43,7 @@ export default function EditBlogPostPage({params}: Props) {
     if (!blogPost) return;
     try {
       await updateBlogPost(id, data)
-      router.push('/admin/sections/blog-posts')
+      // router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to update blog post:', error)
     } finally {

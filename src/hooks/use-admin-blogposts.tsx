@@ -28,20 +28,42 @@ export const useAdminBlogPosts = () => {
   }, [fetchApi]);
 
   const createBlogPost = useCallback(async (data: Partial<BlogPost>) => {
+
+    const payload = { data: data };
     return fetchApi<BlogPost>({
       url: '/api/admin/blog-post',
       method: 'POST',
-      data,
+      data:payload,
       onSuccess: (newPost) => setBlogPosts(prev => [...prev, newPost]),
       errorMessage: 'Failed to create blog post'
     });
   }, [fetchApi]);
 
   const updateBlogPost = useCallback(async (id: string, data: Partial<BlogPost>) => {
+    // Validate required fields
+    if (!data.title || !data.content_html) {
+      throw new Error('Title and content are required');
+    }
+
+    // Structure the payload explicitly
+    // const payload = {
+    //   data: {
+    //     title: data.title,
+    //     slug: data.slug,
+    //     tag: data.tag,
+    //     image_url: data.image_url,
+    //     image_alt: data.image_alt,
+    //     excerpt: data.excerpt,
+    //     content_html: data.content_html,
+    //     is_pinned: data.is_pinned
+    //   }
+    // };
+    const payload = { data: data };
+
     return fetchApi<BlogPost>({
       url: `/api/admin/blog-post?id=${id}`,
       method: 'PUT',
-      data,
+      data: payload ,
       onSuccess: (updatedPost) => setBlogPosts(prev => 
         prev.map(post => post.id === id ? updatedPost : post)
       ),
