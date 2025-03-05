@@ -3,6 +3,9 @@ import { supabase } from '../supabase'
 import { BlogPost } from '@/domain/models/blog-post.model'
 import { IBlogPostRepository } from '@/lib/interfaces/blog-post.interface'
 import logger from '@/lib/logger'
+import { unstable_cache } from 'next/cache'
+import { CACHE_TAGS, CACHE_TIMES } from '@/lib/utils/cache'
+
 export class BlogPostRepository implements IBlogPostRepository {
   private supabaseClient: SupabaseClient
   private tableName: string = 'proffessor_news'
@@ -12,20 +15,22 @@ export class BlogPostRepository implements IBlogPostRepository {
   }
 
   getBlogPosts = async ( ): Promise<BlogPost[]> => {
-    const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .select('*')
-      .order('created_at', { ascending: false })
-      .throwOnError() 
+    const cachedData = await unstable_cache(
+      async () => {
+        const { data, error } = await this.supabaseClient
+          .from(this.tableName)
+          .select('*')
+          .order('created_at', { ascending: false })
+          .throwOnError()
 
-    console.log('data', data)
-
-      if (error) {
-        logger.error('Error fetching blog posts:', error)
-        throw error 
-      }
-
-    return data
+        if (error) throw error
+        return data
+      },
+      ['blog-posts-list'],
+      { tags: [CACHE_TAGS.BLOG_POSTS],  revalidate: CACHE_TIMES.MINUTE }
+    )()
+    
+    return cachedData
   }
 
   getBlogPostBySlug = async (slug: string ): Promise<BlogPost | null> => {
@@ -90,22 +95,22 @@ export class BlogPostRepository implements IBlogPostRepository {
   }
 
   getBlogPostById = async (id: string,  ): Promise<BlogPost | null> => {
-    const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .select('*')
-      .eq('id', id)
-      .single()
+    const cachedData = await unstable_cache(
+      async () => {
+        const { data, error } = await this.supabaseClient
+          .from(this.tableName)
+          .select('*')
+          .eq('id', id)
+          .single()
 
-    if (error) {
-      logger.error('Error fetching blog post by id:', error)
-      throw new Error('Failed to fetch blog post by id')
-    }
-
-    if (!data) {
-      throw new Error('Failed to fetch blog post by id')
-    }
-
-    return data
+        if (error) throw error
+        return data
+      },
+      [`blog-post-${id}`],
+      { tags: [CACHE_TAGS.BLOG_POSTS] ,  revalidate: CACHE_TIMES.MINUTE}
+    )()
+    
+    return cachedData
   }
 
   deleteBlogPost = async (id: string,  ): Promise<boolean> => {

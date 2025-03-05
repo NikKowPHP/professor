@@ -3,6 +3,9 @@ import { supabase } from '../supabase'
 import { YoutubeItem } from '../data/youtube-section'
 import logger from '@/lib/logger'
 import { IYoutubeSectionRepository } from '../interfaces/youtubeSectionRepository.interface'
+import { unstable_cache } from 'next/cache'
+import { CACHE_TAGS, CACHE_TIMES } from '@/lib/utils/cache'
+
 export class YoutubeSectionRepository implements IYoutubeSectionRepository {
   private supabaseClient: SupabaseClient
   private tableName: string = 'proffessor_youtube_section'
@@ -14,21 +17,24 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
 
 
   getYoutubeSection = async (): Promise<YoutubeItem | null> => {
-    const { data, error } = await this.supabaseClient
-      .from(this.tableName)
-      .select('*')
-      .single()
+    const cachedData = await unstable_cache(
+      async () => {
+        const { data, error } = await this.supabaseClient
+          .from(this.tableName)
+          .select('*')
+          .single()
 
-    if (error) {
-      logger.log('Error fetching youtube section by ID:', error)
-      return null
-    }
-
-    if (!data) {
-      return null
-    }
-
-    return data
+        if (error) {
+          logger.log('Error fetching youtube section by ID:', error)
+          return null
+        }
+        return data
+      },
+      ['youtube-section'],
+      { tags: [CACHE_TAGS.YOUTUBE], revalidate: CACHE_TIMES.MINUTE }
+    )()
+    
+    return cachedData
   }
 
 

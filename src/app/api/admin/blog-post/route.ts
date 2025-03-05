@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getBlogPostService } from '@/lib/services/blog-post.service'
 import logger from '@/lib/logger'
+import { revalidateTag } from 'next/cache'
+import { CACHE_TAGS } from '@/lib/utils/cache'
+
 const blogPostService = await getBlogPostService()
 
 export async function POST(request: NextRequest) {
@@ -15,8 +18,8 @@ export async function POST(request: NextRequest) {
     data.id = id;
 
     const newBlogPost = await blogPostService.createBlogPost(data)
-
-
+    
+    revalidateTag(CACHE_TAGS.BLOG_POSTS)
     return NextResponse.json(newBlogPost)
   } catch (error) {
     logger.log('Error creating case study:', error)
@@ -61,11 +64,8 @@ export async function PUT(request: NextRequest) {
 
     logger.log(`Updating blog post: ${id} with data: ${JSON.stringify(data)}`)
     const updatedBlogPost = await blogPostService.updateBlogPost(id, data)
-
-    if (!updatedBlogPost) {
-      return NextResponse.json({ error: 'Blog post not found' }, { status: 404 })
-    }
-
+    
+    revalidateTag(CACHE_TAGS.BLOG_POSTS)
     return NextResponse.json(updatedBlogPost)
   } catch (error) {
     logger.error(`Error updating blog post: ${error}`)
@@ -88,8 +88,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Blog post not found' }, { status: 404 })
     }
 
-    // Revalidate cache
-
+    revalidateTag(CACHE_TAGS.BLOG_POSTS)
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error(`Error deleting blog post: ${error}`)
