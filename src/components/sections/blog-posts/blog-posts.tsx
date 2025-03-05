@@ -22,9 +22,9 @@ export async function BlogPosts({displayReadAll = true}: {displayReadAll?: boole
         </h1>
         {displayReadAll && (
           <Link href="/blog">
-            <span className='flex items-center gap-2'>
+            <span className='flex items-center gap-2 text-[21px]'>
               Read All
-              <ArrowUpRight className="transition-transform group-hover:translate-x-1" />
+              <ArrowUpRight className="transition-transform group-hover:translate-x-1 w-[17px] h-[17px]" />
             </span>
           </Link>
         )}
@@ -42,7 +42,15 @@ export async function BlogPosts({displayReadAll = true}: {displayReadAll?: boole
             itemScope
             itemType="https://schema.org/ItemList"
           >
-            {blogPosts.map((post, index) => (
+            {displayReadAll ?  blogPosts.slice(0,3).map((post, index) => (
+              <BlogPostItem
+                key={post.slug}
+                post={post}
+                position={index + 1}
+              />
+            )) :
+            
+              blogPosts.map((post, index) => (
               <BlogPostItem
                 key={post.slug}
                 post={post}
