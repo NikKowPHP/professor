@@ -3,32 +3,56 @@
 import Link from 'next/link'
 import { navigationConfig } from '@/config/navigation'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
+  const scrollYRef = useRef(typeof window !== 'undefined' ? window.scrollY : 0)
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
+    let animationFrameId: number
 
     const handleScroll = () => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => {
-        const isScrolled = window.scrollY > 20
-        if (isScrolled !== scrolled) {
-          setScrolled(isScrolled)
+      // Cancel any previous animation frame
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
+
+      // Use requestAnimationFrame for smoother scroll handling
+      animationFrameId = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY
+        scrollYRef.current = currentScrollY
+        
+        // Clear existing timeout if it exists
+        if (scrollTimeout.current) {
+          clearTimeout(scrollTimeout.current)
         }
-      }, 100)
+
+        // Use functional update to avoid stale state
+        scrollTimeout.current = setTimeout(() => {
+          setScrolled(prev => {
+            const isScrolled = currentScrollY > 20
+            return isScrolled !== prev ? isScrolled : prev
+          })
+        }, 100)
+      })
     }
 
+    // Initial check for scroll position
+    handleScroll()
 
-    window.addEventListener('scroll', handleScroll)
+    // Use passive scroll listener for better performance
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      clearTimeout(timeoutId)
+      if (animationFrameId) cancelAnimationFrame(animationFrameId)
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current)
     }
-  }, [scrolled])
+  }, []) // Empty dependency array ensures this runs once
+
   useEffect(() => {
     if (!scrolled) {
       setMobileMenuOpen(false)
