@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import styles from './blog-post.module.css'
 import { blogPostService } from '@/lib/services/blog-post.service'
+import Link from 'next/link'
+import { siteUrl } from '@/config/constants'
 
 interface PageProps {
   params: {
@@ -86,7 +88,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </header>
           <div className='flex flex-col lg:flex-row gap-8 '>
 
-          <aside className='lg:w-[300px]'>
+          <aside className='lg:w-[300px] flex flex-col gap-5'>
 
             <div className="sm:text-lg  flex flex-col leading-[120%]   gap-4">
               <time dateTime={post.created_at}>
@@ -99,6 +101,46 @@ export default async function BlogPostPage({ params }: PageProps) {
               <span>{post.tag}</span>
               <span>{readingTime} min read</span>
             </div>
+
+            <div className="sm:text-lg  flex flex-col leading-[120%]   gap-4">
+              <p>Share:</p>
+              <ul>
+                <li>
+                  <Link
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                     `${siteUrl}/blog/${slug}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Facebook
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                      `${siteUrl}/blog/${slug}`
+                    )}&text=${encodeURIComponent(post.title)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Twitter
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                   `${siteUrl}/blog/${slug}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    LinkedIn
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
 
           </aside>
 
