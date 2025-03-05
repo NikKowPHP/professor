@@ -21,14 +21,14 @@ export function YoutubeForm() {
       <div>
         <label
           htmlFor="youtube_url"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-lg font-medium text-gray-700"
         >
           Youtube URL
         </label>
         <input
           type="text"
           id="youtube_url"
-          className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+          className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-lg"
           value={youtube_url}
           onChange={(e) => setYoutubeUrl(e.target.value)}
           required
@@ -37,14 +37,14 @@ export function YoutubeForm() {
       <div>
         <label
           htmlFor="quote"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-lg font-medium text-gray-700"
         >
           Quote
         </label>
         <textarea
           id="quote"
           rows={3}
-          className="mt-1 block w-full   border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+          className="mt-1 block w-full   border-gray-300 shadow-sm focus:border-primary focus:ring-primary  sm:text-lg"
           value={quote}
           onChange={(e) => setQuote(e.target.value)}
           required

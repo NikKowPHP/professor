@@ -8,6 +8,7 @@ export interface BlogPost {
   excerpt: string;
   content_html: string;
   is_pinned: boolean;
+  tag: string;
   updated_at: string;
 
 }

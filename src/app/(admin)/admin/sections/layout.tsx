@@ -1,12 +1,18 @@
+'use client'
 import Link from 'next/link'
 import { LayoutDashboard, FileText, Youtube, Quote } from 'lucide-react'
 import { AdminProvider } from '@/contexts/admin-context'
+import { usePathname } from 'next/navigation'; 
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
-}) {
+  }) {
+  
+  const pathname = usePathname(); 
+  
+  
   return (
     <AdminProvider>
 
@@ -22,7 +28,9 @@ export default async function AdminLayout({
         <nav className="flex flex-col space-y-1">
           <Link 
             href="/admin/sections/dashboard" 
-            className="flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className={`flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors ${
+              pathname === '/admin/sections/dashboard' ? 'bg-gray-100 font-semibold text-primary-500' : ''
+            }`}
           >
             <LayoutDashboard className="w-5 h-5" />
             <span className="font-medium hidden md:block">Dashboard</span>
@@ -33,7 +41,9 @@ export default async function AdminLayout({
      
           <Link 
             href="/admin/sections/blog-posts" 
-            className="flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className={`flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors ${
+              pathname === '/admin/sections/blog-posts' ? 'bg-gray-100 font-semibold text-primary-500' : ''
+            }`}
           >
             <FileText className="w-5 h-5" />
             <span className="font-medium hidden md:block">News Posts</span>
@@ -42,14 +52,18 @@ export default async function AdminLayout({
          
           <Link
             href="/admin/sections/youtube"
-            className="flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className={`flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors ${
+              pathname === '/admin/sections/youtube' ? 'bg-gray-100 font-semibold text-primary-500' : ''
+            }`}
           >
             <Youtube className="w-5 h-5" />
             <span className="font-medium hidden md:block">YouTube</span>
           </Link>
            <Link
             href="/admin/sections/quote"
-            className="flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className={`flex items-center gap-3 py-3 px-4 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors ${
+              pathname === '/admin/sections/quote' ? 'bg-gray-100 font-semibold text-primary-500' : ''
+            }`}
           >
             <Quote className="w-5 h-5" />
             <span className="font-medium hidden md:block">Quote</span>

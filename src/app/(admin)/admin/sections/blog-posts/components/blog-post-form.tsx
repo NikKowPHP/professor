@@ -11,7 +11,7 @@ import { useQuill } from 'react-quilljs'
 import 'quill/dist/quill.snow.css'
 
 interface BlogPostFormProps {
-  post?: BlogPost
+  post?: BlogPost | null
   onSubmit: (data: Partial<BlogPost>) => Promise<void>
   onUpdate: (data: Partial<BlogPost>) => Promise<void>
   onCancel: () => void
@@ -25,15 +25,17 @@ export function BlogPostForm({
   onCancel,
   loading,
 }: BlogPostFormProps) {
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Partial<BlogPost>>({
-    defaultValues: post,
+    defaultValues: post || undefined,
   })
   const [content, setContent] = useState(post?.content_html || '')
   const [excerpt, setExcerpt] = useState(post?.excerpt || '')
+  const [tag, setTag] = useState(post?.tag || '')
   const { quill: quillContent, quillRef: quillRefContent } = useQuill({ theme: 'snow' })
   const { quill: quillExcerpt, quillRef: quillRefExcerpt } = useQuill({ theme: 'snow' })
 
@@ -127,6 +129,8 @@ export function BlogPostForm({
           <p className="text-red-600">{errors.excerpt.message}</p>
         )}
       </div>
+
+
 
       <div className="pt-20">
         <Label htmlFor="contentHtml">Content</Label>

@@ -15,8 +15,7 @@ export default function EditBlogPostPage({params}: Props) {
   const router = useRouter()
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [id, setId] = useState<string>('')
-  const [loading, setLoading] = useState(false)
-  const { updateBlogPost, getBlogPostById, createBlogPost } = useAdmin()
+  const { updateBlogPost, getBlogPostById, createBlogPost, loading} = useAdmin()
 
   useEffect(() => {
     const { id } = params
@@ -29,28 +28,25 @@ export default function EditBlogPostPage({params}: Props) {
 
   const handleUpdate = async (data: Partial<BlogPost>) => {
     if (!blogPost) return;
-    setLoading(true)
     try {
       await updateBlogPost(id, data)
       router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to update blog post:', error)
     } finally {
-      setLoading(false)
     }
   }
 
   const handleCreate = async (data: Partial<BlogPost>) => {
-    setLoading(true)
     try {
       await createBlogPost(data as Omit<BlogPost, 'id'>)
       router.push('/admin/sections/blog-posts')
     } catch (error) {
       logger.log('Failed to create blog post:', error)
     } finally {
-      setLoading(false)
     }
   }
+  if(loading)
 
   if(!blogPost) {
     return <div>Blog post not found</div>
