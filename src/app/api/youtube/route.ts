@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { youtubeSectionService } from '@/lib/services/youtube-section.service'
 import logger from '@/lib/logger'
+import { revalidateTag } from 'next/cache'
+import { CACHE_TAGS } from '@/lib/utils/cache'
 
 export async function GET() {
   try {
@@ -19,6 +21,7 @@ export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
     const updatedYoutubeSection = await youtubeSectionService.updateYoutubeSection(body)
+    revalidateTag(CACHE_TAGS.YOUTUBE);
     return NextResponse.json(updatedYoutubeSection)
   } catch (error) {
     logger.error(`Error updating youtube section: ${error}`)
