@@ -232,7 +232,7 @@ export function Navbar() {
       {/* Desktop Offcanvas */}
       <div
         id="desktop-offcanvas"
-        className={`hidden md:block fixed inset-y-0 right-0 h-screen z-[60] bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
+        className={`hidden md:block fixed inset-y-0 right-0 h-screen z-[60] bg-opacity-90 backdrop-blur-lg bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{ width: '320px' }}
