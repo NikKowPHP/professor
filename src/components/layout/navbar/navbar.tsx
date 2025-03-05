@@ -22,6 +22,7 @@ export function Navbar() {
       }, 100)
     }
 
+
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -224,6 +225,45 @@ export function Navbar() {
                 </li>
               ))}
             </ul>
+          </nav>
+        </div>
+      </div>
+
+      {/* Desktop Offcanvas */}
+      <div
+        id="desktop-offcanvas"
+        className={`hidden md:block fixed inset-y-0 right-0 h-screen z-[60] bg-[#FAF8F1] shadow-lg transition-transform duration-300 ease-in-out ${
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{ width: '320px' }}
+      >
+        <div className="p-6 h-full">
+          <button
+            className="absolute top-4 right-4 p-2"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <nav className="mt-10 flex flex-col gap-6">
+            <Link
+              href="/book-a-call"
+              className="flex items-center gap-2 text-lg font-medium hover:opacity-70 transition-opacity"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Book a call
+              <ArrowUpRight className="w-5 h-5" />
+            </Link>
+            {navigationConfig.mainNav.concat(navigationConfig.mainNavLinks).map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-lg font-medium hover:opacity-70 transition-opacity"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.title}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>
