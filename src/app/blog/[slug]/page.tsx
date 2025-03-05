@@ -86,9 +86,9 @@ export default async function BlogPostPage({ params }: PageProps) {
           </header>
           <div className='flex flex-col lg:flex-row gap-8 '>
 
-          <aside className=' order  lg:w-[300px]'>
+          <aside className='lg:w-[300px]'>
 
-            <div className="sm:text-lg font-semibold flex flex-col leading-1  gap-4">
+            <div className="sm:text-lg  flex flex-col leading-[120%]   gap-4">
               <time dateTime={post.created_at}>
                 {new Date(post.created_at).toLocaleDateString('en', {
                   year: 'numeric',
@@ -96,6 +96,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   day: 'numeric'
                 })}
               </time>
+              <span>{post.tag}</span>
               <span>{readingTime} min read</span>
             </div>
 
@@ -105,13 +106,14 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             <div
               className={styles.blogPostContent}
+                // style={{ border: '1px solid black'}}
               itemProp="articleBody"
               dangerouslySetInnerHTML={{
                 __html: post.content_html.trim()
               }}
             />
 
-            <footer className="mt-8 pt-8 border-t border-red-500">
+            <footer className="mt-8 pt-8 border-t border-gray-300">
               <div className="flex flex-col gap-4">
                 {/* {post.tags && (
               <div className="flex flex-wrap gap-2">
