@@ -55,7 +55,3 @@ export class BlogPostService implements IBlogPostService {
 
 // export singleton
 export const blogPostService = new BlogPostService()
-
-export const getBlogPostService = async () => {
-  return new BlogPostService()
-}
