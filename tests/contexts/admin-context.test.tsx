@@ -156,13 +156,18 @@ describe('AdminContext', () => {
 
   describe('quote section', () => {
     it('should fetch quote data', async () => {
+      const mockFetchApi = jest.fn().mockImplementation(({ onSuccess }) => {
+        onSuccess?.(mockQuote);
+        return Promise.resolve(mockQuote);
+      });
+
       mockUseApi.mockReturnValueOnce({
-        fetchApi: jest.fn().mockResolvedValue(mockQuote),
+        fetchApi: mockFetchApi,
         loading: false,
         error: null,
         setError: jest.fn(),
       });
-
+      
       const { result } = renderHook(() => useAdmin(), { wrapper });
 
       await act(async () => {
@@ -170,8 +175,11 @@ describe('AdminContext', () => {
       });
 
       expect(result.current.quote).toEqual(mockQuote);
-      expect(mockUseApi().fetchApi).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.stringMatching(/^\/api\/quote/) })
+      expect(mockFetchApi).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringMatching(/^\/api\/quote/),
+          method: 'GET'
+        })
       );
     });
 
@@ -195,8 +203,13 @@ describe('AdminContext', () => {
 
   describe('youtube section', () => {
     it('should fetch youtube data', async () => {
+      const mockFetchApi = jest.fn().mockImplementation(({ onSuccess }) => {
+        onSuccess?.(mockYoutube);
+        return Promise.resolve(mockYoutube);
+      });
+
       mockUseApi.mockReturnValueOnce({
-        fetchApi: jest.fn().mockResolvedValue(mockYoutube),
+        fetchApi: mockFetchApi,
         loading: false,
         error: null,
         setError: jest.fn(),
@@ -208,9 +221,13 @@ describe('AdminContext', () => {
         await result.current.getYoutube();
       });
 
+      console.log('result.current.youtube', result.current.youtube)
       expect(result.current.youtube).toEqual(mockYoutube);
-      expect(mockUseApi().fetchApi).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.stringMatching(/^\/api\/youtube/) })
+      expect(mockFetchApi).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringMatching(/^\/api\/youtube/),
+          method: 'GET'
+        })
       );
     });
 
