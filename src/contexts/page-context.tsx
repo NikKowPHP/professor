@@ -7,9 +7,7 @@ import {
   useCallback,
   useMemo,
 } from 'react'
-import { BlogPost } from '@/domain/models/blog-post.model'
-import { QuoteItem } from '@/lib/data/quote-section'
-import { YoutubeItem } from '@/lib/data/youtube-section'
+import { QuoteItem, YoutubeItem, BlogPost } from '@/domain/models/models'
 import { usePathname } from 'next/navigation'
 
 interface PageContextType {

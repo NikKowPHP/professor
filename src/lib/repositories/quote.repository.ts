@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { supabase } from '../supabase'
-import { QuoteItem } from '../data/quote-section'
+import { QuoteItem } from '@/domain/models/models'
 import logger from '@/lib/logger'
 
 export class QuoteSectionRepository {

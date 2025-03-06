@@ -12,3 +12,20 @@ export interface BlogPost {
   updated_at: string;
 
 }
+
+export interface QuoteItem {
+  id: string
+  quote: string
+  created_at: string
+  updated_at: string
+}
+
+
+
+export interface YoutubeItem {
+  id: string
+  youtube_url: string
+  quote: string
+  created_at: Date
+  updated_at: Date
+}

@@ -2,12 +2,11 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { blogPostService} from '@/lib/services/blog-post.service';
-import { BlogPost } from '@/domain/models/blog-post.model';
+import { BlogPost } from '@/domain/models/models';
 import Image from 'next/image';
 import { Tag } from '@/components/ui/tag/tag';
 import { ArrowUpRight } from 'lucide-react';
 import logger from '@/lib/logger';
-
 
 export async function BlogPosts({displayReadAll = true}: {displayReadAll?: boolean}) {
   const blogPosts = await blogPostService.getBlogPosts();

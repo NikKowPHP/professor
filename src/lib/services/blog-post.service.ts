@@ -1,7 +1,7 @@
-import { BlogPost } from "@/domain/models/blog-post.model"
+import { BlogPost } from "@/domain/models/models"
 import { blogPostRepositoryLocal } from "@/lib/repositories/blog-post.local.repository"
 import { blogPostRepository } from "@/lib/repositories/blog-post.repository"
-import { IBlogPostRepository } from "../interfaces/blog-post.interface"
+import { IBlogPostRepository } from "@/lib/interfaces/repositories.interface"
 import logger from "../logger"
 
 export interface IBlogPostService {

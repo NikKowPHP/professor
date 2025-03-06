@@ -1,5 +1,5 @@
-import { BlogPost } from '@/domain/models/blog-post.model';
-import { IBlogPostRepository } from '@/lib/interfaces/blog-post.interface';
+import { BlogPost } from '@/domain/models/models';
+import { IBlogPostRepository } from '@/lib/interfaces/repositories.interface';
 import logger from '@/lib/logger'
 import { getDatabaseFilePath } from '@/lib/config/database.config';
 import { Database } from 'sqlite3';

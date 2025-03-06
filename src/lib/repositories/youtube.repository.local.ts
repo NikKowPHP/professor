@@ -1,6 +1,6 @@
-import { YoutubeItem } from '../data/youtube-section'
+import { YoutubeItem } from '@/domain/models/models'
 import logger from '@/lib/logger'
-import { IYoutubeSectionRepository } from '../interfaces/youtubeSectionRepository.interface'
+import { IYoutubeSectionRepository } from '@/lib/interfaces/repositories.interface'
 import { SqlLiteAdapter } from './adapters/sqllite.adapter'
 import { Database } from 'sqlite3'
 import { getDatabaseFilePath } from '@/lib/config/database.config'

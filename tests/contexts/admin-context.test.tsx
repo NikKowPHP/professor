@@ -3,9 +3,12 @@ import { renderHook } from '@testing-library/react';
 import { useAdmin, AdminProvider } from '@/contexts/admin-context';
 import { useApi } from '@/hooks/use-api';
 import { useAdminBlogPosts } from '@/hooks/use-admin-blogposts';
-import { BlogPost } from '@/domain/models/blog-post.model';
-import { blogPosts } from '@/lib/data/blog-posts.mock.data';
+import { BlogPost } from '@/domain/models/models';
+import { blogPosts } from '@/lib/data/mocks/blog-posts.mock.data';
 import { ReactNode } from 'react';
+import { QuoteItem, YoutubeItem } from '@/domain/models/models';
+import { getMockQuoteItem } from '@/lib/data/mocks/quote-item.mock';
+import { getMockYoutubeItem } from '@/lib/data/mocks/youtube-item.mock';
 
 // Mock dependencies
 jest.mock('@/hooks/use-api');
@@ -46,6 +49,8 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 
 describe('AdminContext', () => {
   const mockBlogPost: BlogPost = blogPosts[0];
+  const mockQuote: QuoteItem =  getMockQuoteItem()
+  const mockYoutube: YoutubeItem =  getMockYoutubeItem()
 
   beforeEach(() => {
     // Mock API setup
@@ -79,7 +84,9 @@ describe('AdminContext', () => {
     expect(result.current).toEqual(expect.objectContaining({
       blogPosts: [mockBlogPost],
       loading: false,
-      error: null
+      error: null,
+      quote: null,
+      youtube: null
     }));
   });
 
@@ -145,5 +152,93 @@ describe('AdminContext', () => {
         expect.objectContaining({ url: '/api/admin/revalidate' })
       );
     });
+  });
+
+  describe('quote section', () => {
+    it('should fetch quote data', async () => {
+      mockUseApi.mockReturnValueOnce({
+        fetchApi: jest.fn().mockResolvedValue(mockQuote),
+        loading: false,
+        error: null,
+        setError: jest.fn(),
+      });
+
+      const { result } = renderHook(() => useAdmin(), { wrapper });
+
+      await act(async () => {
+        await result.current.getQuote();
+      });
+
+      expect(result.current.quote).toEqual(mockQuote);
+      expect(mockUseApi().fetchApi).toHaveBeenCalledWith(
+        expect.objectContaining({ url: expect.stringMatching(/^\/api\/quote/) })
+      );
+    });
+
+    it('should handle quote update errors', async () => {
+      const error = new Error('Update failed');
+      mockUseApi.mockReturnValueOnce({
+        fetchApi: jest.fn().mockRejectedValue(error),
+        loading: false,
+        error: null,
+        setError: jest.fn(),
+      });
+
+      const { result } = renderHook(() => useAdmin(), { wrapper });
+
+      await act(async () => {
+        await expect(result.current.updateQuote({}))
+          .rejects.toThrow('Update failed');
+      });
+    });
+  });
+
+  describe('youtube section', () => {
+    it('should fetch youtube data', async () => {
+      mockUseApi.mockReturnValueOnce({
+        fetchApi: jest.fn().mockResolvedValue(mockYoutube),
+        loading: false,
+        error: null,
+        setError: jest.fn(),
+      });
+
+      const { result } = renderHook(() => useAdmin(), { wrapper });
+
+      await act(async () => {
+        await result.current.getYoutube();
+      });
+
+      expect(result.current.youtube).toEqual(mockYoutube);
+      expect(mockUseApi().fetchApi).toHaveBeenCalledWith(
+        expect.objectContaining({ url: expect.stringMatching(/^\/api\/youtube/) })
+      );
+    });
+
+    it('should handle youtube update errors', async () => {
+      const error = new Error('Update failed');
+      mockUseApi.mockReturnValueOnce({
+        fetchApi: jest.fn().mockRejectedValue(error),
+        loading: false,
+        error: null,
+        setError: jest.fn(),
+      });
+
+      const { result } = renderHook(() => useAdmin(), { wrapper });
+
+      await act(async () => {
+        await expect(result.current.updateYoutube({}))
+          .rejects.toThrow('Update failed');
+      });
+    });
+  });
+
+  test('clearError resets error state', () => {
+    const { result } = renderHook(() => useAdmin(), { wrapper });
+    
+    act(() => {
+      result.current.clearError();
+    });
+
+    expect(mockUseApi().setError).toHaveBeenCalledWith(null);
   });
 });

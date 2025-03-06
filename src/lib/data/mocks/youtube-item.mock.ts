@@ -1,13 +1,8 @@
-export interface YoutubeItem {
-    id: string
-    youtube_url: string
-    quote: string
-    created_at: Date
-    updated_at: Date
-}
+import { YoutubeItem } from "@/domain/models/models"
+
   
 
-export const youtubeItem: YoutubeItem = {
+ const youtubeItem: YoutubeItem  = {
     id: 'youtubeItem1',
     youtube_url: 'SDrQH84YzU0',
     quote: '"Embrace failure! It is essential to innovation. Treat every failure as a learning opportunity, not a setback.',
@@ -15,6 +10,6 @@ export const youtubeItem: YoutubeItem = {
     updated_at: new Date(),
 }
   
-  export async function getYoutubeItem(): Promise<YoutubeItem> {
+  export  function getMockYoutubeItem(): YoutubeItem {
     return youtubeItem
   }

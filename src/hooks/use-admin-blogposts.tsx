@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { BlogPost } from '@/domain/models/blog-post.model';
+import { BlogPost } from '@/domain/models/models';
 import { useApi } from '@/hooks/use-api';
 
 export const useAdminBlogPosts = () => {

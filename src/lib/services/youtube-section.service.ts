@@ -1,5 +1,5 @@
-import { YoutubeItem } from "../data/youtube-section"
-import { IYoutubeSectionRepository } from "../interfaces/youtubeSectionRepository.interface"
+import { YoutubeItem } from "@/domain/models/models"
+import { IYoutubeSectionRepository } from "@/lib/interfaces/repositories.interface"
 import { youtubeSectionRepository } from "../repositories/youtube.repository"
 import {  youtubeSectionRepositoryLocal } from "../repositories/youtube.repository.local"
 

@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { BlogPostForm } from '../../components/blog-post-form'
 import { useEffect, useState } from 'react'
-import { BlogPost } from '@/domain/models/blog-post.model'
+import { BlogPost } from '@/domain/models/models'
 import logger from '@/lib/logger'
 import { useAdmin } from '@/contexts/admin-context'
 import { LoadingSpinner } from '@/components/ui/loadingSpinner'

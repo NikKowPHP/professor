@@ -1,14 +1,14 @@
 import { blogPostService } from '@/lib/services/blog-post.service';
 import { blogPostRepository } from '@/lib/repositories/blog-post.repository';
-import { blogPosts } from '@/lib/data/blog-posts.mock.data';
-import { BlogPost } from '@/domain/models/blog-post.model';
-import { youtubeItem, YoutubeItem } from '@/lib/data/youtube-section';
+import { blogPosts } from '@/lib/data/mocks/blog-posts.mock.data';
+import { BlogPost, YoutubeItem, QuoteItem  } from '@/domain/models/models';
+import { getMockYoutubeItem } from '@/lib/data/mocks/youtube-item.mock';
 import { youtubeSectionRepository } from '@/lib/repositories/youtube.repository';
 import { youtubeSectionService } from '@/lib/services/youtube-section.service';
 
 import { quoteSectionService } from '@/lib/services/quote-section.service';
 import { quoteSectionRepository } from '@/lib/repositories/quote.repository';
-import { quoteItem, QuoteItem } from '@/lib/data/quote-section';
+import {  getMockQuoteItem } from '@/lib/data/mocks/quote-item.mock';
 
 jest.mock('@/lib/repositories/quote.repository');
 jest.mock('@/lib/repositories/blog-post.repository');
@@ -152,7 +152,7 @@ describe('BlogPostService', () => {
 
 
 describe('YoutubeSectionService', () => {
-  const mockYoutubeItem: YoutubeItem = youtubeItem
+  const mockYoutubeItem: YoutubeItem = getMockYoutubeItem()
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -201,7 +201,7 @@ describe('YoutubeSectionService', () => {
 });
 
 describe('QuoteSectionService', () => {
-  const mockQuote: QuoteItem = quoteItem
+  const mockQuote: QuoteItem =  getMockQuoteItem()
 
   beforeEach(() => {
     jest.clearAllMocks();

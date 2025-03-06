@@ -1,4 +1,4 @@
-import { BlogPost } from "@/domain/models/blog-post.model";
+import { BlogPost } from "@/domain/models/models";
 
 export const blogPosts: BlogPost[] = [
     {

@@ -1,8 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { supabase } from '../supabase'
-import { YoutubeItem } from '../data/youtube-section'
+import { YoutubeItem } from '@/domain/models/models'
 import logger from '@/lib/logger'
-import { IYoutubeSectionRepository } from '../interfaces/youtubeSectionRepository.interface'
+import { IYoutubeSectionRepository } from '@/lib/interfaces/repositories.interface'
 
 export class YoutubeSectionRepository implements IYoutubeSectionRepository {
   private supabaseClient: SupabaseClient

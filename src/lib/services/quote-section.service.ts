@@ -1,8 +1,7 @@
-import { QuoteItem } from "../data/quote-section"
+import { QuoteItem } from "@/domain/models/models"
 import {  quoteSectionRepository } from "../repositories/quote.repository"
 import { quoteSectionRepositoryLocal } from "../repositories/quote.repository.local"
-import { IQuoteSectionRepository } from "../interfaces/quoteSectionRepository.interface"
-
+import { IQuoteSectionRepository } from "@/lib/interfaces/repositories.interface"
 
 export class QuoteSectionService {
   private quoteSectionRepository: IQuoteSectionRepository

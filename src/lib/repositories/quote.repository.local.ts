@@ -1,4 +1,4 @@
-import { QuoteItem } from '../data/quote-section'
+import { QuoteItem } from '@/domain/models/models'
 import logger from '@/lib/logger'
 import { SqlLiteAdapter } from './adapters/sqllite.adapter'
 import { Database } from 'sqlite3'
