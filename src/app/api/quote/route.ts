@@ -4,8 +4,8 @@ import { CACHE_TAGS } from '@/lib/utils/cache'
 import { quoteSectionService } from '@/lib/services/quote-section.service'
 import logger from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'; // Disable route caching
-export const fetchCache = 'force-no-store'; // Disable fetch caching
+  export const dynamic = 'force-dynamic';
+  export const fetchCache = 'force-no-store';
 
 export async function GET() {
   try {

@@ -3,8 +3,6 @@ import { supabase } from '../supabase'
 import { YoutubeItem } from '../data/youtube-section'
 import logger from '@/lib/logger'
 import { IYoutubeSectionRepository } from '../interfaces/youtubeSectionRepository.interface'
-import { unstable_cache } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/utils/cache'
 
 export class YoutubeSectionRepository implements IYoutubeSectionRepository {
   private supabaseClient: SupabaseClient
@@ -13,32 +11,22 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
     this.supabaseClient = supabase
   }
 
-  
-
-
   getYoutubeSection = async (): Promise<YoutubeItem | null> => {
-    const cachedData = await unstable_cache(
-      async () => {
-        const { data, error } = await this.supabaseClient
-          .from(this.tableName)
-          .select('*')
-          .single()
-          logger.log('getYoutubeSection data ' ,data);
-        if (error) {
-          logger.log('Error fetching youtube section by ID:', error)
-          return null
-        }
-        return data
-      },
-      ['youtube-section'],
-      { tags: [CACHE_TAGS.YOUTUBE], revalidate: 1 }
-    )()
-    
-    return cachedData
+    const { data, error } = await this.supabaseClient
+      .from(this.tableName)
+      .select('*')
+      .single()
+    logger.log('getYoutubeSection data ', data)
+    if (error) {
+      logger.log('Error fetching youtube section by ID:', error)
+      return null
+    }
+    return data
   }
 
-
-  updateYoutubeSection = async (youtubeSection: Partial<YoutubeItem>): Promise<YoutubeItem> => {
+  updateYoutubeSection = async (
+    youtubeSection: Partial<YoutubeItem>
+  ): Promise<YoutubeItem> => {
     const { data, error } = await this.supabaseClient
       .from(this.tableName)
       .update({
@@ -49,7 +37,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .eq('id', youtubeSection.id)
       .select()
       .single()
-      logger.log('updateYoutubeSection data ' ,data);
+    logger.log('updateYoutubeSection data ', data)
     if (error) {
       logger.log('Error updating youtube section:', error)
       throw new Error('Failed to update youtube section')
@@ -62,7 +50,6 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
     return data
   }
 }
-
 
 // export singleton
 export const youtubeSectionRepository = new YoutubeSectionRepository()

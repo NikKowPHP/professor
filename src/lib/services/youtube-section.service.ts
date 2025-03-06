@@ -1,7 +1,7 @@
 import { YoutubeItem } from "../data/youtube-section"
 import { IYoutubeSectionRepository } from "../interfaces/youtubeSectionRepository.interface"
-import { youtubeSectionRepository } from "../repositories/youtubeSection.repository"
-import {  youtubeSectionRepositoryLocal } from "../repositories/youtubeSection.repository.local"
+import { youtubeSectionRepository } from "../repositories/youtube.repository"
+import {  youtubeSectionRepositoryLocal } from "../repositories/youtube.repository.local"
 
 export class YoutubeSectionService {
   private youtubeSectionRepository: IYoutubeSectionRepository
