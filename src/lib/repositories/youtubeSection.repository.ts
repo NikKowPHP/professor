@@ -31,7 +31,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
         return data
       },
       ['youtube-section'],
-      { tags: [CACHE_TAGS.YOUTUBE], revalidate: 0 }
+      { tags: [CACHE_TAGS.YOUTUBE], revalidate: 1 }
     )()
     
     return cachedData

@@ -27,7 +27,7 @@ export class BlogPostRepository implements IBlogPostRepository {
         return data
       },
       ['blog-posts-list'],
-      { tags: [CACHE_TAGS.BLOG_POSTS],  revalidate: 0 }
+      { tags: [CACHE_TAGS.BLOG_POSTS],  revalidate: 1 }
     )()
     
     return cachedData
@@ -48,7 +48,7 @@ export class BlogPostRepository implements IBlogPostRepository {
       [`blog-post-slug-${slug}`],
       { 
         tags: [CACHE_TAGS.BLOG_POSTS, `blog-post-slug-${slug}`],
-        revalidate: 0 
+        revalidate: 1 
       }
     )()
     
@@ -110,7 +110,7 @@ export class BlogPostRepository implements IBlogPostRepository {
         return data
       },
       [`blog-post-${id}`],
-      { tags: [CACHE_TAGS.BLOG_POSTS] ,  revalidate: 0}
+      { tags: [CACHE_TAGS.BLOG_POSTS] ,  revalidate: 1}
     )()
     
     return cachedData

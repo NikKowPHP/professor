@@ -52,7 +52,7 @@ export class QuoteSectionRepository {
       ['quote-section'],
       { 
         tags: [CACHE_TAGS.QUOTE],
-        revalidate: 0
+        revalidate: 1
       }
     )()
     
