@@ -6,10 +6,10 @@ import { getMockYoutubeItem } from '@/lib/data/mocks/youtube-item.mock';
 import { getMockQuoteItem } from '@/lib/data/mocks/quote-item.mock';
 import { blogPosts } from '@/lib/data/mocks/blog-posts.mock.data';
 
-// Mock Next.js navigation
-jest.mock('next/navigation', () => ({
-  usePathname: jest.fn(),
 
+
+jest.mock('next/navigation', () => ({
+  usePathname: jest.fn().mockReturnValue('/'),
 }));
 
 // Mock global fetch
@@ -86,8 +86,7 @@ describe('PageContext', () => {
 
   describe('getBlogPost', () => {
     it('should fetch single blog post successfully', async () => {
-      (require('next/navigation').usePathname as jest.Mock)
-      .mockReturnValue('/');
+ 
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockBlogPost)
@@ -126,8 +125,7 @@ describe('PageContext', () => {
 
   describe('getQuote', () => {
     it('should fetch quote successfully', async () => {
-      (require('next/navigation').usePathname as jest.Mock)
-      .mockReturnValue('/');
+  
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockQuote)
@@ -145,8 +143,7 @@ describe('PageContext', () => {
     });
 
     it('should handle quote fetch errors', async () => {
-      (require('next/navigation').usePathname as jest.Mock)
-      .mockReturnValue('/');
+   
       mockFetch.mockResolvedValueOnce({
         ok: false,
         statusText: 'Not Found'
@@ -165,8 +162,7 @@ describe('PageContext', () => {
 
   describe('getYoutube', () => {
     it('should fetch youtube data successfully', async () => {
-      (require('next/navigation').usePathname as jest.Mock)
-        .mockReturnValue('/');
+    
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockYoutube)
@@ -184,9 +180,7 @@ describe('PageContext', () => {
     });
 
     it('should handle youtube fetch errors', async () => {
-      (require('next/navigation').usePathname as jest.Mock)
-        .mockReturnValue('/');
-      
+     
       mockFetch.mockResolvedValueOnce({
         ok: false,
         statusText: 'Not Found'
