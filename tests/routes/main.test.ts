@@ -51,11 +51,15 @@ jest.mock('@/lib/services/youtube-section.service', () => ({
 jest.mock('@/lib/services/blog-post.service', () => ({
   blogPostService: {
     getBlogPostById: jest.fn(),
-    createBlogPost: jest.fn(),
+    createBlogPost: jest.fn().mockImplementation(async (data) => ({
+      id: 'new-id',
+      ...data,
+      created_at: new Date().toISOString()
+    })),
     updateBlogPost: jest.fn(),
     deleteBlogPost: jest.fn(),
     getBlogPosts: jest.fn(),
-    getBlogPostBySlug: jest.fn() // Add missing method
+    getBlogPostBySlug: jest.fn()
   }
 }));
 jest.mock('next/cache', () => ({
@@ -163,17 +167,19 @@ describe('Blog Post API', () => {
   });
 
   test('POST should create new blog post', async () => {
-    const mockPost = { id: '1', title: 'New Post' };
-    blogPostService.createBlogPost.mockResolvedValue(mockPost);
-    
+    const mockData = { title: 'New Post' };
     const req = new NextRequest('http://localhost/api/admin/blog-post', {
       method: 'POST',
-      body: JSON.stringify({ data: { title: 'New Post' }, locale: 'en' })
+      body: JSON.stringify({ data: mockData, locale: 'en' })
     });
     
     const res = await BLOG_POST_POST(req);
     expect(res.status).toBe(200);
-    expect(blogPostService.createBlogPost).toHaveBeenCalled();
+    const responseData = await res.json();
+    expect(responseData).toMatchObject({
+      id: expect.any(String),
+      ...mockData
+    });
   });
 
   test('GET should require ID parameter', async () => {
@@ -206,7 +212,7 @@ describe('Blog Post API', () => {
 describe('Blog Posts API', () => {
   const { blogPostService } = require('@/lib/services/blog-post.service');
 
-  test.only('GET should return all blog posts', async () => {
+  test('GET should return all blog posts', async () => {
     const mockPosts = [{ id: '1' }, { id: '2' }];
     blogPostService.getBlogPosts.mockResolvedValue(mockPosts);
     

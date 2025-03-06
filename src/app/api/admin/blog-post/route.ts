@@ -13,15 +13,12 @@ export async function POST(request: NextRequest) {
       locale,
       mappedData: data
     })
-    const id = crypto.randomUUID()
-    data.id = id;
-
     const newBlogPost = await blogPostService.createBlogPost(data)
     
     revalidateTag(CACHE_TAGS.BLOG_POSTS)
     return NextResponse.json(newBlogPost)
   } catch (error) {
-    logger.log('Error creating case study:', error)
+    logger.log('Error creating blog post:', error)
     return NextResponse.json(
       { error: 'Failed to create blog post', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
