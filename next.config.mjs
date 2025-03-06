@@ -1,11 +1,14 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer');
-const { PERFORMANCE_CONFIG } = require('./src/config/performance');
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+// Dynamic import for performance config
+import { PERFORMANCE_CONFIG } from './src/config/performance.js';
 
 const withAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
 });
 
+/** @type {import('next').NextConfig} */
 const config = {
   // Image optimization
   images: {
@@ -37,7 +40,6 @@ const config = {
     },
     optimizePackageImports: [
       '@heroicons/react',
-      '@iconify/react',
       'clsx',
       'tailwind-merge',
     ],
@@ -114,13 +116,13 @@ const config = {
   reactStrictMode: true,
 };
 
-// Install critters for CSS optimization
+// Critters installation check
 try {
-  require('critters');
+  await import('critters');
 } catch (e) {
   console.warn('Installing critters...');
-  require('child_process').execSync('npm install critters');
+  const { execSync } = await import('child_process');
+  execSync('npm install critters', { stdio: 'inherit' });
 }
 
-// Export your configuration using CommonJS
-module.exports = withAnalyzer(config);
+export default withAnalyzer(config);
