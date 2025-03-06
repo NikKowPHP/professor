@@ -3,7 +3,7 @@ import { supabase } from '../supabase'
 import { QuoteItem } from '../data/quote-section'
 import logger from '@/lib/logger'
 import { unstable_cache } from 'next/cache'
-import { CACHE_TAGS, CACHE_TIMES } from '@/lib/utils/cache'
+import { CACHE_TAGS } from '@/lib/utils/cache'
 
 export class QuoteSectionRepository {
   private supabaseClient: SupabaseClient
@@ -52,7 +52,7 @@ export class QuoteSectionRepository {
       ['quote-section'],
       { 
         tags: [CACHE_TAGS.QUOTE],
-        revalidate: CACHE_TIMES.MINUTE
+        revalidate: 0
       }
     )()
     

@@ -4,7 +4,7 @@ import { BlogPost } from '@/domain/models/blog-post.model'
 import { IBlogPostRepository } from '@/lib/interfaces/blog-post.interface'
 import logger from '@/lib/logger'
 import { unstable_cache } from 'next/cache'
-import { CACHE_TAGS, CACHE_TIMES } from '@/lib/utils/cache'
+import { CACHE_TAGS } from '@/lib/utils/cache'
 
 export class BlogPostRepository implements IBlogPostRepository {
   private supabaseClient: SupabaseClient
@@ -27,7 +27,7 @@ export class BlogPostRepository implements IBlogPostRepository {
         return data
       },
       ['blog-posts-list'],
-      { tags: [CACHE_TAGS.BLOG_POSTS],  revalidate: CACHE_TIMES.MINUTE }
+      { tags: [CACHE_TAGS.BLOG_POSTS],  revalidate: 0 }
     )()
     
     return cachedData
@@ -48,7 +48,7 @@ export class BlogPostRepository implements IBlogPostRepository {
       [`blog-post-slug-${slug}`],
       { 
         tags: [CACHE_TAGS.BLOG_POSTS, `blog-post-slug-${slug}`],
-        revalidate: CACHE_TIMES.MINUTE 
+        revalidate: 0 
       }
     )()
     
@@ -110,7 +110,7 @@ export class BlogPostRepository implements IBlogPostRepository {
         return data
       },
       [`blog-post-${id}`],
-      { tags: [CACHE_TAGS.BLOG_POSTS] ,  revalidate: CACHE_TIMES.MINUTE}
+      { tags: [CACHE_TAGS.BLOG_POSTS] ,  revalidate: 0}
     )()
     
     return cachedData

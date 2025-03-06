@@ -4,7 +4,7 @@ import { YoutubeItem } from '../data/youtube-section'
 import logger from '@/lib/logger'
 import { IYoutubeSectionRepository } from '../interfaces/youtubeSectionRepository.interface'
 import { unstable_cache } from 'next/cache'
-import { CACHE_TAGS, CACHE_TIMES } from '@/lib/utils/cache'
+import { CACHE_TAGS } from '@/lib/utils/cache'
 
 export class YoutubeSectionRepository implements IYoutubeSectionRepository {
   private supabaseClient: SupabaseClient
@@ -31,7 +31,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
         return data
       },
       ['youtube-section'],
-      { tags: [CACHE_TAGS.YOUTUBE], revalidate: CACHE_TIMES.MINUTE }
+      { tags: [CACHE_TAGS.YOUTUBE], revalidate: 0 }
     )()
     
     return cachedData
