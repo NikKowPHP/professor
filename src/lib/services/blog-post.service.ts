@@ -38,11 +38,11 @@ export class BlogPostService implements IBlogPostService {
     return this.blogPostRepository.getBlogPostById(id)
   }
 
-  createBlogPost = async (blogPost: Omit<BlogPost, 'id'>): Promise<BlogPost> => {
-    blogPost.created_at = new Date().toISOString()
-    return this.blogPostRepository.createBlogPost(blogPost)
+  createBlogPost = async (blogPostData: Omit<BlogPost, 'id'>): Promise<BlogPost> => {
+ 
+    
+    return this.blogPostRepository.createBlogPost(blogPostData);
   }
-
   updateBlogPost = async (id: string, blogPost: Partial<BlogPost>): Promise<BlogPost | null> => {
     return this.blogPostRepository.updateBlogPost(id, blogPost)
   }
