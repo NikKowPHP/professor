@@ -1,7 +1,6 @@
 import {  NextResponse } from 'next/server'
-import { getBlogPostService } from '@/lib/services/blog-post.service'
+import { blogPostService } from '@/lib/services/blog-post.service'
 import logger from '@/lib/logger'
-const blogPostService = await getBlogPostService()
 
 
 

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getBlogPostService } from '@/lib/services/blog-post.service'
 import logger from '@/lib/logger'
 import { revalidateTag } from 'next/cache'
 import { CACHE_TAGS } from '@/lib/utils/cache'
+import { blogPostService } from '@/lib/services/blog-post.service'
 
-const blogPostService = await getBlogPostService()
 
 export async function POST(request: NextRequest) {
   const { data, locale } = await request.json()

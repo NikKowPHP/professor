@@ -1,20 +1,18 @@
 import { NextRequest } from 'next/server';
-import { POST as TTS_POST } from '@/app/api/tts/route';
-import { POST as RECORDING_POST } from '@/app/api/recording/route';
-import { POST as SUBSCRIBE_POST } from '@/app/api/subscribe/route';
+import { GET as QUOTE_GET, PUT as QUOTE_PUT } from '@/app/api/quote/route';
+import { GET as YOUTUBE_GET, PUT as YOUTUBE_PUT } from '@/app/api/youtube/route';
+import { 
+  GET as BLOG_POST_GET, 
+  POST as BLOG_POST_POST, 
+  PUT as BLOG_POST_PUT, 
+  DELETE as BLOG_POST_DELETE 
+} from '@/app/api/admin/blog-post/route';
+import { GET as BLOG_POSTS_GET } from '@/app/api/admin/blog-posts/route';
 
-// Mock the services so we can control behavior in tests.
-jest.mock('@/services/tts.service', () => {
-  return {
-    TTS: jest.fn().mockImplementation(() => ({
-      generateAudio: jest.fn().mockResolvedValue(Buffer.from('audio'))
-    }))
-  };
-});
 
 // Replace the current supabase mock with a chainable queryBuilder.
 // Move the queryBuilder declaration inside the factory callback to avoid referencing out-of-scope variables.
-jest.mock('@/repositories/supabase/supabase', () => {
+jest.mock('@/lib/supabase', () => {
   const queryBuilder = {
     select: jest.fn().mockReturnThis(),
     eq: jest.fn(), // we will override this in each test.
@@ -34,178 +32,188 @@ jest.mock('@/repositories/supabase/supabase', () => {
   };
 });
 
-jest.mock('@/services/polly.service', () => {
-  return {
-    PollyService: jest.fn().mockImplementation(() => ({}))
-  };
-});
-
-// jest.mock('@supabase/supabase-js');
-
-describe('TTS API POST route', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('should return 400 for missing required fields', async () => {
-    // Missing the "language" field.
-    const req = new NextRequest('http://localhost/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: 'Hello' })
-    });
-    
-    const res = await TTS_POST(req);
-    expect(res.status).toBe(400);
-    const data = await res.json();
-    expect(data.message).toMatch(/Missing required fields/);
-  });
-
-  test('should return an audio buffer when valid input is provided', async () => {
-    const req = new NextRequest('http://localhost/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: 'Hello', language: 'en' })
-    });
-    
-    const res = await TTS_POST(req);
-    expect(res.status).toBe(200);
-    expect(res.headers.get('Content-Type')).toBe('audio/mpeg');
-    // Expect the audio buffer to be nonempty.
-    const arrayBuffer = await res.arrayBuffer();
-    expect(arrayBuffer.byteLength).toBeGreaterThan(0);
-  });
-
-  test('should return a 500 error when generateAudio throws', async () => {
-    // Override the TTS mock so that generateAudio rejects.
-    const { TTS } = require('@/services/tts.service');
-    TTS.mockImplementationOnce(() => ({
-      generateAudio: jest.fn().mockRejectedValue(new Error('Generation failed'))
-    }));
-
-    const req = new NextRequest('http://localhost/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: 'Hello', language: 'en' })
-    });
-    
-    const res = await TTS_POST(req);
-    expect(res.status).toBe(500);
-    const data = await res.json();
-    expect(data.message).toBe('Phoneme generation failed');
-    expect(data.error).toBe('Generation failed');
-  });
-});
-
-jest.mock('@/services/recording.service', () => ({
-  RecordingService: jest.fn().mockImplementation(() => ({
-    uploadFile: jest.fn().mockResolvedValue('mock-uri'),
-    submitRecording: jest.fn().mockResolvedValue({ mock: 'response' })
-  }))
+jest.mock('@/lib/services/quote-section.service', () => ({
+  quoteSectionService: {
+    getQuoteSection: jest.fn(),
+    updateQuoteSection: jest.fn()
+  }
 }));
 
-describe('Recording API', () => {
-  // Helper to create a fake NextRequest with form data.
-  const mockFormDataRequest = async (body: Buffer, headers: globalThis.Headers) => {
-    const req = new NextRequest('http://localhost/api/recording', {
-      method: 'POST',
-      headers,
-      body
-    });
-    
-    // For formidable parsing, set the Content-Type header to multipart/form-data with a boundary.
-    req.headers.set('Content-Type', 'multipart/form-data; boundary=test');
-    return req;
-  };
+// Mock youtube section service
+jest.mock('@/lib/services/youtube-section.service', () => ({
+  youtubeSectionService: {
+    getYoutubeSection: jest.fn(),
+    updateYoutubeSection: jest.fn()
+  }
+}));
 
-  test('should reject invalid form data', async () => {
-    const req = await mockFormDataRequest(Buffer.from('invalid content'), new Headers());
-    const res = await RECORDING_POST(req);
-    expect(res.status).toBe(400);
-  });
-});
+// Mock blog post service
+jest.mock('@/lib/services/blog-post.service', () => ({
+  getBlogPostService: jest.fn(() => ({
+    getBlogPostById: jest.fn(),
+    createBlogPost: jest.fn(),
+    updateBlogPost: jest.fn(),
+    deleteBlogPost: jest.fn(),
+    getBlogPosts: jest.fn()
+  }))
+}));
+jest.mock('next/cache', () => ({
+  revalidateTag: jest.fn()
+}));
 
-describe('Subscription API', () => {
+
+
+describe('Quote API', () => {
+  const { quoteSectionService } = require('@/lib/services/quote-section.service');
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should return 400 for invalid email address', async () => {
-    const req = new NextRequest('http://localhost/api/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: 'invalid-email' }),
-    });
-
-    const res = await SUBSCRIBE_POST(req);
-    expect(res.status).toBe(400);
+  test('GET should return 404 when no quote section exists', async () => {
+    quoteSectionService.getQuoteSection.mockResolvedValue(null);
+    
+    const res = await QUOTE_GET();
+    expect(res.status).toBe(404);
     const data = await res.json();
-    expect(data.message).toBe('Invalid email address');
+    expect(data.message).toBe('Quote section not found');
   });
 
-  test('should return 200 for existing email address', async () => {
-    // Get our mocked supabase.
-    const { supabase } = require('@/repositories/supabase/supabase');
-
-    // Override the chain for the email lookup.
-    // Note that in the route, the chain is: supabase.from(...).select('*').eq('email', email)
-    // Because our from() returns queryBuilder (the same object), we call .select() (which returns queryBuilder too)
-    // and then override eq() to return a promise resolving with the desired value.
-    supabase.from().eq.mockResolvedValue({ data: [{ email: 'test@example.com' }] });
+  test('GET should return quote section with cache headers', async () => {
+    const mockData = { content: 'Test quote' };
+    quoteSectionService.getQuoteSection.mockResolvedValue(mockData);
     
-    const req = new NextRequest('http://localhost/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'test@example.com' }),
-    });
+    const res = await QUOTE_GET();
+    expect(res.status).toBe(200);
+    expect(res.headers.get('Cache-Control')).toMatch(/no-store/);
+    const data = await res.json();
+    expect(data).toEqual(mockData);
+  });
 
-    const res = await SUBSCRIBE_POST(req);
+  test('PUT should require ID field', async () => {
+    const req = new NextRequest('http://localhost/api/quote', {
+      method: 'PUT',
+      body: JSON.stringify({ content: 'New quote' })
+    });
+    
+    const res = await QUOTE_PUT(req);
+    expect(res.status).toBe(400);
+  });
+
+  test('PUT should handle update errors', async () => {
+    quoteSectionService.updateQuoteSection.mockRejectedValue(new Error('DB error'));
+    const req = new NextRequest('http://localhost/api/quote', {
+      method: 'PUT',
+      body: JSON.stringify({ id: '1', content: 'New quote' })
+    });
+    
+    const res = await QUOTE_PUT(req);
+    expect(res.status).toBe(500);
+  });
+});
+
+describe('YouTube API', () => {
+  const { youtubeSectionService } = require('@/lib/services/youtube-section.service');
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('GET should return youtube section data', async () => {
+    const mockData = { videoId: 'abc123' };
+    youtubeSectionService.getYoutubeSection.mockResolvedValue(mockData);
+    
+    const res = await YOUTUBE_GET();
     expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.message).toBe('Email already exists');
+    expect(data).toEqual(mockData);
   });
 
-  test('should return 200 for successful subscription', async () => {
-      // Get the mocked supabase.
-      const { supabase } = require('@/repositories/supabase/supabase');
-      // Simulate no existing email.
-      supabase.__queryBuilder.eq.mockResolvedValue({ data: [] });
-      // Simulate a successful insertion.
-      supabase.__queryBuilder.insert.mockResolvedValue({ error: null });
-  
-      const req = new NextRequest('http://localhost/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: 'new@example.com' }),
-      });
-  
-      const res = await SUBSCRIBE_POST(req);
-      expect(res.status).toBe(200);
-      const data = await res.json();
-      expect(data.message).toBe('Subscription successful');
-  });
-
-  test('should return 500 for Supabase insertion error', async () => {
-    // Mock Supabase to simulate an insertion error
-    const { supabase } = require('@/repositories/supabase/supabase');
-    supabase.__queryBuilder.eq.mockResolvedValue({ data: [] }); // No existing email
-    supabase.__queryBuilder.insert.mockResolvedValue({ error: new Error('Supabase error') });
-
-    const req = new NextRequest('http://localhost/api/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: 'error@example.com' }),
+  test('PUT should validate request body', async () => {
+    const req = new NextRequest('http://localhost/api/youtube', {
+      method: 'PUT',
+      body: JSON.stringify({}) // Missing required fields
     });
-
-    const res = await SUBSCRIBE_POST(req);
+    
+    const res = await YOUTUBE_PUT(req);
     expect(res.status).toBe(500);
+  });
+
+  test('PUT should revalidate cache', async () => {
+    const { revalidateTag } = require('next/cache');
+    const mockData = { videoId: 'updated123' };
+    youtubeSectionService.updateYoutubeSection.mockResolvedValue(mockData);
+    
+    const req = new NextRequest('http://localhost/api/youtube', {
+      method: 'PUT',
+      body: JSON.stringify({ videoId: 'updated123' })
+    });
+    
+    await YOUTUBE_PUT(req);
+    expect(revalidateTag).toHaveBeenCalledWith(expect.stringContaining('youtube'));
+  });
+});
+
+describe('Blog Post API', () => {
+  const { getBlogPostService } = require('@/lib/services/blog-post.service');
+  const blogPostService = getBlogPostService();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('POST should create new blog post', async () => {
+    const mockPost = { id: '1', title: 'New Post' };
+    blogPostService.createBlogPost.mockResolvedValue(mockPost);
+    
+    const req = new NextRequest('http://localhost/api/admin/blog-post', {
+      method: 'POST',
+      body: JSON.stringify({ data: { title: 'New Post' }, locale: 'en' })
+    });
+    
+    const res = await BLOG_POST_POST(req);
+    expect(res.status).toBe(200);
+    expect(blogPostService.createBlogPost).toHaveBeenCalled();
+  });
+
+  test('GET should require ID parameter', async () => {
+    const req = new NextRequest('http://localhost/api/admin/blog-post');
+    const res = await BLOG_POST_GET(req);
+    expect(res.status).toBe(400);
+  });
+
+  test('PUT should validate request body', async () => {
+    const req = new NextRequest('http://localhost/api/admin/blog-post', {
+      method: 'PUT',
+      body: JSON.stringify({}) // Missing data
+    });
+    
+    const res = await BLOG_POST_PUT(req);
+    expect(res.status).toBe(400);
+  });
+
+  test('DELETE should handle not found errors', async () => {
+    blogPostService.deleteBlogPost.mockResolvedValue(null);
+    const req = new NextRequest('http://localhost/api/admin/blog-post?id=999', {
+      method: 'DELETE'
+    });
+    
+    const res = await BLOG_POST_DELETE(req);
+    expect(res.status).toBe(404);
+  });
+});
+
+describe('Blog Posts API', () => {
+  const { getBlogPostService } = require('@/lib/services/blog-post.service');
+  const blogPostService = getBlogPostService();
+
+  test('GET should return all blog posts', async () => {
+    const mockPosts = [{ id: '1' }, { id: '2' }];
+    blogPostService.getBlogPosts.mockResolvedValue(mockPosts);
+    
+    const res = await BLOG_POSTS_GET();
+    expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.message).toBe('Supabase error');
+    expect(data.length).toBe(2);
   });
 });
