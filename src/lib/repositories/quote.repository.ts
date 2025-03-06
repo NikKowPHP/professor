@@ -2,8 +2,6 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { supabase } from '../supabase'
 import { QuoteItem } from '../data/quote-section'
 import logger from '@/lib/logger'
-import { unstable_cache } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/utils/cache'
 
 export class QuoteSectionRepository {
   private supabaseClient: SupabaseClient
@@ -36,27 +34,21 @@ export class QuoteSectionRepository {
   }
 
   getQuoteSection = async (): Promise<QuoteItem | null> => {
-    const cachedData = await unstable_cache(
-      async () => {
-        const { data, error } = await this.supabaseClient
-          .from(this.tableName)
-          .select('*')
-          .single()
-          logger.log('getQuoteSection data ' ,data);
-        if (error) {
-          logger.log('Error fetching quote section:', error)
-          return null
-        }
-        return data
-      },
-      ['quote-section'],
-      { 
-        tags: [CACHE_TAGS.QUOTE],
-        revalidate: 1
-      }
-    )()
+    // Bypass unstable_cache completely
+    logger.log('Repository: Fetching quote section directly (no cache)');
+    const { data, error } = await this.supabaseClient
+      .from(this.tableName)
+      .select('*')
+      .single();
     
-    return cachedData
+    logger.log('getQuoteSection data ', data);
+    
+    if (error) {
+      logger.log('Error fetching quote section:', error);
+      return null;
+    }
+    
+    return data;
   }
 }
 

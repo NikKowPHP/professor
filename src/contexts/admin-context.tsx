@@ -5,6 +5,7 @@ import { useAdminBlogPosts } from '@/hooks/use-admin-blogposts';
 import { useApi } from '@/hooks/use-api';
 import { QuoteItem } from '@/lib/data/quote-section';
 import { YoutubeItem } from '@/lib/data/youtube-section';
+import axios from 'axios';
 
 type AdminContextType = ReturnType<typeof useAdminBlogPosts> & {
   // Quote Section
@@ -35,23 +36,42 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // Quote Section
   const getQuote = useCallback(async () => {
-    return fetchApi<QuoteItem>({
-      url: '/api/quote',
-      method: 'GET',
-      onSuccess: setQuote,
-      errorMessage: 'Failed to fetch quote'
-    });
-  }, [fetchApi]);
+    try {
+      const timestamp = new Date().getTime(); // Cache-busting parameter
+      const response = await axios.get(`/api/quote?t=${timestamp}`, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      const data = response.data;
+      setQuote(data);
+      return data;
+    } catch (error) {
+      setError('Failed to fetch quote');
+      throw error;
+    }
+  }, [setError]);
 
   const updateQuote = useCallback(async (data: Partial<QuoteItem>) => {
-    return fetchApi<QuoteItem>({
-      url: '/api/quote',
-      method: 'PUT',
-      data,
-      onSuccess: setQuote,
-      errorMessage: 'Failed to update quote'
-    }).then(result => result || Promise.reject('Update failed'));
-  }, [fetchApi]);
+    try {
+      const response = await axios.put('/api/quote', data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      const result = response.data;
+      setQuote(result);
+      return result;
+    } catch (error) {
+      setError('Failed to update quote');
+      throw error;
+    }
+  }, [setError]);
 
   // Youtube Section
   const getYoutube = useCallback(async () => {
