@@ -23,6 +23,8 @@ export class BlogPostRepository implements IBlogPostRepository {
           .order('created_at', { ascending: false })
           .throwOnError()
 
+        logger.log('blog posts data ' ,data);
+
         if (error) throw error
         return data
       },
@@ -41,7 +43,7 @@ export class BlogPostRepository implements IBlogPostRepository {
           .select('*')
           .eq('slug', slug)
           .maybeSingle()
-
+          logger.log('blog getBlogPostBySlug data ' ,data);
         if (error) throw error
         return data
       },
@@ -85,6 +87,8 @@ export class BlogPostRepository implements IBlogPostRepository {
       .select()
       .single()
 
+      logger.log('blog updateBlogPost data ' ,data);
+    
     if (error) {
       logger.error('Error updating blog post:', error)
       throw new Error('Failed to update blog post')

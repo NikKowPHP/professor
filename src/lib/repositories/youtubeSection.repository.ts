@@ -23,7 +23,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
           .from(this.tableName)
           .select('*')
           .single()
-
+          logger.log('getYoutubeSection data ' ,data);
         if (error) {
           logger.log('Error fetching youtube section by ID:', error)
           return null
@@ -49,7 +49,7 @@ export class YoutubeSectionRepository implements IYoutubeSectionRepository {
       .eq('id', youtubeSection.id)
       .select()
       .single()
-
+      logger.log('updateYoutubeSection data ' ,data);
     if (error) {
       logger.log('Error updating youtube section:', error)
       throw new Error('Failed to update youtube section')

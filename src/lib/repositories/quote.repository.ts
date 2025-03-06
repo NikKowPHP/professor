@@ -22,7 +22,7 @@ export class QuoteSectionRepository {
       .eq('id', id)
       .select()
       .single()
-
+      logger.log('updateQuoteSection data ' ,data);
     if (error) {
       logger.log('Error updating quote section:', error)
       throw new Error('Failed to update quote section')
@@ -42,7 +42,7 @@ export class QuoteSectionRepository {
           .from(this.tableName)
           .select('*')
           .single()
-
+          logger.log('getQuoteSection data ' ,data);
         if (error) {
           logger.log('Error fetching quote section:', error)
           return null
