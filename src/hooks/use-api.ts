@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import logger from '@/lib/logger';
+import axios from 'axios';
 
 type ApiRequest<T> = {
   url: string;
@@ -27,41 +28,44 @@ export const useApi = () => {
     logger.log(`[${requestId}] Starting ${method} request to ${url}`, data);
 
     try {
-      const response = await fetch(url, {
+      const response = await axios({
+        url,
         method,
-        headers: method !== 'GET' ? { 'Content-Type': 'application/json' } : undefined,
-        body: method !== 'GET' ? JSON.stringify(data) : undefined,
-        cache: 'no-store'
+        data: method !== 'GET' ? data : undefined,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
       });
 
       const responseTime = performance.now();
       logger.log(`[${requestId}] Received response in ${responseTime}ms`, {
         status: response.status,
-        ok: response.ok
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const error = new Error(errorData.error || errorMessage);
-        logger.error(`[${requestId}] API Error: ${error.message}`, {
-          url,
-          method,
-          status: response.status,
-          errorData
-        });
-        throw error;
-      }
-
-      const responseData = await response.json();
+      const responseData = response.data;
       logger.log(`[${requestId}] Request succeeded`, responseData);
 
       onSuccess?.(responseData);
       return responseData;
     } catch (err) {
-      const message = err instanceof Error ? err.message : errorMessage;
+      const axiosError = err as any;
+      const errorData = axiosError.response?.data || {};
+      const status = axiosError.response?.status;
+      
+      const message = errorData.error || axiosError.message || errorMessage;
       setError(message);
-      logger.error(`[${requestId}] Unhandled error: ${message}`, err);
-      throw err;
+      
+      logger.error(`[${requestId}] API Error: ${message}`, {
+        url,
+        method,
+        status,
+        errorData
+      });
+      
+      throw new Error(message);
     } finally {
       setLoading(false);
       logger.log(`[${requestId}] Request completed`);
