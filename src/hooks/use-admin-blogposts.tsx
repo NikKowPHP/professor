@@ -28,7 +28,7 @@ export const useAdminBlogPosts = () => {
   }, [fetchApi]);
 
   const createBlogPost = useCallback(async (data: Partial<BlogPost>) => {
-
+ 
     const payload = { data: data };
     return fetchApi<BlogPost>({
       url: '/api/admin/blog-post',
@@ -41,23 +41,12 @@ export const useAdminBlogPosts = () => {
 
   const updateBlogPost = useCallback(async (id: string, data: Partial<BlogPost>) => {
     // Validate required fields
-    if (!data.title || !data.content_html) {
+    if (!data.title?.trim() || !data.content_html?.trim()) {
       throw new Error('Title and content are required');
     }
+  
 
-    // Structure the payload explicitly
-    // const payload = {
-    //   data: {
-    //     title: data.title,
-    //     slug: data.slug,
-    //     tag: data.tag,
-    //     image_url: data.image_url,
-    //     image_alt: data.image_alt,
-    //     excerpt: data.excerpt,
-    //     content_html: data.content_html,
-    //     is_pinned: data.is_pinned
-    //   }
-    // };
+ 
     const payload = { data: data };
 
     return fetchApi<BlogPost>({

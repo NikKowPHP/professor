@@ -5,6 +5,7 @@ import { useAdminBlogPosts } from '@/hooks/use-admin-blogposts';
 import { useApi } from '@/hooks/use-api';
 import { QuoteItem } from '@/lib/data/quote-section';
 import { YoutubeItem } from '@/lib/data/youtube-section';
+import { BlogPost } from '@/domain/models/blog-post.model';
 
 type AdminContextType = ReturnType<typeof useAdminBlogPosts> & {
   // Quote Section
@@ -80,6 +81,13 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       errorMessage: 'Failed to revalidate cache'
     });
   }, [fetchApi]);
+  const updateBlogPost = useCallback(async (id: string, data: Partial<BlogPost>) => {
+    if (!data.title?.trim() || !data.content_html?.trim()) {
+      throw new Error('Title and content are required');
+    }
+    
+    return blogPosts.updateBlogPost(id, data);
+  }, [blogPosts]);
 
   const clearError = () => setError(null);
 
@@ -95,7 +103,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       loading,
       error,
       clearError,
-      revalidateCache
+      revalidateCache,
+      updateBlogPost
     }}>
       {children}
     </AdminContext.Provider>

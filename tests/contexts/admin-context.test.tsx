@@ -37,12 +37,7 @@ beforeAll(() => {
   global.URL.revokeObjectURL = jest.fn();
 });
 
-// Error provider mock
-// const mockShowError = jest.fn();
-// jest.mock('@/hooks/use-error', () => ({
-//   useError: () => ({ showError: mockShowError }),
-//   ErrorProvider: ({ children }: { children: React.ReactNode }) => children,
-// }));
+
 
 // Unified wrapper with all providers
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -108,6 +103,7 @@ describe('AdminContext', () => {
 
   // Enhanced update test with validation
   describe('updateBlogPost', () => {
+   
     it('should validate required fields', async () => {
       const { result } = renderHook(() => useAdmin(), { wrapper });
 
