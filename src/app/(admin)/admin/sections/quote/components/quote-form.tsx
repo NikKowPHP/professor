@@ -26,10 +26,14 @@ export function QuoteForm() {
       })
       // Refresh data after update
       await getQuote()
+      
+
     } catch (error) {
       console.error('Update failed:', error)
     }
   }
+  
+
   const handleRefresh = async () => {
     await Promise.all([getQuote(), revalidateCache()])
   }

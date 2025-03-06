@@ -1,25 +1,24 @@
-import {  NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 import { CACHE_TAGS } from '@/lib/utils/cache'
 import logger from '@/lib/logger'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-   
-    console.log('Revalidating cache')
-
-    // Revalidate cache
+    // Revalidate all cache tags
     Object.values(CACHE_TAGS).forEach(tag => {
-      console.log('Revalidating tag:', tag)
       revalidateTag(tag)
     })
-
-    return NextResponse.json({ message: 'Cache revalidated' })
+    
+    return NextResponse.json({ 
+      revalidated: true, 
+      message: 'Cache successfully revalidated' 
+    })
   } catch (error) {
-    logger.log('Error revalidating cache:', error)
-    return NextResponse.json(
-      { error: 'Failed to revalidate cache', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    )
+    logger.error(`Error revalidating cache: ${error}`)
+    return NextResponse.json({ 
+      revalidated: false,
+      message: 'Error revalidating cache' 
+    }, { status: 500 })
   }
 }

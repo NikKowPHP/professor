@@ -27,12 +27,23 @@ export function YoutubeForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await updateYoutube({ youtube_url, quote, id: youtube?.id, updated_at: new Date() })
-    await revalidateCache()
+    
+    try {
+      await updateYoutube({ youtube_url, quote, id: youtube?.id, updated_at: new Date() })
+      await revalidateCache()
+      await getYoutube()
+    } catch (error) {
+      console.error('Failed to update YouTube:', error)
+    }
   }
 
   const handleRefresh = async () => {
-    await Promise.all([getYoutube(), revalidateCache()])
+    try {
+      await revalidateCache()
+      await getYoutube()
+    } catch (error) {
+      console.error('Failed to refresh data:', error)
+    }
   }
 
   if(loading) return <LoadingSpinner />
