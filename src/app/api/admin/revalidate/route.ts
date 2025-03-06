@@ -7,8 +7,10 @@ export async function GET(request: NextRequest) {
   try {
     // Revalidate all cache tags
     Object.values(CACHE_TAGS).forEach(tag => {
+      logger.log(`Revalidating cache tag: ${tag}`)
       revalidateTag(tag)
     })
+    logger.log(request);
     
     return NextResponse.json({ 
       revalidated: true, 

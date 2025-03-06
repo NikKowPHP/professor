@@ -14,7 +14,7 @@ export function QuoteForm() {
   }, [quote])
   useEffect(() => {
     getQuote();
-  }, [])
+  }, [getQuote])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,9 +24,11 @@ export function QuoteForm() {
         id: quote?.id,
         updated_at: new Date().toISOString()
       })
+
+      await revalidateCache();
       // Refresh data after update
       await getQuote()
-      
+
 
     } catch (error) {
       console.error('Update failed:', error)
