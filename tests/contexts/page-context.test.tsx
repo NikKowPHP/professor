@@ -9,10 +9,12 @@ import { blogPosts } from '@/lib/data/mocks/blog-posts.mock.data';
 // Mock Next.js navigation
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
+
 }));
 
 // Mock global fetch
 const mockFetch = jest.fn();
+
 global.fetch = mockFetch as jest.MockedFunction<typeof fetch>;
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -31,6 +33,8 @@ describe('PageContext', () => {
   });
 
   test('provides initial context values', () => {
+    (require('next/navigation').usePathname as jest.Mock)
+    .mockReturnValue('/admin/blog-posts');
     const { result } = renderHook(() => usePage(), { wrapper });
     
     expect(result.current).toEqual(expect.objectContaining({
@@ -39,12 +43,14 @@ describe('PageContext', () => {
       youtube: null,
       loading: false,
       error: null,
-      isAdminRoute: false
+      isAdminRoute: true
     }));
   });
 
   describe('getBlogPosts', () => {
     it('should fetch blog posts successfully', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+      .mockReturnValue('/admin/blog-posts');
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve([mockBlogPost])
@@ -80,6 +86,8 @@ describe('PageContext', () => {
 
   describe('getBlogPost', () => {
     it('should fetch single blog post successfully', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+      .mockReturnValue('/');
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockBlogPost)
@@ -98,6 +106,8 @@ describe('PageContext', () => {
     });
 
     it('should handle single blog post fetch errors', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+      .mockReturnValue('/admin');
       mockFetch.mockResolvedValueOnce({
         ok: false,
         statusText: 'Not Found'
@@ -116,6 +126,8 @@ describe('PageContext', () => {
 
   describe('getQuote', () => {
     it('should fetch quote successfully', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+      .mockReturnValue('/');
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockQuote)
@@ -133,6 +145,8 @@ describe('PageContext', () => {
     });
 
     it('should handle quote fetch errors', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+      .mockReturnValue('/');
       mockFetch.mockResolvedValueOnce({
         ok: false,
         statusText: 'Not Found'
@@ -151,6 +165,8 @@ describe('PageContext', () => {
 
   describe('getYoutube', () => {
     it('should fetch youtube data successfully', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+        .mockReturnValue('/');
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockYoutube)
@@ -168,6 +184,9 @@ describe('PageContext', () => {
     });
 
     it('should handle youtube fetch errors', async () => {
+      (require('next/navigation').usePathname as jest.Mock)
+        .mockReturnValue('/');
+      
       mockFetch.mockResolvedValueOnce({
         ok: false,
         statusText: 'Not Found'
