@@ -73,7 +73,79 @@ describe('BlogPostService', () => {
     });
   });
 
-  // Add similar tests for updateBlogPost, deleteBlogPost, getBlogPosts, etc.
-});
+  describe('getBlogPosts', () => {
+    it('should retrieve all blog posts', async () => {
+      const mockPosts = [mockBlogPost];
+      (blogPostRepository.getBlogPosts as jest.Mock).mockResolvedValue(mockPosts);
 
+      const result = await blogPostService.getBlogPosts();
+      
+      expect(blogPostRepository.getBlogPosts).toHaveBeenCalled();
+      expect(result).toEqual(mockPosts);
+    });
+
+    it('should return empty array when no posts exist', async () => {
+      (blogPostRepository.getBlogPosts as jest.Mock).mockResolvedValue([]);
+
+      const result = await blogPostService.getBlogPosts();
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('updateBlogPost', () => {
+    it('should update an existing blog post', async () => {
+      const updatedData = { title: 'Updated Title' };
+      const mockUpdatedPost = { ...mockBlogPost, ...updatedData };
+      
+      (blogPostRepository.updateBlogPost as jest.Mock).mockResolvedValue(mockUpdatedPost);
+
+      const result = await blogPostService.updateBlogPost('1', updatedData);
+      
+      expect(blogPostRepository.updateBlogPost).toHaveBeenCalledWith('1', updatedData);
+      expect(result).toEqual(mockUpdatedPost);
+    });
+
+    it('should handle non-existent post updates', async () => {
+      (blogPostRepository.updateBlogPost as jest.Mock).mockResolvedValue(null);
+
+      const result = await blogPostService.updateBlogPost('999', { title: 'New Title' });
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('deleteBlogPost', () => {
+    it('should successfully delete a blog post', async () => {
+      (blogPostRepository.deleteBlogPost as jest.Mock).mockResolvedValue(true);
+
+      const result = await blogPostService.deleteBlogPost('1');
+      expect(result).toBe(true);
+      expect(blogPostRepository.deleteBlogPost).toHaveBeenCalledWith('1');
+    });
+
+    it('should return false when deletion fails', async () => {
+      (blogPostRepository.deleteBlogPost as jest.Mock).mockResolvedValue(false);
+
+      const result = await blogPostService.deleteBlogPost('999');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('getBlogPostBySlug', () => {
+    it('should retrieve post by slug', async () => {
+      (blogPostRepository.getBlogPostBySlug as jest.Mock).mockResolvedValue(mockBlogPost);
+
+      const result = await blogPostService.getBlogPostBySlug('test-post');
+      expect(blogPostRepository.getBlogPostBySlug).toHaveBeenCalledWith('test-post');
+      expect(result).toEqual(mockBlogPost);
+    });
+
+    it('should return null for non-existent slug', async () => {
+      (blogPostRepository.getBlogPostBySlug as jest.Mock).mockResolvedValue(null);
+
+      const result = await blogPostService.getBlogPostBySlug('non-existent');
+      expect(result).toBeNull();
+    });
+  });
+
+});
 
