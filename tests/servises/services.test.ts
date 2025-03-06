@@ -1,22 +1,24 @@
-// import RecordingService from '@/services/recording.service';
-// import AIService from '@/services/ai.service';
-// import MessageGenerator from '@/services/generators/messageGenerator';
-// import MetricsService from '@/services/metrics.service';
-// import { mockDeep } from 'jest-mock-extended';
 import { blogPostService } from '@/lib/services/blog-post.service';
 import { blogPostRepository } from '@/lib/repositories/blog-post.repository';
 import { blogPosts } from '@/lib/data/blog-posts.mock.data';
 import { BlogPost } from '@/domain/models/blog-post.model';
+import { youtubeItem, YoutubeItem } from '@/lib/data/youtube-section';
+import { youtubeSectionRepository } from '@/lib/repositories/youtube.repository';
+import { youtubeSectionService } from '@/lib/services/youtube-section.service';
 
+import { quoteSectionService } from '@/lib/services/quote-section.service';
+import { quoteSectionRepository } from '@/lib/repositories/quote.repository';
+import { quoteItem, QuoteItem } from '@/lib/data/quote-section';
+
+jest.mock('@/lib/repositories/quote.repository');
 jest.mock('@/lib/repositories/blog-post.repository');
-// Replace the current supabase mock with a chainable queryBuilder.
-// Move the queryBuilder declaration inside the factory callback to avoid referencing out-of-scope variables.
+
+jest.mock('@/lib/repositories/youtube.repository');
 jest.mock('@/lib/supabase', () => {
   const queryBuilder = {
     select: jest.fn().mockReturnThis(),
-    eq: jest.fn(), // we will override this in each test.
+    eq: jest.fn(), 
     insert: jest.fn(),
-    // Make our chain thenable by defining a then function.
     then: function (resolve: (value: unknown) => void) {
       return resolve(this);
     },
@@ -25,7 +27,6 @@ jest.mock('@/lib/supabase', () => {
   return {
     supabase: {
       from: jest.fn(() => queryBuilder),
-      // Expose the query builder so that tests can override its methods:
       __queryBuilder: queryBuilder,
     },
   };
@@ -102,8 +103,7 @@ describe('BlogPostService', () => {
       const result = await blogPostService.updateBlogPost('1', updatedData);
       
       expect(blogPostRepository.updateBlogPost).toHaveBeenCalledWith('1', updatedData);
-      expect(result).toEqual(mockUpdatedPost);
-    });
+      expect(result).toEqual(mockUpdatedPost); });
 
     it('should handle non-existent post updates', async () => {
       (blogPostRepository.updateBlogPost as jest.Mock).mockResolvedValue(null);
@@ -149,3 +149,100 @@ describe('BlogPostService', () => {
 
 });
 
+
+
+describe('YoutubeSectionService', () => {
+  const mockYoutubeItem: YoutubeItem = youtubeItem
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('getYoutubeSection', () => {
+    it('should retrieve youtube section data', async () => {
+      (youtubeSectionRepository.getYoutubeSection as jest.Mock).mockResolvedValue(mockYoutubeItem);
+
+      const result = await youtubeSectionService.getYoutubeSection();
+      
+      expect(youtubeSectionRepository.getYoutubeSection).toHaveBeenCalled();
+      expect(result).toEqual(mockYoutubeItem);
+    });
+
+    it('should return null when no data exists', async () => {
+      (youtubeSectionRepository.getYoutubeSection as jest.Mock).mockResolvedValue(null);
+
+      const result = await youtubeSectionService.getYoutubeSection();
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('updateYoutubeSection', () => {
+    it('should update youtube section with partial data', async () => {
+      const updateData = { youtube_url: 'new123' };
+      const mockUpdated = { ...mockYoutubeItem, ...updateData };
+      
+      (youtubeSectionRepository.updateYoutubeSection as jest.Mock).mockResolvedValue(mockUpdated);
+
+      const result = await youtubeSectionService.updateYoutubeSection(updateData);
+      
+      expect(youtubeSectionRepository.updateYoutubeSection).toHaveBeenCalledWith(updateData);
+      expect(result).toEqual(mockUpdated);
+    });
+
+    it('should handle repository errors', async () => {
+      const mockError = new Error('Update failed');
+      (youtubeSectionRepository.updateYoutubeSection as jest.Mock).mockRejectedValue(mockError);
+
+      await expect(youtubeSectionService.updateYoutubeSection({}))
+        .rejects
+        .toThrow('Update failed');
+    });
+  });
+});
+
+describe('QuoteSectionService', () => {
+  const mockQuote: QuoteItem = quoteItem
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('getQuoteSection', () => {
+    it('should retrieve quote section data', async () => {
+      (quoteSectionRepository.getQuoteSection as jest.Mock).mockResolvedValue(mockQuote);
+
+      const result = await quoteSectionService.getQuoteSection();
+      
+      expect(quoteSectionRepository.getQuoteSection).toHaveBeenCalled();
+      expect(result).toEqual(mockQuote);
+    });
+
+    it('should return null when no data exists', async () => {
+      (quoteSectionRepository.getQuoteSection as jest.Mock).mockResolvedValue(null);
+
+      const result = await quoteSectionService.getQuoteSection();
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('updateQuoteSection', () => {
+    it('should update quote section with valid ID', async () => {
+      const updateData = { quote: 'Updated Quote' };
+      const mockUpdated = { ...mockQuote, ...updateData };
+      
+      (quoteSectionRepository.updateQuoteSection as jest.Mock).mockResolvedValue(mockUpdated);
+
+      const result = await quoteSectionService.updateQuoteSection('1', updateData);
+      
+      expect(quoteSectionRepository.updateQuoteSection).toHaveBeenCalledWith('1', updateData);
+      expect(result).toEqual(mockUpdated);
+    });
+
+    it('should handle non-existent ID updates', async () => {
+      (quoteSectionRepository.updateQuoteSection as jest.Mock).mockResolvedValue(null);
+
+      const result = await quoteSectionService.updateQuoteSection('999', {});
+      expect(result).toBeNull();
+    });
+  });
+});
